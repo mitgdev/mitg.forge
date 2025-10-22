@@ -1,34 +1,34 @@
 {
-  "name": "miforge",
-  "private": true,
-  "scripts": {
-    "dev": "turbo run dev",
-    "changeset": "changeset",
+	"name": "miforge",
+	"private": true,
+	"scripts": {
+		"dev": "turbo run dev",
+		"changeset": "changeset",
 		"changeset:status": "changeset status --verbose",
 		"changeset:version": "changeset version",
 		"changeset:tag": "changeset tag",
-    "postinstall": "pnpm dlx sherif@latest -f",
+		"postinstall": "pnpm dlx sherif@latest -f",
 		"prepare": "husky"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@biomejs/biome": "^2.2.6",
-    "@changesets/cli": "^2.29.7",
-    "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0",
-    "commitizen": "^4.3.1",
-    "conventional-changelog-conventionalcommits": "^9.1.0",
-    "cz-conventional-changelog": "^3.3.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.5",
-    "turbo": "^2.5.8"
-  },
-  "config": {
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@biomejs/biome": "^2.2.6",
+		"@changesets/cli": "^2.29.7",
+		"@commitlint/cli": "^20.1.0",
+		"@commitlint/config-conventional": "^20.0.0",
+		"commitizen": "^4.3.1",
+		"conventional-changelog-conventionalcommits": "^9.1.0",
+		"cz-conventional-changelog": "^3.3.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.2.5",
+		"turbo": "^2.5.8"
+	},
+	"config": {
 		"commitizen": {
 			"path": "cz-conventional-changelog"
 		}
 	},
-  "packageManager": "pnpm@10.18.3"
+	"packageManager": "pnpm@10.18.3"
 }
