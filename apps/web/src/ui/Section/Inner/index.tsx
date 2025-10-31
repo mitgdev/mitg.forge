@@ -6,7 +6,7 @@ type Props = HTMLAttributes<HTMLDivElement> & {};
 export const InnerSection = forwardRef<HTMLDivElement, Props>(
 	({ className, children, ...props }, ref) => {
 		const classnames = cn(
-			"flex flex-col gap-4 border border-tertiary bg-500 p-1",
+			"flex flex-col gap-4 border border-tertiary bg-tibia-500 p-1",
 			className,
 		);
 

@@ -53,6 +53,16 @@
 		@apply saturate-110;
 	}
 
+	.section-title {
+		@apply font-fondamento;
+    @apply font-bold;
+    @apply text-primary;
+    @apply text-shadow-title;
+    @apply select-none;
+    @apply capitalize;
+    @apply tracking-wider;
+	}
+
 	.fondamento-title {
 		@apply font-fondamento;
 		@apply font-medium;

@@ -47,6 +47,11 @@ export const MenuItem = ({ icon, label, menus = [] }: Props) => {
 				}}
 				onClick={() => setShow(!show)}
 			>
+				<img
+					alt={`${label}-icon-plus-minus`}
+					src={show ? "/assets/buttons/minus.gif" : "/assets/buttons/plus.gif"}
+					className="absolute right-0 bottom-0"
+				/>
 				<img src={Icons[icon]} alt="teste" className="absolute" />
 				<span className="fondamento-title flex-1 text-center text-base capitalize">
 					{label}
