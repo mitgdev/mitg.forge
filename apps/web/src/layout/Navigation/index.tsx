@@ -1,5 +1,6 @@
-import { BoxDownload } from "../../components/Box/Download";
-import { BoxLogin } from "../../components/Box/Login";
+import { BoxDownload } from "@/components/Box/Download";
+import { BoxLogin } from "@/components/Box/Login";
+import { Menu } from "../../components/Menu";
 
 export const Navigation = () => {
 	return (
@@ -11,6 +12,7 @@ export const Navigation = () => {
 		>
 			<BoxLogin />
 			<BoxDownload />
+			<Menu />
 		</nav>
 	);
 };

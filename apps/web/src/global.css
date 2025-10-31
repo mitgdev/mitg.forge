@@ -9,9 +9,6 @@
 	--font-sans: var(--font-roboto);
 	--font-serif: var(--font-martel);
 
-
-
-
 	--color-tibia-100: #051122;
 	--color-tibia-200: #0d2e2b;
 	--color-tibia-300: #194440;
@@ -23,7 +20,7 @@
 	--color-tibia-900: #f1e0c6;
 	--color-tibia-1000: #d5c0a1;
 	--color-tibia-1100: #ebcaa3;
-	
+
 	--color-primary: #ffd698;
 	--color-secondary: #5a2800;
 	--color-tertiary: #4b7874;
@@ -33,17 +30,13 @@
 	--color-septenary: #faf0d7;
 	--color-octonary: #5f4d41;
 
-
-
-
 	--color-error: #c91b1b;
-  --color-success: #2e7d32;
-  --color-warning: #f57c00;
-  --color-info: #1976d2;
+	--color-success: #2e7d32;
+	--color-warning: #f57c00;
+	--color-info: #1976d2;
 
-
-	--text-shadow-title: -1px -1px 0 #000, 1px -1px 0 #2c2c2c, -1px 1px 0 #000, 1px 1px 0 #000;
-
+	--text-shadow-title:
+		-1px -1px 0 #000, 1px -1px 0 #2c2c2c, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 @layer base {
@@ -53,11 +46,7 @@
 	}
 }
 
-
 @layer utilities {
-
-
-	
 	.hover\:filter-hover:hover {
 		@apply brightness-110;
 		@apply contrast-110;
