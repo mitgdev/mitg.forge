@@ -15,7 +15,6 @@
 		"db:migrate:dev": "prisma migrate dev",
 		"db:seed": "bun run prisma/seed/index.ts",
 		"db:reset": "prisma migrate reset --force",
-		"generate:types": "bun run scripts/index.ts",
 		"prepare": "pnpm run db:generate && pnpm run build && pnpm run build:types"
 	},
 	"dependencies": {

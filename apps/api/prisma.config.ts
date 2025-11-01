@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "dotenv-flow";
 import path from "node:path";
 
 import { defineConfig } from "prisma/config";
