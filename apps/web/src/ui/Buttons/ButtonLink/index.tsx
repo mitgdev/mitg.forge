@@ -5,8 +5,7 @@ import { cn } from "@/sdk/utils/cn";
 
 type Props = LinkHTMLAttributes<HTMLAnchorElement> & {
 	variant?: "regular" | "large" | "info" | "green" | "red";
-	to: LinkComponentProps["to"];
-};
+} & LinkComponentProps;
 
 export const ButtonLink = forwardRef<HTMLAnchorElement, Props>(function Button(
 	{ variant = "regular", className: classNameProp, to, ...props },

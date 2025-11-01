@@ -10,8 +10,8 @@ export const InnerContainer = forwardRef<HTMLDivElement, Props>(
 				ref={ref}
 				{...props}
 				className={cn(
-					className,
 					"relative mb-4 block h-max w-full border border-septenary bg-tibia-600 shadow-container outline-1 outline-quaternary last:mb-0",
+					className,
 				)}
 			/>
 		);

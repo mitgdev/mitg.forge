@@ -76,6 +76,7 @@
 
 	--text-shadow-title:
 		-1px -1px 0 #000, 1px -1px 0 #2c2c2c, -1px 1px 0 #000, 1px 1px 0 #000;
+	--shadow-container: 3px 3px 2px #875f3e;
 }
 
 @layer base {
