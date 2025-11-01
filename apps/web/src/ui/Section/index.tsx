@@ -16,7 +16,7 @@ export const Section = forwardRef<HTMLDivElement, Props>(
 		return (
 			<section
 				className={cn(
-					`${classNameProps} relative border-quaternary border-r-2 border-l-2 bg-400 bg-tibia-400`,
+					`${classNameProps} relative border-quaternary border-r-2 border-l-2 bg-tibia-400`,
 				)}
 				ref={ref}
 				{...props}

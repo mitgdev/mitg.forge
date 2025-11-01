@@ -1,12 +1,18 @@
+import { DiscordBox } from "@/components/Box/Discord";
+import { RankBox } from "@/components/Box/Rank";
+import { MonsterBoost } from "@/components/MonsterBoost";
+
 export const Sidebar = () => {
 	return (
 		<aside
-			className="hidden xl:flex"
+			className="relative hidden w-max flex-col gap-3 xl:flex"
 			style={{
 				gridArea: "sidebar",
 			}}
 		>
-			Side
+			<MonsterBoost />
+			<RankBox />
+			<DiscordBox />
 		</aside>
 	);
 };

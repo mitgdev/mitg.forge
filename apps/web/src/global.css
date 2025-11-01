@@ -2,38 +2,38 @@
 
 /* 400 normal */
 @font-face {
-  font-family: "Verdana Custom";
-  src: url("/assets/fonts/verdana/Verdana.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+	font-family: "Verdana Custom";
+	src: url("/assets/fonts/verdana/Verdana.ttf") format("truetype");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
 }
 
 /* 400 italic */
 @font-face {
-  font-family: "Verdana Custom";
-  src: url("/assets/fonts/verdana/Verdana-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
+	font-family: "Verdana Custom";
+	src: url("/assets/fonts/verdana/Verdana-Italic.ttf") format("truetype");
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
 }
 
 /* 700 bold */
 @font-face {
-  font-family: "Verdana Custom";
-  src: url("/assets/fonts/verdana/Verdana-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+	font-family: "Verdana Custom";
+	src: url("/assets/fonts/verdana/Verdana-Bold.ttf") format("truetype");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
 }
 
 /* 700 bold italic */
 @font-face {
-  font-family: "Verdana Custom";
-  src: url("/assets/fonts/verdana/Verdana-BoldItalic.ttf") format("truetype");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
+	font-family: "Verdana Custom";
+	src: url("/assets/fonts/verdana/Verdana-BoldItalic.ttf") format("truetype");
+	font-weight: 700;
+	font-style: italic;
+	font-display: swap;
 }
 
 @theme {
@@ -154,7 +154,7 @@
 	/* Medium screens and up */
 	@media (width > 80rem) {
 		.page-layout {
-			column-gap: 0.5rem;
+			column-gap: 1rem;
 			grid-template-columns: 205px auto 205px;
 			grid-template-areas:
 				"header header header"
