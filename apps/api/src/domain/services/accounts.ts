@@ -12,6 +12,7 @@ import type {
 } from "@/presentation/routes/v1/accounts/login/schema";
 import type { AccountRepository, SessionRepository } from "@/repositories";
 import { CatchDecorator } from "../decorators/Catch";
+import type { SessionService } from "./session";
 
 @injectable()
 export class AccountsService {
@@ -25,6 +26,8 @@ export class AccountsService {
 		@inject(TOKENS.HasherCrypto)
 		private readonly hasherCrypto: HasherCrypto,
 		@inject(TOKENS.JwtCrypto) private readonly jwtCrypto: JwtCrypto,
+		@inject(TOKENS.SessionService)
+		private readonly sessionService: SessionService,
 	) {}
 
 	@CatchDecorator()
@@ -92,5 +95,10 @@ export class AccountsService {
 		return {
 			token: token,
 		};
+	}
+
+	@CatchDecorator()
+	async logout() {
+		return this.sessionService.destroy();
 	}
 }

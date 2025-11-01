@@ -2,18 +2,24 @@ import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "@/di/tokens";
 import { CatchDecorator } from "@/domain/decorators/Catch";
+import { env } from "@/env";
+import type { Cookies } from "@/infra/cookies";
 import type { JwtCrypto } from "@/infra/crypto/jwt";
 import type { Metadata } from "@/infra/metadata";
-import type { AccountRepository } from "@/repositories";
+import type { SessionInfoOutput } from "@/presentation/routes/v1/session/info/schema";
+import type { AccountRepository, SessionRepository } from "@/repositories";
 
 @injectable()
 export class SessionService {
 	constructor(
 		@inject(TOKENS.Context) private readonly context: ReqContext,
 		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
+		@inject(TOKENS.Cookies) private readonly cookies: Cookies,
 		@inject(TOKENS.JwtCrypto) private readonly jwt: JwtCrypto,
 		@inject(TOKENS.AccountRepository)
 		private readonly accountRepository: AccountRepository,
+		@inject(TOKENS.SessionRepository)
+		private readonly sessionRepository: SessionRepository,
 	) {}
 
 	@CatchDecorator()
@@ -71,5 +77,47 @@ export class SessionService {
 		throw new ORPCError("FORBIDDEN", {
 			message: "Already authenticated",
 		});
+	}
+
+	@CatchDecorator()
+	async destroy() {
+		const session = this.context.get("session");
+
+		if (!session) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "No active session found",
+			});
+		}
+
+		this.cookies.delete(env.SESSION_TOKEN_NAME, {
+			namePrefix: true,
+		});
+
+		await this.sessionRepository.deleteByToken(session.token);
+	}
+
+	@CatchDecorator()
+	async info(): Promise<SessionInfoOutput> {
+		const session = this.context.get("session");
+
+		if (!session) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "No active session found",
+			});
+		}
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Account associated with the session not found",
+			});
+		}
+
+		return {
+			accountId: account.id,
+			email: account.email,
+			token: session.token,
+		};
 	}
 }
