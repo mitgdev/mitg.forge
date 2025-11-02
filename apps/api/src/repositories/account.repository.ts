@@ -47,4 +47,18 @@ export class AccountRepository {
 			},
 		});
 	}
+
+	async details(email: string) {
+		return this.prisma.accounts.findFirst({
+			where: {
+				email,
+			},
+			include: {
+				coins_transactions: true,
+				store_history: true,
+				sessions: true,
+				players: true,
+			},
+		});
+	}
 }

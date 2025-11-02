@@ -6,6 +6,8 @@ import type { Cookies } from "@/infra/cookies";
 import type { HasherCrypto } from "@/infra/crypto/hasher";
 import type { JwtCrypto } from "@/infra/crypto/jwt";
 import type { Logger } from "@/infra/logging/logger";
+import type { Metadata } from "@/infra/metadata";
+import type { AccountDetailsOutput } from "@/presentation/routes/v1/accounts/details/schema";
 import type {
 	AccountLoginInput,
 	AccountLoginOutput,
@@ -19,6 +21,7 @@ export class AccountsService {
 	constructor(
 		@inject(TOKENS.Logger) private readonly logger: Logger,
 		@inject(TOKENS.Cookies) private readonly cookies: Cookies,
+		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
 		@inject(TOKENS.AccountRepository)
 		private readonly accountRepository: AccountRepository,
 		@inject(TOKENS.SessionRepository)
@@ -100,5 +103,24 @@ export class AccountsService {
 	@CatchDecorator()
 	async logout() {
 		return this.sessionService.destroy();
+	}
+
+	@CatchDecorator()
+	async details(): Promise<AccountDetailsOutput> {
+		const session = this.metadata.session();
+		const account = await this.accountRepository.details(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		return {
+			...account,
+			sessions: account.sessions,
+			players: account.players,
+			store_history: account.store_history,
+		};
 	}
 }

@@ -2,12 +2,14 @@ import type { Context, Hono } from "hono";
 import type { RequestIdVariables } from "hono/request-id";
 
 declare global {
+	export type AuthenticatedSession = {
+		token: string;
+		email: string;
+	};
+
 	export type ContextEnv = {
 		Variables: {
-			session?: {
-				token: string;
-				email: string;
-			};
+			session?: AuthenticatedSession;
 		} & RequestIdVariables;
 	};
 

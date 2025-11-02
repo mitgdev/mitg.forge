@@ -1,3 +1,4 @@
+import { ORPCError } from "@orpc/client";
 import { getConnInfo } from "hono/bun";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "@/di/tokens";
@@ -60,5 +61,17 @@ export class Metadata {
 		});
 
 		return token;
+	}
+
+	public session(): AuthenticatedSession {
+		const session = this.context.get("session");
+
+		if (!session) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "No authenticated session found",
+			});
+		}
+
+		return session;
 	}
 }
