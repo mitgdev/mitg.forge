@@ -1,11 +1,31 @@
 import { useSession } from "@/sdk/contexts/session";
+import { useTimezone } from "@/sdk/hooks/useTimezone";
+import { cn } from "@/sdk/utils/cn";
 import { Button } from "@/ui/Buttons/Button";
 import { ButtonLink } from "@/ui/Buttons/ButtonLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 
-export const AccountStatus = () => {
+type Props = {
+	premium?: boolean;
+	premiumDays?: number;
+	premiumExpiresAt?: Date;
+};
+
+export const AccountStatus = ({
+	premium = false,
+	premiumDays = 0,
+	premiumExpiresAt,
+}: Props) => {
+	const { formatDate } = useTimezone();
 	const { logout } = useSession();
+
+	/**
+	 * TODO - Add a alert when premium is about to expire
+	 * changing the border color of the container to yellow/orange
+	 * and adding a tooltip on hover to notify the user
+	 */
+
 	return (
 		<Container title="Account Status">
 			<InnerContainer>
@@ -13,15 +33,31 @@ export const AccountStatus = () => {
 					<div className="flex flex-row items-center gap-2">
 						<img
 							alt="premium-time-status"
-							src="/assets/status/account-status_red.gif"
+							src={
+								premium
+									? "/assets/status/account-status_green.gif"
+									: "/assets/status/account-status_red.gif"
+							}
 							className="h-[52px] w-[52px]"
 						/>
 						<div className="flex flex-col font-roboto text-secondary text-sm leading-tight">
-							<span className="text-error">Free Account</span>
-							<span className="text-xs">
-								Your VIP Time expired at Dec 31, 1969, 21:00:00 BRA.
+							<span
+								className={cn("font-bold", {
+									"text-success": premium,
+									"text-error": !premium,
+								})}
+							>
+								{premium ? "VIP Account" : "Free Account"}
 							</span>
-							<span className="text-xs">(Balance of Premium Time: 0 days)</span>
+							{premiumExpiresAt && (
+								<span className="text-xs">
+									Your VIP Time expired at {formatDate(premiumExpiresAt)}.
+								</span>
+							)}
+
+							<span className="text-xs">
+								(Balance of Premium Time: {premiumDays} days)
+							</span>
 						</div>
 					</div>
 					<div className="flex flex-row flex-wrap gap-1 md:flex-col">
@@ -46,7 +82,7 @@ export const AccountStatus = () => {
 							className="h-8 w-8"
 						/>
 						<span className="font-roboto text-secondary text-sm">
-							customise quick looting to your liking
+							customize quick looting to your liking
 						</span>
 					</div>
 					<div className="flex w-full flex-row items-center gap-1 md:w-auto">

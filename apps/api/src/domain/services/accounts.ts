@@ -119,7 +119,7 @@ export class AccountsService {
 		return {
 			...account,
 			sessions: account.sessions,
-			players: account.players,
+			characters: account.players,
 			store_history: account.store_history,
 		};
 	}

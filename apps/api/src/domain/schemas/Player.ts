@@ -1,13 +1,14 @@
 import z from "zod";
 import { unixTimestampToDate } from "@/utils/date";
+import { getPlayerRole, getVocationName } from "@/utils/player";
 
 export const PlayerSchema = z.object({
 	id: z.number(),
 	name: z.string(),
-	group_id: z.number(),
+	group_id: z.number().transform(getPlayerRole),
 	account_id: z.number(),
 	level: z.number(),
-	vocation: z.number(),
+	vocation: z.number().transform(getVocationName),
 	health: z.number(),
 	healthmax: z.number(),
 	experience: z.bigint(),

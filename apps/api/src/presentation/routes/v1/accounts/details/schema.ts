@@ -9,7 +9,7 @@ export const AccountDetailsSchema = {
 	output: AccountSchema.omit({ password: true }).extend({
 		store_history: z.array(StoreHistory),
 		sessions: z.array(SessionSchema.omit({ token: true })),
-		players: z.array(PlayerSchema),
+		characters: z.array(PlayerSchema),
 	}),
 };
 

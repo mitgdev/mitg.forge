@@ -1,9 +1,17 @@
 import { Link } from "@tanstack/react-router";
+import { PlayerRole } from "@/components/Player/Role";
+import { PlayerVocation } from "@/components/Player/Vocation";
+import { makeOutfit } from "@/sdk/utils/outfit";
 import { ButtonLink } from "@/ui/Buttons/ButtonLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
+import type { AccountSectionDetails } from "..";
 
-export const AccountCharacters = () => {
+export const AccountCharacters = ({
+	characters,
+}: {
+	characters: AccountSectionDetails["characters"];
+}) => {
 	return (
 		<Container title="Characters">
 			<InnerContainer className="flex justify-center p-0">
@@ -13,64 +21,95 @@ export const AccountCharacters = () => {
 				<table className="w-full border-collapse">
 					<thead>
 						<tr>
-							<th className="border border-septenary p-1 text-start font-bold text-secondary" />
+							<th className="w-[2%] border border-septenary p-1 text-start font-bold text-secondary" />
 							<th className="border border-septenary p-1 text-start font-bold text-secondary">
 								Name
 							</th>
-							<th className="border border-septenary p-1 text-start font-bold text-secondary">
+							<th className="w-[10%] border border-septenary p-1 text-start font-bold text-secondary">
+								Vocation
+							</th>
+							<th className="w-[10%] border border-septenary p-1 text-start font-bold text-secondary">
 								Status
 							</th>
-							<th className="border border-septenary p-1 text-start font-bold text-secondary">
+							<th className="w-[10%] border border-septenary p-1 text-start font-bold text-secondary">
 								Actions
 							</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td className="border border-septenary p-1 text-center">
-								<span className="font-bold text-secondary">1.</span>
-							</td>
-							<td className="border border-septenary p-1 text-secondary">
-								<div className="flex flex-row flex-wrap items-center gap-1">
-									<div className="relative hidden h-16 w-16 md:block">
-										<img
-											alt="character-avatar"
-											src="https://outfit-images.ots.me/latest_walk/animoutfit.php?id=130&addons=3&head=0&body=114&legs=94&feet=94"
-											className="absolute right-3 bottom-3"
-										/>
-									</div>
-									<div className="flex flex-col">
-										<span className="font-bold text-lg text-secondary">
-											Kamity
+						{characters.map((character, index) => {
+							return (
+								<tr key={`${character.id}-${character.name}`}>
+									<td className="border border-septenary p-1 text-center">
+										<span className="font-bold text-secondary">
+											{index + 1}.
 										</span>
-										<span className="text-secondary text-xs">
-											Royal Paladin - Level 897 - on Ferumbra
-										</span>
-									</div>
-								</div>
-							</td>
-							<td className="border border-septenary p-1 text-secondary">
-								Online
-							</td>
-							<td className="border border-septenary p-1">
-								<div className="flex flex-col items-center">
-									<span className="text-secondary text-sm">
-										[
-										<Link to="/" className="font-bold text-blue-900 underline">
-											Edit
-										</Link>
-										]
-									</span>
-									<span className="text-secondary text-sm">
-										[
-										<Link to="/" className="font-bold text-blue-900 underline">
-											Delete
-										</Link>
-										]
-									</span>
-								</div>
-							</td>
-						</tr>
+									</td>
+									<td className="border border-septenary p-1 text-secondary">
+										<div className="flex flex-row flex-wrap items-center gap-1">
+											<div className="relative hidden h-16 w-16 md:block">
+												<img
+													alt="character-avatar"
+													src={makeOutfit({
+														id: character.looktype,
+														addons: character.lookaddons,
+														head: character.lookhead,
+														body: character.lookbody,
+														legs: character.looklegs,
+														feet: character.lookfeet,
+													})}
+													className="absolute right-3 bottom-3"
+												/>
+											</div>
+											<div className="flex flex-col">
+												<div className="flex flex-row items-center gap-1">
+													<PlayerRole role={character.group_id} />
+													<span className="font-bold text-lg text-secondary">
+														{character.name}
+													</span>
+												</div>
+
+												<span className="flex flex-row items-center gap-1 text-secondary text-xs">
+													Level {character.level} - on Ferumbra
+												</span>
+											</div>
+										</div>
+									</td>
+									<td className="border border-septenary p-1">
+										<div className="flex w-full justify-center">
+											<PlayerVocation vocation={character.vocation} />
+										</div>
+									</td>
+									<td className="border border-septenary p-1 text-secondary">
+										Online
+									</td>
+									<td className="border border-septenary p-1">
+										<div className="flex flex-col items-center">
+											<span className="text-secondary text-sm">
+												[
+												<Link
+													to="/"
+													className="font-bold text-blue-900 underline"
+												>
+													Edit
+												</Link>
+												]
+											</span>
+											<span className="text-secondary text-sm">
+												[
+												<Link
+													to="/"
+													className="font-bold text-blue-900 underline"
+												>
+													Delete
+												</Link>
+												]
+											</span>
+										</div>
+									</td>
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</InnerContainer>
