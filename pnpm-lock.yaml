@@ -108,6 +108,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.66.0(react@19.2.0))
+      '@miforge/api':
+        specifier: workspace:*
+        version: link:../api
       '@orpc/client':
         specifier: ^1.10.0
         version: 1.10.0

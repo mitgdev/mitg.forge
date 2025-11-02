@@ -15,6 +15,7 @@
 	"packageManager": "pnpm@10.18.3",
 	"dependencies": {
 		"@hookform/resolvers": "^5.2.2",
+		"@miforge/api": "workspace:*",
 		"@orpc/client": "^1.10.0",
 		"@orpc/tanstack-query": "^1.10.0",
 		"@tailwindcss/vite": "^4.1.15",
