@@ -12,6 +12,7 @@
 		"check": "turbo run check",
 		"lint": "turbo run lint",
 		"types": "turbo run types",
+		"build": "turbo run build",
 		"changeset": "changeset",
 		"changeset:status": "changeset status --verbose",
 		"changeset:version": "changeset version",
