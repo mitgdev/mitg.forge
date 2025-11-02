@@ -1,14 +1,10 @@
 import { forwardRef } from "react";
 import { cn } from "@/sdk/utils/cn";
-import { InnerContainer } from "./Inner";
 
-type Props = React.HTMLAttributes<HTMLDivElement> & {
-	title: string;
-	innerContainer?: boolean;
-};
+type Props = React.HTMLAttributes<HTMLDivElement> & {};
 
-export const Container = forwardRef<HTMLDivElement, Props>(
-	({ children, className, innerContainer, title, ...props }, ref) => {
+export const MessageContainer = forwardRef<HTMLDivElement, Props>(
+	({ className, children, ...props }, ref) => {
 		const corner = cn(
 			"absolute h-[5px] w-[5px] bg-[url('/assets/borders/box-frame-edge.gif')] bg-no-repeat",
 		);
@@ -28,25 +24,12 @@ export const Container = forwardRef<HTMLDivElement, Props>(
 					<span className={`${borderSides} -right-px`} />
 					<span className={`${corner} -top-px -right-px`} />
 					<span className={`${corner} -right-px -bottom-px`} />
-					<div className="flex items-center justify-between gap-3 bg-tibia-700 px-3 py-1">
-						<h1 className="font-bold font-poppins text-sm text-white">
-							{title}
-						</h1>
-					</div>
+					<div className="gap-3 bg-tibia-600 px-3 py-1">{children}</div>
 					<span className={`${borderAboves} -left-px`} />
 					<span className={`${borderSides}`} />
 					<span className={`${corner} -top-px -left-px`} />
 					<span className={`${corner} -bottom-px -left-px`} />
 				</div>
-				{innerContainer ? (
-					<div className="border-3 border-t-0 bg-tibia-800 p-2 text-senary">
-						<InnerContainer className="p-1">{children}</InnerContainer>
-					</div>
-				) : (
-					<div className="border-3 border-t-0 bg-tibia-800 p-2 text-senary">
-						{children}
-					</div>
-				)}
 			</div>
 		);
 	},
