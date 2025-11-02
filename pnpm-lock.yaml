@@ -72,8 +72,8 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       hono:
-        specifier: ^4.10.1
-        version: 4.10.1
+        specifier: ^4.10.3
+        version: 4.10.3
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -1877,8 +1877,8 @@ packages:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
     engines: {node: '>=0.10.0'}
 
-  hono@4.10.1:
-    resolution: {integrity: sha512-rpGNOfacO4WEPClfkEt1yfl8cbu10uB1lNpiI33AKoiAHwOS8lV748JiLx4b5ozO/u4qLjIvfpFsPXdY5Qjkmg==}
+  hono@4.10.3:
+    resolution: {integrity: sha512-2LOYWUbnhdxdL8MNbNg9XZig6k+cZXm5IjHn2Aviv7honhBMOHb+jxrKIeJRZJRmn+htUCKhaicxwXuUDlchRA==}
     engines: {node: '>=16.9.0'}
 
   hookable@5.5.3:
@@ -4874,7 +4874,7 @@ snapshots:
     dependencies:
       parse-passwd: 1.0.0
 
-  hono@4.10.1: {}
+  hono@4.10.3: {}
 
   hookable@5.5.3: {}
 
