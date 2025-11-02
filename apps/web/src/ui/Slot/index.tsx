@@ -1,22 +1,42 @@
-import { cloneElement, forwardRef, isValidElement } from "react";
+/** biome-ignore-all lint/suspicious/noExplicitAny: <this a component slot, and can be anything> */
+import {
+	cloneElement,
+	forwardRef,
+	isValidElement,
+	type ReactElement,
+} from "react";
 
-export const Slot = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
-	({ children, ...props }, ref) => {
-		if (isValidElement(children)) {
-			// mescla: props do filho primeiro, depois as do Slot (o Slot vence)
-			const merged: Record<string, any> = { ...children.props, ...props };
+type SlotProps = React.HTMLAttributes<HTMLElement> & {
+	children?: React.ReactNode;
+};
 
-			// remove undefined para não "controlar" sem querer
-			for (const k of Object.keys(merged)) {
-				if (merged[k] === undefined) delete merged[k];
-			}
+export const Slot = forwardRef<HTMLElement, SlotProps>(function Slot(
+	{ children, ...props },
+	ref,
+) {
+	if (isValidElement(children)) {
+		// deixe explícito que é um ReactElement “aberto”
+		const child = children as ReactElement<any>;
 
-			return cloneElement(children, { ...merged, ref });
+		// faça o spread em objetos tipados
+		const merged: Record<string, unknown> = { ...child.props, ...props };
+
+		// limpa undefined
+		for (const k of Object.keys(merged)) {
+			if ((merged as any)[k] === undefined) delete (merged as any)[k];
 		}
-		return (
-			<div ref={ref} {...props}>
-				{children}
-			</div>
-		);
-	},
-);
+
+		// passe o ref com cast para driblar a limitação de tipos do cloneElement
+		return cloneElement(child, { ...(merged as any), ref } as any);
+	}
+
+	// fallback: <div> com casts compatíveis
+	return (
+		<div
+			ref={ref as React.Ref<HTMLDivElement>}
+			{...(props as React.HTMLAttributes<HTMLDivElement>)}
+		>
+			{children}
+		</div>
+	);
+});
