@@ -31,6 +31,7 @@
 	"prettier.enable": false,
 	"cSpell.words": [
 		"addonsflags",
+		"alstr",
 		"anticheatprotection",
 		"assetversion",
 		"autoincrement",
