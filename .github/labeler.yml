@@ -1,0 +1,12 @@
+---
+"Area: Docker":
+  - any: ["docker/**/*"]
+
+"Area: Api":
+  - any: ["apps/api/**/*"]
+
+"Area: Web":
+  - any: ["apps/web/**/*"]
+
+"Area: Docs":
+  - any: ["docs/**/*"]
