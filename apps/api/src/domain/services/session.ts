@@ -101,6 +101,8 @@ export class SessionService {
 	@CatchDecorator()
 	async info(): Promise<SessionInfoOutput> {
 		try {
+			const account = await this.isAuthenticated();
+
 			const session = this.context.get("session");
 
 			if (!session) {
@@ -109,8 +111,6 @@ export class SessionService {
 					session: null,
 				};
 			}
-
-			const account = await this.isAuthenticated();
 
 			return {
 				authenticated: true,
