@@ -1,12 +1,18 @@
----
 "Area: Docker":
-  - any: ["docker/**/*"]
+  - changed-files:
+      - any-glob-to-any-file: ["docker/**"]
 
 "Area: Api":
-  - any: ["apps/api/**/*"]
+  - changed-files:
+      - any-glob-to-any-file: ["apps/api/**"]
 
 "Area: Web":
-  - any: ["apps/web/**/*"]
+  - changed-files:
+      - any-glob-to-any-file: ["apps/web/**"]
 
 "Area: Docs":
-  - any: ["docs/**/*"]
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**"
+          - "**/README.*"
+          - "**/CONTRIBUTING.*"
