@@ -5,9 +5,11 @@
 	"scripts": {
 		"dev": "vite --port 3000",
 		"build": "vite build && tsc --noEmit",
-		"check": "tsc --noEmit",
 		"serve": "vite preview",
-		"start": "vite"
+		"start": "vite",
+		"types": "tsc --noEmit",
+		"lint": "biome lint .",
+		"check": "biome check ."
 	},
 	"keywords": [],
 	"packageManager": "pnpm@10.18.3",

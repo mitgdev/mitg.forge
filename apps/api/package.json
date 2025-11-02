@@ -8,13 +8,15 @@
 		"build": "tsdown && pnpm run build:types && pnpm run build:bun",
 		"build:types": "tsc --emitDeclarationOnly",
 		"build:bun": "bun build --compile --minify --sourcemap ./src/index.ts --outfile dist/server",
-		"check:types": "tsc -b",
 		"dev": "bun run --tsconfig-override ./tsconfig.dev.json --inspect=localhost:6499/ --hot src/index.ts",
 		"db:generate": "prisma generate --no-hints",
 		"db:migrate": "prisma migrate deploy",
 		"db:migrate:dev": "prisma migrate dev",
 		"db:seed": "bun run prisma/seed/index.ts",
 		"db:reset": "prisma migrate reset --force",
+		"types": "tsc -b",
+		"check": "biome check .",
+		"lint": "biome lint .",
 		"prepare": "pnpm run db:generate && pnpm run build && pnpm run build:types"
 	},
 	"dependencies": {
