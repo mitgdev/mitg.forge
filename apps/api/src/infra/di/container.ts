@@ -13,7 +13,7 @@ import {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
-import { env } from "@/env";
+import { env } from "@/infra/env";
 import { TOKENS } from "./tokens";
 
 declare global {

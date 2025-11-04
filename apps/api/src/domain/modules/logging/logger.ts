@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env } from "@/infra/env";
 
 export type LogLevel = "debug" | "info" | "warn" | "error";
 

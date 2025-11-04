@@ -1,5 +1,5 @@
 import { cors } from "hono/cors";
-import { env } from "@/env";
+import { env } from "@/infra/env";
 
 const allowedOrigins = new Set(env.ALLOWED_ORIGINS);
 

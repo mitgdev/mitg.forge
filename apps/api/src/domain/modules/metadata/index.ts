@@ -1,9 +1,8 @@
 import { ORPCError } from "@orpc/client";
 import { getConnInfo } from "hono/bun";
 import { inject, injectable } from "tsyringe";
-
-import { env } from "@/env";
 import { TOKENS } from "@/infra/di/tokens";
+import { env } from "@/infra/env";
 import type { Cookies } from "../cookies";
 
 @injectable()

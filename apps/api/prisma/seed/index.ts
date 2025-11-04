@@ -1,4 +1,4 @@
-import { env } from '@/env'
+import { env } from '@/infra/env'
 import {PrismaClient} from 'generated/client'
 import {PrismaMariaDb} from "@prisma/adapter-mariadb"
 import crypto from "node:crypto";

@@ -2,8 +2,8 @@
 import * as jwt from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 import type { Logger } from "@/domain/modules/logging/logger";
-import { env } from "@/env";
 import { TOKENS } from "@/infra/di/tokens";
+import { env } from "@/infra/env";
 
 type ExtendedJwt<T> = jwt.JwtPayload & T;
 

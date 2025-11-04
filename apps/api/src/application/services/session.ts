@@ -8,8 +8,8 @@ import type {
 	AccountRepository,
 	SessionRepository,
 } from "@/domain/repositories";
-import { env } from "@/env";
 import { TOKENS } from "@/infra/di/tokens";
+import { env } from "@/infra/env";
 import type { SessionInfoOutput } from "@/presentation/routes/v1/session/info/schema";
 
 @injectable()

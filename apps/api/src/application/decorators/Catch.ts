@@ -1,5 +1,5 @@
 import { ORPCError } from "@orpc/client";
-import { env } from "@/env";
+import { env } from "@/infra/env";
 
 // biome-ignore lint/suspicious/noExplicitAny: <decorator>
 function resolveClassName(target: any, self: any): string {
