@@ -1,4 +1,4 @@
-type Vocation =
+export type Vocation =
 	| "No Vocation"
 	| "Sorcerer"
 	| "Druid"

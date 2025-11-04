@@ -1,4 +1,4 @@
-type Roles =
+export type Roles =
 	| "Admin"
 	| "Community Manager"
 	| "Game Master"
