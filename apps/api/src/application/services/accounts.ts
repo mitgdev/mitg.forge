@@ -1,18 +1,21 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "@/di/tokens";
+import type { Cookies } from "@/domain/modules/cookies";
+import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
+import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
+import type { Logger } from "@/domain/modules/logging/logger";
+import type { Metadata } from "@/domain/modules/metadata";
+import type {
+	AccountRepository,
+	SessionRepository,
+} from "@/domain/repositories";
 import { env } from "@/env";
-import type { Cookies } from "@/infra/cookies";
-import type { HasherCrypto } from "@/infra/crypto/hasher";
-import type { JwtCrypto } from "@/infra/crypto/jwt";
-import type { Logger } from "@/infra/logging/logger";
-import type { Metadata } from "@/infra/metadata";
+import { TOKENS } from "@/infra/di/tokens";
 import type { AccountDetailsOutput } from "@/presentation/routes/v1/accounts/details/schema";
 import type {
 	AccountLoginInput,
 	AccountLoginOutput,
 } from "@/presentation/routes/v1/accounts/login/schema";
-import type { AccountRepository, SessionRepository } from "@/repositories";
 import { CatchDecorator } from "../decorators/Catch";
 import type { SessionService } from "./session";
 

@@ -1,4 +1,4 @@
-import { base } from "@/main/rpc/base";
+import { base } from "@/infra/rpc/base";
 import { crashReporterRoute } from "./crashReporter";
 import { fpsTrackingRoute } from "./fpsTracking";
 import { loginRoute } from "./login";

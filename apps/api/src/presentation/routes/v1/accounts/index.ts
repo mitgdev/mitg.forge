@@ -1,4 +1,4 @@
-import { base } from "@/main/rpc/base";
+import { base } from "@/infra/rpc/base";
 import { detailsRoute } from "./details";
 import { loginRoute } from "./login";
 import { logoutRoute } from "./logout";

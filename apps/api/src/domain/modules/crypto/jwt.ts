@@ -1,9 +1,9 @@
 // TODO - Refactor to use hono/jwt
 import * as jwt from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "@/di/tokens";
+import type { Logger } from "@/domain/modules/logging/logger";
 import { env } from "@/env";
-import type { Logger } from "@/infra/logging/logger";
+import { TOKENS } from "@/infra/di/tokens";
 
 type ExtendedJwt<T> = jwt.JwtPayload & T;
 

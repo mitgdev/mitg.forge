@@ -1,17 +1,20 @@
 import type { InjectionToken } from "tsyringe";
-import type { AccountsService, TibiaClientService } from "@/domain/services";
-import type { SessionService } from "@/domain/services/session";
-import type { Prisma } from "@/infra/clients";
-import type { Cookies } from "@/infra/cookies";
-import type { HasherCrypto } from "@/infra/crypto/hasher";
-import type { JwtCrypto } from "@/infra/crypto/jwt";
-import type { Logger, RootLogger } from "@/infra/logging/logger";
-import type { Metadata } from "@/infra/metadata";
+import type {
+	AccountsService,
+	TibiaClientService,
+} from "@/application/services";
+import type { SessionService } from "@/application/services/session";
+import type { Prisma } from "@/domain/modules/clients";
+import type { Cookies } from "@/domain/modules/cookies";
+import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
+import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
+import type { Logger, RootLogger } from "@/domain/modules/logging/logger";
+import type { Metadata } from "@/domain/modules/metadata";
 import type {
 	AccountRepository,
 	PlayersRepository,
 	SessionRepository,
-} from "@/repositories";
+} from "@/domain/repositories";
 
 export const token = <T>(desc: string) => Symbol(desc) as InjectionToken<T>;
 

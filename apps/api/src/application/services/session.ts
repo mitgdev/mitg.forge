@@ -1,13 +1,16 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "@/di/tokens";
-import { CatchDecorator } from "@/domain/decorators/Catch";
+import { CatchDecorator } from "@/application/decorators/Catch";
+import type { Cookies } from "@/domain/modules/cookies";
+import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
+import type { Metadata } from "@/domain/modules/metadata";
+import type {
+	AccountRepository,
+	SessionRepository,
+} from "@/domain/repositories";
 import { env } from "@/env";
-import type { Cookies } from "@/infra/cookies";
-import type { JwtCrypto } from "@/infra/crypto/jwt";
-import type { Metadata } from "@/infra/metadata";
+import { TOKENS } from "@/infra/di/tokens";
 import type { SessionInfoOutput } from "@/presentation/routes/v1/session/info/schema";
-import type { AccountRepository, SessionRepository } from "@/repositories";
 
 @injectable()
 export class SessionService {

@@ -1,4 +1,4 @@
-import { base } from "@/main/rpc/base";
+import { base } from "@/infra/rpc/base";
 import { FileToText } from "@/utils/fileToText";
 
 export const crashReporterRoute = base

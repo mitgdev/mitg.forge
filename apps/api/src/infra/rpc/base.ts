@@ -2,7 +2,7 @@ import { oo } from "@orpc/openapi";
 import { os } from "@orpc/server";
 import z from "zod";
 
-import type { Context } from "@/main/context";
+import type { Context } from "@/infra/context";
 
 type Meta = {};
 

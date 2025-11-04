@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "@/di/tokens";
-import type { Prisma } from "@/infra/clients";
+import type { Prisma } from "@/domain/modules/clients";
+import { TOKENS } from "@/infra/di/tokens";
 
 @injectable()
 export class AccountRepository {

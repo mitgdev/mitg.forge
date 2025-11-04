@@ -1,20 +1,20 @@
 import { container, type DependencyContainer, Lifecycle } from "tsyringe";
-import { TOKENS } from "@/di/tokens";
-import { AccountsService, TibiaClientService } from "@/domain/services";
-import { SessionService } from "@/domain/services/session";
-import { env } from "@/env";
-import { makePrisma, type Prisma } from "@/infra/clients";
-import { Cookies } from "@/infra/cookies";
-import { HasherCrypto } from "@/infra/crypto/hasher";
-import { JwtCrypto } from "@/infra/crypto/jwt";
-import { RootLogger } from "@/infra/logging/logger";
-import { makeRequestLogger } from "@/infra/logging/request-logger";
-import { Metadata } from "@/infra/metadata";
+import { AccountsService, TibiaClientService } from "@/application/services";
+import { SessionService } from "@/application/services/session";
+import { makePrisma, type Prisma } from "@/domain/modules/clients";
+import { Cookies } from "@/domain/modules/cookies";
+import { HasherCrypto } from "@/domain/modules/crypto/hasher";
+import { JwtCrypto } from "@/domain/modules/crypto/jwt";
+import { RootLogger } from "@/domain/modules/logging/logger";
+import { makeRequestLogger } from "@/domain/modules/logging/request-logger";
+import { Metadata } from "@/domain/modules/metadata";
 import {
 	AccountRepository,
 	PlayersRepository,
 	SessionRepository,
-} from "@/repositories";
+} from "@/domain/repositories";
+import { env } from "@/env";
+import { TOKENS } from "./tokens";
 
 declare global {
 	var __PRISMA__: Prisma | undefined;

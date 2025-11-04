@@ -1,11 +1,11 @@
 import "reflect-metadata";
 import { config as dotenv } from "dotenv-flow";
 import { container } from "tsyringe";
-import { bootstrapContainer } from "@/di/container";
-import { TOKENS } from "@/di/tokens";
+import type { Logger } from "@/domain/modules/logging/logger";
 import { env } from "@/env";
-import type { Logger } from "@/infra/logging/logger";
-import { app } from "@/main/config/app";
+import { app } from "@/infra/config/app";
+import { bootstrapContainer } from "@/infra/di/container";
+import { TOKENS } from "@/infra/di/tokens";
 
 dotenv({
 	node_env: process.env.NODE_ENV || "development",

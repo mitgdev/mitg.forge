@@ -1,4 +1,4 @@
-import { base } from "@/main/rpc/base";
+import { base } from "@/infra/rpc/base";
 import { accountsRouter } from "./accounts";
 import { clientRouter } from "./client";
 import { pingRoute } from "./ping";

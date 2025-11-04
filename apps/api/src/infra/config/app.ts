@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { setupMiddlewares } from "@/main/config/setupMiddlewares";
-import { setupRoutes } from "@/main/config/setupRoutes";
+import { setupMiddlewares } from "./setupMiddlewares";
+import { setupRoutes } from "./setupRoutes";
 
 const app = new Hono<ContextEnv>();
 

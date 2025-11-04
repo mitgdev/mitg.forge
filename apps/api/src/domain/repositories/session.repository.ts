@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "@/di/tokens";
-import type { Prisma } from "@/infra/clients";
-import type { Metadata } from "@/infra/metadata";
+import type { Prisma } from "@/domain/modules/clients";
+import type { Metadata } from "@/domain/modules/metadata";
+import { TOKENS } from "@/infra/di/tokens";
 
 @injectable()
 export class SessionRepository {

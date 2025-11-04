@@ -1,9 +1,9 @@
 import type { DependencyContainer } from "tsyringe";
-import { TOKENS } from "@/di/tokens";
+import type { Logger } from "@/domain/modules/logging/logger";
 
-import type { Logger } from "@/infra/logging/logger";
+import { TOKENS } from "@/infra/di/tokens";
 import { AccountsService } from "./accounts";
-import { SessionService } from "./session";
+import type { SessionService } from "./session";
 import { TibiaClientService } from "./tibiaclient";
 
 export class Services {
@@ -26,4 +26,4 @@ export class Services {
 	}
 }
 
-export { AccountsService, SessionService, TibiaClientService };
+export { AccountsService, type SessionService, TibiaClientService };

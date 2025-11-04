@@ -1,8 +1,8 @@
 import z from "zod";
-import { AccountSchema } from "@/domain/schemas/Account";
-import { PlayerSchema } from "@/domain/schemas/Player";
-import { SessionSchema } from "@/domain/schemas/Session";
-import { StoreHistory } from "@/domain/schemas/StoreHistory";
+import { AccountSchema } from "@/shared/schemas/Account";
+import { PlayerSchema } from "@/shared/schemas/Player";
+import { SessionSchema } from "@/shared/schemas/Session";
+import { StoreHistory } from "@/shared/schemas/StoreHistory";
 
 export const AccountDetailsSchema = {
 	input: z.unknown().optional(),

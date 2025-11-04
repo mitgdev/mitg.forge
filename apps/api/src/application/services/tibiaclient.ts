@@ -1,8 +1,8 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "@/di/tokens";
-import type { HasherCrypto } from "@/infra/crypto/hasher";
-import type { AccountRepository } from "@/repositories";
+import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
+import type { AccountRepository } from "@/domain/repositories";
+import { TOKENS } from "@/infra/di/tokens";
 
 @injectable()
 export class TibiaClientService {

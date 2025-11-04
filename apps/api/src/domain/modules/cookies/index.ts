@@ -1,7 +1,7 @@
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import type { CookieOptions } from "hono/utils/cookie";
 import { inject, injectable } from "tsyringe";
-import { TOKENS } from "@/di/tokens";
+import { TOKENS } from "@/infra/di/tokens";
 
 type ExtendedCookieOptions = CookieOptions & {
 	namePrefix?: boolean;
