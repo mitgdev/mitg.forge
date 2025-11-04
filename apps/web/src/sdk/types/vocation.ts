@@ -1,5 +1,3 @@
-import type { api } from "../lib/api/factory";
+import type { Vocation as Vocations } from "@miforge/api/utils/player/vocations";
 
-export type Vocation = Awaited<
-	ReturnType<typeof api.client.miforge.accounts.details>
->["characters"][number]["vocation"];
+export type Vocation = Vocations;

@@ -1,5 +1,3 @@
-import type { api } from "../lib/api/factory";
+import type { Roles } from "@miforge/api/utils/player/group";
 
-export type Role = Awaited<
-	ReturnType<typeof api.client.miforge.accounts.details>
->["characters"][number]["group_id"];
+export type Role = Roles;

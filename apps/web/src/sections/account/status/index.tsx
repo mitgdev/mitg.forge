@@ -74,11 +74,11 @@ export const AccountStatus = ({
 				</div>
 			</InnerContainer>
 			<InnerContainer>
-				<div className="flex flex-row flex-wrap justify-around gap-3">
+				<div className="flex flex-row flex-wrap justify-between gap-3">
 					<div className="flex w-full flex-row items-center gap-1 md:w-auto">
 						<img
 							alt="something"
-							src="/assets/icons/32/citizen_doll.gif"
+							src="/assets/icons/32/premium-icon-quick-loot.png"
 							className="h-8 w-8"
 						/>
 						<span className="font-roboto text-secondary text-sm">
@@ -88,7 +88,7 @@ export const AccountStatus = ({
 					<div className="flex w-full flex-row items-center gap-1 md:w-auto">
 						<img
 							alt="something"
-							src="/assets/icons/32/armillary_sphere.gif"
+							src="/assets/icons/32/premium-icon-death.png"
 							className="h-8 w-8"
 						/>
 						<span className="font-roboto text-secondary text-sm">
@@ -98,7 +98,7 @@ export const AccountStatus = ({
 					<div className="flex w-full flex-row items-center gap-1 md:w-auto">
 						<img
 							alt="something"
-							src="/assets/icons/32/goromaphone.gif"
+							src="/assets/icons/32/premium-icon-stamina.png"
 							className="h-8 w-8"
 						/>
 						<span className="font-roboto text-secondary text-sm">

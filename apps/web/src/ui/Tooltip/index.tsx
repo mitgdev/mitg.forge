@@ -1,4 +1,5 @@
 import { type PropsWithChildren, useId } from "react";
+import { cn } from "@/sdk/utils/cn";
 
 type TooltipProps = PropsWithChildren<{
 	content: React.ReactNode;
@@ -9,7 +10,11 @@ export function Tooltip({ content, children, className }: TooltipProps) {
 	const id = useId();
 	return (
 		<span className="group relative inline-block h-max w-max">
-			<button type="button" aria-describedby={id} className={className}>
+			<button
+				type="button"
+				aria-describedby={id}
+				className={cn("flex", className)}
+			>
 				{children}
 			</button>
 

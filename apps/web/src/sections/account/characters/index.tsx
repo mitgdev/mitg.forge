@@ -1,4 +1,8 @@
 import { Link } from "@tanstack/react-router";
+import { PlayerStatusHidden } from "@/components/Player/Hidden";
+import { PlayerMain } from "@/components/Player/Main";
+import { PlayerIsOnline } from "@/components/Player/Online";
+import { PlayerRewardCollected } from "@/components/Player/RewardCollected";
 import { PlayerRole } from "@/components/Player/Role";
 import { PlayerVocation } from "@/components/Player/Vocation";
 import { makeOutfit } from "@/sdk/utils/outfit";
@@ -25,10 +29,10 @@ export const AccountCharacters = ({
 							<th className="border border-septenary p-1 text-start font-bold text-secondary">
 								Name
 							</th>
-							<th className="w-[10%] border border-septenary p-1 text-start font-bold text-secondary">
+							<th className="hidden w-[10%] border border-septenary p-1 text-start font-bold text-secondary md:table-cell">
 								Vocation
 							</th>
-							<th className="w-[10%] border border-septenary p-1 text-start font-bold text-secondary">
+							<th className="hidden w-[10%] border border-septenary p-1 text-start font-bold text-secondary md:table-cell">
 								Status
 							</th>
 							<th className="w-[10%] border border-septenary p-1 text-start font-bold text-secondary">
@@ -67,6 +71,7 @@ export const AccountCharacters = ({
 													<span className="font-bold text-lg text-secondary">
 														{character.name}
 													</span>
+													<PlayerMain />
 												</div>
 
 												<span className="flex flex-row items-center gap-1 text-secondary text-xs">
@@ -75,13 +80,17 @@ export const AccountCharacters = ({
 											</div>
 										</div>
 									</td>
-									<td className="border border-septenary p-1">
+									<td className="hidden border border-septenary p-1 md:table-cell">
 										<div className="flex w-full justify-center">
 											<PlayerVocation vocation={character.vocation} />
 										</div>
 									</td>
-									<td className="border border-septenary p-1 text-secondary">
-										Online
+									<td className="hidden border border-septenary p-1 text-secondary md:table-cell">
+										<div className="flex flex-row flex-wrap items-center justify-center gap-1">
+											<PlayerRewardCollected collected />
+											<PlayerIsOnline online />
+											<PlayerStatusHidden />
+										</div>
 									</td>
 									<td className="border border-septenary p-1">
 										<div className="flex flex-col items-center">
@@ -113,7 +122,10 @@ export const AccountCharacters = ({
 					</tbody>
 				</table>
 			</InnerContainer>
-			<div className="flex w-full justify-end">
+			<div className="flex w-full flex-wrap justify-end gap-2">
+				<ButtonLink variant="green" to="/">
+					Change Main
+				</ButtonLink>
 				<ButtonLink variant="info" to="/">
 					Create Character
 				</ButtonLink>
