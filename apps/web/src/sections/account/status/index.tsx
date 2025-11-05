@@ -61,7 +61,7 @@ export const AccountStatus = ({
 						</div>
 					</div>
 					<div className="flex flex-row flex-wrap gap-1 md:flex-col">
-						<ButtonLink variant="info" to="/">
+						<ButtonLink variant="info" to="/account/details">
 							Manage Account
 						</ButtonLink>
 						<ButtonLink variant="green" to="/">

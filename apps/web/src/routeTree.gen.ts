@@ -19,6 +19,9 @@ import { Route as AuthAccountIndexRouteImport } from './routes/_auth/account/ind
 
 const PublicTermsIndexLazyRouteImport = createFileRoute('/_public/terms/')()
 const Not_authLoginIndexLazyRouteImport = createFileRoute('/_not_auth/login/')()
+const AuthAccountDetailsIndexLazyRouteImport = createFileRoute(
+  '/_auth/account/details/',
+)()
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -58,18 +61,28 @@ const AuthAccountIndexRoute = AuthAccountIndexRouteImport.update({
 } as any).lazy(() =>
   import('./routes/_auth/account/index.lazy').then((d) => d.Route),
 )
+const AuthAccountDetailsIndexLazyRoute =
+  AuthAccountDetailsIndexLazyRouteImport.update({
+    id: '/account/details/',
+    path: '/account/details/',
+    getParentRoute: () => AuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/account/details/index.lazy').then((d) => d.Route),
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/account': typeof AuthAccountIndexRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
+  '/account/details': typeof AuthAccountDetailsIndexLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/account': typeof AuthAccountIndexRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
+  '/account/details': typeof AuthAccountDetailsIndexLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,12 +93,13 @@ export interface FileRoutesById {
   '/_auth/account/': typeof AuthAccountIndexRoute
   '/_not_auth/login/': typeof Not_authLoginIndexLazyRoute
   '/_public/terms/': typeof PublicTermsIndexLazyRoute
+  '/_auth/account/details/': typeof AuthAccountDetailsIndexLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account' | '/login' | '/terms'
+  fullPaths: '/' | '/account' | '/login' | '/terms' | '/account/details'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account' | '/login' | '/terms'
+  to: '/' | '/account' | '/login' | '/terms' | '/account/details'
   id:
     | '__root__'
     | '/_auth'
@@ -95,6 +109,7 @@ export interface FileRouteTypes {
     | '/_auth/account/'
     | '/_not_auth/login/'
     | '/_public/terms/'
+    | '/_auth/account/details/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -154,15 +169,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAccountIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/account/details/': {
+      id: '/_auth/account/details/'
+      path: '/account/details'
+      fullPath: '/account/details'
+      preLoaderRoute: typeof AuthAccountDetailsIndexLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
   }
 }
 
 interface AuthRouteRouteChildren {
   AuthAccountIndexRoute: typeof AuthAccountIndexRoute
+  AuthAccountDetailsIndexLazyRoute: typeof AuthAccountDetailsIndexLazyRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccountIndexRoute: AuthAccountIndexRoute,
+  AuthAccountDetailsIndexLazyRoute: AuthAccountDetailsIndexLazyRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
