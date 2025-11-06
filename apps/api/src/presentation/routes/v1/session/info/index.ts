@@ -11,5 +11,5 @@ export const infoRoute = publicProcedure
 	.input(SessionInfoSchema.input)
 	.output(SessionInfoSchema.output)
 	.handler(async ({ context }) => {
-		return context.services.session.info();
+		return context.usecases.session.info.execute();
 	});

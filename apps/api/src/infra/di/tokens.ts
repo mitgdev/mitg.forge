@@ -1,9 +1,18 @@
 import type { InjectionToken } from "tsyringe";
 import type {
 	AccountsService,
+	SessionService,
 	TibiaClientService,
 } from "@/application/services";
-import type { SessionService } from "@/application/services/session";
+import type {
+	AccountDetailsUseCase,
+	AccountLoginUseCase,
+	AccountLogoutUseCase,
+	SessionAuthenticatedUseCase,
+	SessionInfoUseCase,
+	SessionNotAuthenticatedUseCase,
+	TibiaLoginUseCase,
+} from "@/application/usecases";
 import type { Prisma } from "@/domain/modules/clients";
 import type { Cookies } from "@/domain/modules/cookies";
 import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
@@ -46,4 +55,19 @@ export const TOKENS = {
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),
 	AccountsService: token<AccountsService>("AccountsService"),
 	SessionService: token<SessionService>("SessionService"),
+
+	// UseCases
+	AccountLoginUseCase: token<AccountLoginUseCase>("LoginUseCase"),
+	AccountDetailsUseCase: token<AccountDetailsUseCase>("AccountDetailsUseCase"),
+	AccountLogoutUseCase: token<AccountLogoutUseCase>("AccountLogoutUseCase"),
+
+	SessionInfoUseCase: token<SessionInfoUseCase>("SessionInfoUseCase"),
+	SessionAuthenticatedUseCase: token<SessionAuthenticatedUseCase>(
+		"SessionAuthenticatedUseCase",
+	),
+	SessionNotAuthenticatedUseCase: token<SessionNotAuthenticatedUseCase>(
+		"SessionNotAuthenticatedUseCase",
+	),
+
+	TibiaLoginUseCase: token<TibiaLoginUseCase>("TibiaLoginUseCase"),
 } as const;

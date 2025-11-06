@@ -3,6 +3,11 @@ import { inject, injectable } from "tsyringe";
 import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import type { AccountRepository } from "@/domain/repositories";
 import { TOKENS } from "@/infra/di/tokens";
+import type { TibiaClientCharacter } from "@/shared/schemas/ClientCharacters";
+import type { TibiaClientError } from "@/shared/schemas/ClientError";
+import type { TibiaClientSession } from "@/shared/schemas/ClientSession";
+import type { TibiaClientWorld } from "@/shared/schemas/ClientWorld";
+import { getVocationName } from "@/utils/player";
 
 @injectable()
 export class TibiaClientService {
@@ -17,7 +22,14 @@ export class TibiaClientService {
 		email: string,
 		password: string,
 	): Promise<
-		{ errorCode: number; errorMessage: string } | Record<string, unknown>
+		| TibiaClientError
+		| {
+				session: TibiaClientSession;
+				playdata: {
+					worlds: Array<TibiaClientWorld>;
+					characters: Array<TibiaClientCharacter>;
+				};
+		  }
 	> {
 		try {
 			const account = await this.accountRepository.findByEmail(email);
@@ -94,7 +106,7 @@ export class TibiaClientService {
 							ismale: char.sex === 1,
 							tutorial: char.istutorial,
 							level: char.level,
-							vocation: "No Vocation",
+							vocation: getVocationName(char.vocation),
 							outfitid: char.looktype,
 							headcolor: char.lookhead,
 							torsocolor: char.lookbody,

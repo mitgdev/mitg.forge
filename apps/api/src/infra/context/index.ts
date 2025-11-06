@@ -1,4 +1,4 @@
-import { Services } from "@/application/services";
+import { UseCases } from "@/application/usecases";
 import { createRequestContainer } from "@/infra/di/container";
 
 export type CreateContextOptions = {
@@ -6,17 +6,17 @@ export type CreateContextOptions = {
 };
 
 export type CreateContext = {
-	services: Services;
+	usecases: UseCases;
 };
 
 export async function createContext({
 	context,
 }: CreateContextOptions): Promise<CreateContext> {
 	const di = createRequestContainer(context);
-	const services = new Services(di);
+	const usecases = new UseCases(di);
 
 	return {
-		services,
+		usecases,
 	};
 }
 

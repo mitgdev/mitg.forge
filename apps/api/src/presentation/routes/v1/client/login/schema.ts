@@ -1,4 +1,8 @@
 import z from "zod";
+import { TibiaClientCharactersSchema } from "@/shared/schemas/ClientCharacters";
+import { TibiaClientErrorSchema } from "@/shared/schemas/ClientError";
+import { TibiaClientSessionSchema } from "@/shared/schemas/ClientSession";
+import { TibiaClientWorldSchema } from "@/shared/schemas/ClientWorld";
 import { FileToText } from "@/utils/fileToText";
 
 const LoginSchema = z
@@ -34,6 +38,19 @@ const LoginFileSchema = z.instanceof(File).transform(async (file) => {
 
 export const ClientLoginSchema = {
 	input: z.instanceof(File),
-	output: z.any(),
+	output: z.union([
+		TibiaClientErrorSchema,
+		z.object({
+			session: TibiaClientSessionSchema,
+			playdata: z.object({
+				worlds: z.array(TibiaClientWorldSchema),
+				characters: z.array(TibiaClientCharactersSchema),
+			}),
+		}),
+	]),
 	inside: LoginFileSchema,
 };
+
+export type ClientLoginInput = z.infer<typeof ClientLoginSchema.input>;
+export type ClientLoginInside = z.infer<typeof ClientLoginSchema.inside>;
+export type ClientLoginOutput = z.infer<typeof ClientLoginSchema.output>;

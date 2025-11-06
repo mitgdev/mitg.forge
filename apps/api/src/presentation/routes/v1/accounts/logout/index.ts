@@ -12,5 +12,5 @@ export const logoutRoute = isAuthenticatedProcedure
 	.input(AccountLogoutSchema.input)
 	.output(AccountLogoutSchema.output)
 	.handler(async ({ context }) => {
-		await context.services.accounts.logout();
+		await context.usecases.account.logout.execute();
 	});

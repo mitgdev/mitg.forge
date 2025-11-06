@@ -1,47 +1,36 @@
 name: miforge-stack
 
 services:
-  # miforge_database:
-  #   image: mariadb
-  #   container_name: miforge_database
-  #   restart: unless-stopped
-  #   user: root
-  #   environment:
-  #     MARIADB_ROOT_PASSWORD: root
-  #     MARIADB_DATABASE: miforge
-  #     MARIADB_USER: aac
-  #     MARIADB_PASSWORD: aac
-  #   ports:
-  #     - "3306:3306"
-  #   volumes:
-  #     - db_data:/var/lib/mysql
-
-  # db_init:
-  #   image: alpine:3.20
-  #   depends_on:
-  #     - miforge_database
-  #   entrypoint: ["/bin/sh", "-c"]
-  #   command: >
-  #     "apk add --no-cache mariadb-client &&
-  #      until mariadb -hmiforge_database -uroot -proot -e 'SELECT 1'; do sleep 1; done &&
-  #      mariadb -hmiforge_database -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS miforge_shadow;' &&
-  #      echo 'shadow DB OK' "
-  #   restart: "no"
-
-  miforge_api:
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile
-    container_name: miforge_api
+  database:
+    image: mariadb
+    container_name: database
     restart: unless-stopped
-    environment:
-      ALLOWED_ORIGINS: "http://localhost:3000"
-      DATABASE_HOST: "localhost"
-      DATABASE_NAME: "ferumbra"
-      DATABASE_USER: "ferumbra"
-      DATABASE_PASSWORD: "ferumbra_password"
+    env_file: .env
     ports:
-      - "4000:4000"
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
+
+  cache:
+    image: eqalpha/keydb
+    container_name: cache
+    restart: unless-stopped
+    env_file: .env
+    command: >
+      keydb-server
+      --appendonly yes
+      --save 900 1 --save 300 10 --save 60 10000
+      --protected-mode no
+      --requirepass ${KEYDB_PASSWORD}
+      --databases 16
+      --dbfilename dump.rdb
+      --dir /data
+    ports:
+      - "6379:6379"
+    volumes:
+      - keydb_data:/data
 
 volumes:
   db_data:
+  keydb_data:

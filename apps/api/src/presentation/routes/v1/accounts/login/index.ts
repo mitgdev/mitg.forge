@@ -11,5 +11,5 @@ export const loginRoute = isNotAuthenticatedProcedure
 	.input(AccountLoginSchema.input)
 	.output(AccountLoginSchema.output)
 	.handler(async ({ context, input }) => {
-		return context.services.accounts.login(input);
+		return context.usecases.account.login.execute(input);
 	});

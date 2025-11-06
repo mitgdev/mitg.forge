@@ -1,6 +1,18 @@
 import { container, type DependencyContainer, Lifecycle } from "tsyringe";
-import { AccountsService, TibiaClientService } from "@/application/services";
-import { SessionService } from "@/application/services/session";
+import {
+	AccountsService,
+	SessionService,
+	TibiaClientService,
+} from "@/application/services";
+import {
+	AccountDetailsUseCase,
+	AccountLoginUseCase,
+	AccountLogoutUseCase,
+	SessionAuthenticatedUseCase,
+	SessionInfoUseCase,
+	SessionNotAuthenticatedUseCase,
+	TibiaLoginUseCase,
+} from "@/application/usecases";
 import { makePrisma, type Prisma } from "@/domain/modules/clients";
 import { Cookies } from "@/domain/modules/cookies";
 import { HasherCrypto } from "@/domain/modules/crypto/hasher";
@@ -112,6 +124,45 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.SessionService,
 		{ useClass: SessionService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	// UseCases (scoped per request)
+	childContainer.register(
+		TOKENS.AccountLoginUseCase,
+		{ useClass: AccountLoginUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountDetailsUseCase,
+		{ useClass: AccountDetailsUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountLogoutUseCase,
+		{ useClass: AccountLogoutUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	childContainer.register(
+		TOKENS.SessionInfoUseCase,
+		{ useClass: SessionInfoUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.SessionAuthenticatedUseCase,
+		{ useClass: SessionAuthenticatedUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.SessionNotAuthenticatedUseCase,
+		{ useClass: SessionNotAuthenticatedUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	childContainer.register(
+		TOKENS.TibiaLoginUseCase,
+		{ useClass: TibiaLoginUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

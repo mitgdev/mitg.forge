@@ -12,16 +12,5 @@ export const loginRoute = base
 	.input(ClientLoginSchema.input)
 	.output(ClientLoginSchema.output)
 	.handler(async ({ input, context }) => {
-		const result = await ClientLoginSchema.inside.safeParseAsync(input);
-
-		if (!result.success) {
-			return {
-				errorCode: 3,
-				errorMessage: "Something went wrong",
-			};
-		}
-
-		const { data } = result;
-
-		return await context.services.tibiaClient.login(data.email, data.password);
+		return context.usecases.tibia.login.execute(input);
 	});

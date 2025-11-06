@@ -1,5 +1,5 @@
 {
-  // Ativa format on save
+	// Ativa format on save
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports.biome": "explicit",
@@ -32,6 +32,7 @@
 	"cSpell.words": [
 		"addonsflags",
 		"anticheatprotection",
+		"appendonly",
 		"assetversion",
 		"autoincrement",
 		"boostname",
@@ -47,11 +48,14 @@
 		"dailyrewardstate",
 		"datasource",
 		"daystreak",
+		"dbfilename",
+		"dbml",
 		"depotitems",
 		"detailcolor",
 		"devicecookie",
 		"emailcoderequest",
 		"envalid",
+		"eqalpha",
 		"externaladdress",
 		"externaladdressprotected",
 		"externaladdressunprotected",
@@ -83,6 +87,7 @@
 		"istournamentworld",
 		"istutorial",
 		"itemtype",
+		"keydb",
 		"killerguild",
 		"lastday",
 		"lastip",
@@ -144,6 +149,7 @@
 		"quintenary",
 		"raceid",
 		"remainingdailytournamentplaytime",
+		"requirepass",
 		"restrictedstore",
 		"returnernotification",
 		"roboto",
@@ -162,6 +168,8 @@
 		"torsocolor",
 		"tournamentticketpurchasestate",
 		"tsyringe",
+		"usecase",
+		"usecases",
 		"usehooks",
 		"verdana",
 		"vipgroup",

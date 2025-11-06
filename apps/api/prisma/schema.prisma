@@ -1,11 +1,16 @@
 generator client {
-  provider      = "prisma-client-js"
-  output        = "../generated/client"
-  binaryTargets = ["native", "linux-arm64-openssl-1.1.x", "linux-musl-arm64-openssl-3.0.x"]
+  provider   = "prisma-client-js"
+  output     = "../generated/client"
+  engineType = "client"
 }
 
 datasource db {
   provider          = "mysql"
   url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+  output   = "../generated/dbml"
 }

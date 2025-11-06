@@ -11,13 +11,8 @@ import type {
 } from "@/domain/repositories";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
-import type { AccountDetailsOutput } from "@/presentation/routes/v1/accounts/details/schema";
-import type {
-	AccountLoginInput,
-	AccountLoginOutput,
-} from "@/presentation/routes/v1/accounts/login/schema";
 import { CatchDecorator } from "../decorators/Catch";
-import type { SessionService } from "./session";
+import type { SessionService } from "./session.service";
 
 @injectable()
 export class AccountsService {
@@ -37,10 +32,7 @@ export class AccountsService {
 	) {}
 
 	@CatchDecorator()
-	async login({
-		email,
-		password,
-	}: AccountLoginInput): Promise<AccountLoginOutput> {
+	async login({ email, password }: { email: string; password: string }) {
 		/**
 		 * TODO - Implement check for banned accounts to prevent login,
 		 * returning an appropriate error message.
@@ -109,7 +101,7 @@ export class AccountsService {
 	}
 
 	@CatchDecorator()
-	async details(): Promise<AccountDetailsOutput> {
+	async details() {
 		const session = this.metadata.session();
 		const account = await this.accountRepository.details(session.email);
 

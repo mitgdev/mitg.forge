@@ -10,7 +10,6 @@ import type {
 } from "@/domain/repositories";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
-import type { SessionInfoOutput } from "@/presentation/routes/v1/session/info/schema";
 
 @injectable()
 export class SessionService {
@@ -102,7 +101,7 @@ export class SessionService {
 	}
 
 	@CatchDecorator()
-	async info(): Promise<SessionInfoOutput> {
+	async info() {
 		try {
 			const account = await this.isAuthenticated();
 
