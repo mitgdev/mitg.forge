@@ -5,6 +5,8 @@ services:
     image: mariadb
     container_name: database
     restart: unless-stopped
+    networks:
+      - devnet
     env_file: .env
     ports:
       - "3306:3306"
@@ -30,6 +32,11 @@ services:
       - "6379:6379"
     volumes:
       - keydb_data:/data
+
+networks:
+  devnet:
+    external: true
+    name: devnet
 
 volumes:
   db_data:

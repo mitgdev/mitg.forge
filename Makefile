@@ -7,6 +7,21 @@ ENV_FILE := .env
 -include $(ENV_FILE)
 export
 
+.PHONY: setup
+setup: docker_network docker_up ## Configura o ambiente Docker e sobe os serviços
+	@echo "Ambiente 🐳 configurado e serviços subidos."
+	@pnpm install
+
+.PHONY: docker_network
+docker_network: ## Cria a rede Docker "devnet" se não existir
+	@echo "Criando a rede 🐳 'devnet' se não existir..."
+	@if ! docker network ls | grep -q devnet; then \
+		docker network create devnet; \
+		echo "Rede 'devnet' criada."; \
+	else \
+		echo "Rede 'devnet' já existe."; \
+	fi
+
 .PHONY: docker_up
 docker_up: ## Sobe os serviços em segundo plano (build se necessário)
 	@echo "Subindo os serviços com 🐳 Compose..."
