@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { PlayerStatusHidden } from "@/components/Player/Hidden";
 import { PlayerMain } from "@/components/Player/Main";
@@ -5,17 +6,32 @@ import { PlayerIsOnline } from "@/components/Player/Online";
 import { PlayerRewardCollected } from "@/components/Player/RewardCollected";
 import { PlayerRole } from "@/components/Player/Role";
 import { PlayerVocation } from "@/components/Player/Vocation";
+import { api } from "@/sdk/lib/api/factory";
 import { makeOutfit } from "@/sdk/utils/outfit";
 import { ButtonLink } from "@/ui/Buttons/ButtonLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
-import type { AccountSectionDetails } from "..";
 
-export const AccountCharacters = ({
-	characters,
-}: {
-	characters: AccountSectionDetails["characters"];
-}) => {
+/**
+ * TODO: The limit of possible characters per account will be bellow of 99.
+ * This should't be a problem, but wee can make a better implementation of this.
+ * Using a config value from env or something similar.
+ *
+ * TODO: Remembering that query is been prefetched on route loader. In the future, maybe implement
+ * a skeleton to simulate a loading state while data is been fetched.
+ */
+export const AccountCharacters = () => {
+	const { data } = useQuery(
+		api.query.miforge.accounts.characters.queryOptions({
+			input: {
+				page: 1,
+				limit: 99,
+			},
+		}),
+	);
+
+	const characters = data?.results ?? [];
+
 	return (
 		<Container title="Characters">
 			<InnerContainer className="flex justify-center p-0">
@@ -71,7 +87,7 @@ export const AccountCharacters = ({
 													<span className="font-bold text-lg text-secondary">
 														{character.name}
 													</span>
-													<PlayerMain />
+													{character.ismain && <PlayerMain />}
 												</div>
 
 												<span className="flex flex-row items-center gap-1 text-secondary text-xs">
@@ -87,9 +103,11 @@ export const AccountCharacters = ({
 									</td>
 									<td className="hidden border border-septenary p-1 text-secondary md:table-cell">
 										<div className="flex flex-row flex-wrap items-center justify-center gap-1">
-											<PlayerRewardCollected collected />
-											<PlayerIsOnline online />
-											<PlayerStatusHidden />
+											<PlayerRewardCollected
+												collected={character.daily_reward_collected}
+											/>
+											<PlayerIsOnline online={character.online} />
+											{character.ishidden && <PlayerStatusHidden />}
 										</div>
 									</td>
 									<td className="border border-septenary p-1">

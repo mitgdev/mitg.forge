@@ -24,6 +24,9 @@ export const AccountStatus = ({
 	 * TODO - Add a alert when premium is about to expire
 	 * changing the border color of the container to yellow/orange
 	 * and adding a tooltip on hover to notify the user
+	 *
+	 * TODO - The crystal server has premium and vip in the same system as premium
+	 * we when vip system is enabled we should show as vip instead of premium
 	 */
 
 	return (
@@ -47,11 +50,13 @@ export const AccountStatus = ({
 									"text-error": !premium,
 								})}
 							>
-								{premium ? "VIP Account" : "Free Account"}
+								{premium ? "Premium Account" : "Free Account"}
 							</span>
 							{premiumExpiresAt && (
 								<span className="text-xs">
-									Your VIP Time expired at {formatDate(premiumExpiresAt)}.
+									{premium
+										? `Your Premium Time expired at ${formatDate(premiumExpiresAt)}`
+										: "Your premium time is expired."}
 								</span>
 							)}
 

@@ -80,6 +80,7 @@
 		"inboxitems",
 		"initdb",
 		"ishidden",
+		"ismain",
 		"ismaincharacter",
 		"ismale",
 		"ispremium",

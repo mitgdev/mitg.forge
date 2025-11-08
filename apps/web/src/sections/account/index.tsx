@@ -9,16 +9,12 @@ import { AccountDownload } from "./download";
 import { AccountRecoveryKey } from "./recovery-key";
 import { AccountStatus } from "./status";
 
-export type AccountSectionDetails = Awaited<
-	ReturnType<typeof api.client.miforge.accounts.details>
->;
-
 export const AccountSection = () => {
 	const { data } = useQuery(api.query.miforge.accounts.details.queryOptions());
 
 	return (
 		<Section>
-			<SectionHeader color="green">
+			<SectionHeader color="green" backButton>
 				<h1 className="section-title">Account Management</h1>
 			</SectionHeader>
 			<InnerSection className="p-2">
@@ -30,7 +26,7 @@ export const AccountSection = () => {
 				/>
 				<AccountDownload />
 				<AccountRecoveryKey />
-				<AccountCharacters characters={data?.characters ?? []} />
+				<AccountCharacters />
 			</InnerSection>
 		</Section>
 	);
