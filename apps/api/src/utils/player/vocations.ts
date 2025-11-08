@@ -1,42 +1,26 @@
-export type Vocation =
-	| "No Vocation"
-	| "Sorcerer"
-	| "Druid"
-	| "Paladin"
-	| "Knight"
-	| "Master Sorcerer"
-	| "Elder Druid"
-	| "Royal Paladin"
-	| "Elite Knight"
-	| "Monk"
-	| "Exalted Monk"
-	| "Unknown Vocation";
+const Vocations = {
+	0: "No Vocation",
+	1: "Sorcerer",
+	2: "Druid",
+	3: "Paladin",
+	4: "Knight",
+	5: "Master Sorcerer",
+	6: "Elder Druid",
+	7: "Royal Paladin",
+	8: "Elite Knight",
+	9: "Monk",
+	10: "Exalted Monk",
+} as const;
+
+export type Vocation = (typeof Vocations)[keyof typeof Vocations];
 
 export const getVocationName = (vocationId: number): Vocation => {
-	switch (vocationId) {
-		case 0:
-			return "No Vocation";
-		case 1:
-			return "Sorcerer";
-		case 2:
-			return "Druid";
-		case 3:
-			return "Paladin";
-		case 4:
-			return "Knight";
-		case 5:
-			return "Master Sorcerer";
-		case 6:
-			return "Elder Druid";
-		case 7:
-			return "Royal Paladin";
-		case 8:
-			return "Elite Knight";
-		case 9:
-			return "Monk";
-		case 10:
-			return "Exalted Monk";
-		default:
-			return "Unknown Vocation";
-	}
+	return Vocations[vocationId as keyof typeof Vocations];
+};
+
+export const getVocationId = (vocation: Vocation): number => {
+	const entry = Object.entries(Vocations).find(
+		([, value]) => value === vocation,
+	);
+	return entry ? Number(entry[0]) : -1;
 };

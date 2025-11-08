@@ -5,9 +5,11 @@ import {
 	TibiaClientService,
 } from "@/application/services";
 import {
-	AccountDetailsUseCase,
+	AccountCharactersBySessionUseCase,
+	AccountDetailsBySessionUseCase,
 	AccountLoginUseCase,
 	AccountLogoutUseCase,
+	AccountPermissionedUseCase,
 	SessionAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
@@ -20,6 +22,7 @@ import { JwtCrypto } from "@/domain/modules/crypto/jwt";
 import { RootLogger } from "@/domain/modules/logging/logger";
 import { makeRequestLogger } from "@/domain/modules/logging/request-logger";
 import { Metadata } from "@/domain/modules/metadata";
+import { Pagination } from "@/domain/modules/pagination";
 import {
 	AccountRepository,
 	PlayersRepository,
@@ -92,6 +95,11 @@ export function createRequestContainer(
 		{ useClass: Cookies },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
+	childContainer.register(
+		TOKENS.Pagination,
+		{ useClass: Pagination },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
 
 	// Repositórios (scoped per request)
 	childContainer.register(
@@ -134,13 +142,23 @@ export function createRequestContainer(
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 	childContainer.register(
-		TOKENS.AccountDetailsUseCase,
-		{ useClass: AccountDetailsUseCase },
+		TOKENS.AccountDetailsBySessionUseCase,
+		{ useClass: AccountDetailsBySessionUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 	childContainer.register(
 		TOKENS.AccountLogoutUseCase,
 		{ useClass: AccountLogoutUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountPermissionedUseCase,
+		{ useClass: AccountPermissionedUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountCharactersBySessionUseCase,
+		{ useClass: AccountCharactersBySessionUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

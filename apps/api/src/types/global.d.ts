@@ -1,10 +1,16 @@
 import type { Context, Hono } from "hono";
 import type { RequestIdVariables } from "hono/request-id";
+import type { AccountType } from "@/utils/account/type";
 
 declare global {
+	export type Permission = {
+		type: AccountType;
+	};
+
 	export type AuthenticatedSession = {
 		token: string;
 		email: string;
+		type: AccountType;
 	};
 
 	export type ContextEnv = {

@@ -4,7 +4,9 @@ import z from "zod";
 
 import type { Context } from "@/infra/context";
 
-type Meta = {};
+type Meta = {
+	permission?: Permission;
+};
 
 export const base = os
 	.errors({

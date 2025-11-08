@@ -7,10 +7,12 @@ import type { Logger } from "@/domain/modules/logging/logger";
 import type { Metadata } from "@/domain/modules/metadata";
 import type {
 	AccountRepository,
+	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
+import { getAccountType, getAccountTypeId } from "@/utils/account/type";
 import { CatchDecorator } from "../decorators/Catch";
 import type { SessionService } from "./session.service";
 
@@ -19,7 +21,6 @@ export class AccountsService {
 	constructor(
 		@inject(TOKENS.Logger) private readonly logger: Logger,
 		@inject(TOKENS.Cookies) private readonly cookies: Cookies,
-		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
 		@inject(TOKENS.AccountRepository)
 		private readonly accountRepository: AccountRepository,
 		@inject(TOKENS.SessionRepository)
@@ -29,6 +30,9 @@ export class AccountsService {
 		@inject(TOKENS.JwtCrypto) private readonly jwtCrypto: JwtCrypto,
 		@inject(TOKENS.SessionService)
 		private readonly sessionService: SessionService,
+		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
+		@inject(TOKENS.PlayersRepository)
+		private readonly playersRepository: PlayersRepository,
 	) {}
 
 	@CatchDecorator()
@@ -101,9 +105,8 @@ export class AccountsService {
 	}
 
 	@CatchDecorator()
-	async details() {
-		const session = this.metadata.session();
-		const account = await this.accountRepository.details(session.email);
+	async details(email: string) {
+		const account = await this.accountRepository.details(email);
 
 		if (!account) {
 			throw new ORPCError("NOT_FOUND", {
@@ -117,5 +120,57 @@ export class AccountsService {
 			characters: account.players,
 			store_history: account.store_history,
 		};
+	}
+
+	@CatchDecorator()
+	async hasPermission(permission?: Permission): Promise<boolean> {
+		/**
+		 * TODO: Maybe this error shouldn't be here, or the message should be different.
+		 * Because this is a .service and can be used in other places than just route protection.
+		 * For now, leaving as is.
+		 */
+		if (!permission) {
+			throw new ORPCError("NOT_IMPLEMENTED", {
+				message:
+					"No permission defined for this route, this is likely a server misconfiguration. Please contact an administrator.",
+			});
+		}
+
+		const session = this.metadata.session();
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const accountType = account.type;
+		const permissionType = getAccountTypeId(permission.type);
+
+		if (accountType < permissionType) {
+			const permissionTypeName = getAccountType(permissionType);
+			const accountTypeName = getAccountType(accountType);
+
+			throw new ORPCError("FORBIDDEN", {
+				message: `You need to be at least a ${permissionTypeName} to access this resource. Your account type is ${accountTypeName}.`,
+			});
+		}
+
+		return true;
+	}
+
+	@CatchDecorator()
+	async characters(email: string) {
+		const account = await this.accountRepository.findByEmail(email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		return this.playersRepository.byAccountId(account.id);
 	}
 }

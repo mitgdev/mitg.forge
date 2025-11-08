@@ -138,6 +138,8 @@
 		"orpc",
 		"outfitid",
 		"ownerid",
+		"permissioned",
+		"Permissioned",
 		"playdata",
 		"poppins",
 		"posx",

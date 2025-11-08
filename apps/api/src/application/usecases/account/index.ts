@@ -1,3 +1,5 @@
-export * from "./details.usecase";
+export * from "./charactersBySession.usecase";
+export * from "./detailsBySession.usecase";
 export * from "./login.usecase";
 export * from "./logout.usecase";
+export * from "./permissioned.usecase";

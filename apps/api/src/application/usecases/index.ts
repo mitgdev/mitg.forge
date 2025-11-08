@@ -1,9 +1,11 @@
 import type { DependencyContainer } from "tsyringe";
 import { TOKENS } from "@/infra/di/tokens";
 import type {
-	AccountDetailsUseCase,
+	AccountCharactersBySessionUseCase,
+	AccountDetailsBySessionUseCase,
 	AccountLoginUseCase,
 	AccountLogoutUseCase,
+	AccountPermissionedUseCase,
 } from "./account";
 import type {
 	SessionAuthenticatedUseCase,
@@ -23,17 +25,26 @@ export class UseCases {
 		const login = this.di.resolve<AccountLoginUseCase>(
 			TOKENS.AccountLoginUseCase,
 		);
-		const details = this.di.resolve<AccountDetailsUseCase>(
-			TOKENS.AccountDetailsUseCase,
+		const detailsBySession = this.di.resolve<AccountDetailsBySessionUseCase>(
+			TOKENS.AccountDetailsBySessionUseCase,
 		);
 		const logout = this.di.resolve<AccountLogoutUseCase>(
 			TOKENS.AccountLogoutUseCase,
 		);
+		const permissioned = this.di.resolve<AccountPermissionedUseCase>(
+			TOKENS.AccountPermissionedUseCase,
+		);
+		const charactersBySession =
+			this.di.resolve<AccountCharactersBySessionUseCase>(
+				TOKENS.AccountCharactersBySessionUseCase,
+			);
 
 		return {
 			login,
-			details,
 			logout,
+			permissioned,
+			detailsBySession,
+			charactersBySession,
 		} as const;
 	}
 

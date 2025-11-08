@@ -5,9 +5,11 @@ import type {
 	TibiaClientService,
 } from "@/application/services";
 import type {
-	AccountDetailsUseCase,
+	AccountCharactersBySessionUseCase,
+	AccountDetailsBySessionUseCase,
 	AccountLoginUseCase,
 	AccountLogoutUseCase,
+	AccountPermissionedUseCase,
 	SessionAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
@@ -19,6 +21,7 @@ import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
 import type { Logger, RootLogger } from "@/domain/modules/logging/logger";
 import type { Metadata } from "@/domain/modules/metadata";
+import type { Pagination } from "@/domain/modules/pagination";
 import type {
 	AccountRepository,
 	PlayersRepository,
@@ -41,6 +44,7 @@ export const TOKENS = {
 	// Utils
 	Metadata: token<Metadata>("Metadata"),
 	Cookies: token<Cookies>("Cookies"),
+	Pagination: token<Pagination>("Pagination"),
 
 	// Crypto
 	HasherCrypto: token<HasherCrypto>("HasherCrypto"),
@@ -58,8 +62,16 @@ export const TOKENS = {
 
 	// UseCases
 	AccountLoginUseCase: token<AccountLoginUseCase>("LoginUseCase"),
-	AccountDetailsUseCase: token<AccountDetailsUseCase>("AccountDetailsUseCase"),
+	AccountDetailsBySessionUseCase: token<AccountDetailsBySessionUseCase>(
+		"AccountDetailsBySessionUseCase",
+	),
 	AccountLogoutUseCase: token<AccountLogoutUseCase>("AccountLogoutUseCase"),
+	AccountPermissionedUseCase: token<AccountPermissionedUseCase>(
+		"AccountPermissionedUseCase",
+	),
+	AccountCharactersBySessionUseCase: token<AccountCharactersBySessionUseCase>(
+		"AccountCharactersBySessionUseCase",
+	),
 
 	SessionInfoUseCase: token<SessionInfoUseCase>("SessionInfoUseCase"),
 	SessionAuthenticatedUseCase: token<SessionAuthenticatedUseCase>(

@@ -177,6 +177,9 @@ model guild_invites {
   @@index([guild_id], map: "guild_id")
 }
 
+/**
+ * TODO: Wee can change the model, allocating a createdAt and updatedAt fields
+ */
 model guild_membership {
   player_id   Int         @id
   guild_id    Int

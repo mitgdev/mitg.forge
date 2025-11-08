@@ -12,5 +12,5 @@ export const detailsRoute = isAuthenticatedProcedure
 	.input(AccountDetailsSchema.input)
 	.output(AccountDetailsSchema.output)
 	.handler(async ({ context }) => {
-		return context.usecases.account.details.execute();
+		return context.usecases.account.detailsBySession.execute();
 	});

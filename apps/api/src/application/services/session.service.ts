@@ -10,6 +10,7 @@ import type {
 } from "@/domain/repositories";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
+import { getAccountType } from "@/utils/account/type";
 
 @injectable()
 export class SessionService {
@@ -53,6 +54,7 @@ export class SessionService {
 		this.context.set("session", {
 			token,
 			email: account.email,
+			type: getAccountType(account.type),
 		});
 
 		return account;
