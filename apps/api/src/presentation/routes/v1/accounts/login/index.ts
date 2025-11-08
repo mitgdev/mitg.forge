@@ -1,5 +1,5 @@
+import { AccountLoginContractSchema } from "@/application/usecases/account/login/contract";
 import { isNotAuthenticatedProcedure } from "@/presentation/procedures/isNotAuthenticated";
-import { AccountLoginSchema } from "./schema";
 
 export const loginRoute = isNotAuthenticatedProcedure
 	.route({
@@ -8,8 +8,8 @@ export const loginRoute = isNotAuthenticatedProcedure
 		summary: "Login",
 		description: "Authenticate a user and return a session token.",
 	})
-	.input(AccountLoginSchema.input)
-	.output(AccountLoginSchema.output)
+	.input(AccountLoginContractSchema.input)
+	.output(AccountLoginContractSchema.output)
 	.handler(async ({ context, input }) => {
 		return context.usecases.account.login.execute(input);
 	});

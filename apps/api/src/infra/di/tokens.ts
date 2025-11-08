@@ -7,7 +7,6 @@ import type {
 import type {
 	AccountCharactersBySessionUseCase,
 	AccountDetailsBySessionUseCase,
-	AccountLoginUseCase,
 	AccountLogoutUseCase,
 	AccountPermissionedUseCase,
 	SessionAuthenticatedUseCase,
@@ -15,6 +14,7 @@ import type {
 	SessionNotAuthenticatedUseCase,
 	TibiaLoginUseCase,
 } from "@/application/usecases";
+import type { AccountLoginUseCase } from "@/application/usecases/account/login";
 import type { Prisma } from "@/domain/modules/clients";
 import type { Cookies } from "@/domain/modules/cookies";
 import type { HasherCrypto } from "@/domain/modules/crypto/hasher";

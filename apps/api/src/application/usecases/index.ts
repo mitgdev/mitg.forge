@@ -3,10 +3,10 @@ import { TOKENS } from "@/infra/di/tokens";
 import type {
 	AccountCharactersBySessionUseCase,
 	AccountDetailsBySessionUseCase,
-	AccountLoginUseCase,
 	AccountLogoutUseCase,
 	AccountPermissionedUseCase,
 } from "./account";
+import type { AccountLoginUseCase } from "./account/login";
 import type {
 	SessionAuthenticatedUseCase,
 	SessionInfoUseCase,
