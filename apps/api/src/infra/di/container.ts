@@ -5,13 +5,13 @@ import {
 	TibiaClientService,
 } from "@/application/services";
 import {
-	AccountDetailsBySessionUseCase,
 	SessionAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
 	TibiaLoginUseCase,
 } from "@/application/usecases";
 import { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
+import { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
 import { AccountLoginUseCase } from "@/application/usecases/account/login";
 import { AccountLogoutUseCase } from "@/application/usecases/account/logout";
 import { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";

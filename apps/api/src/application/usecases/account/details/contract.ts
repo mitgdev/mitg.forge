@@ -4,7 +4,7 @@ import { PlayerSchema } from "@/shared/schemas/Player";
 import { SessionSchema } from "@/shared/schemas/Session";
 import { StoreHistory } from "@/shared/schemas/StoreHistory";
 
-export const AccountDetailsSchema = {
+export const AccountDetailsContractSchema = {
 	input: z.unknown().optional(),
 	output: AccountSchema.omit({ password: true }).extend({
 		store_history: z.array(StoreHistory),
@@ -13,5 +13,9 @@ export const AccountDetailsSchema = {
 	}),
 };
 
-export type AccountDetailsInput = z.infer<typeof AccountDetailsSchema.input>;
-export type AccountDetailsOutput = z.input<typeof AccountDetailsSchema.output>;
+export type AccountDetailsContractInput = z.infer<
+	typeof AccountDetailsContractSchema.input
+>;
+export type AccountDetailsContractOutput = z.input<
+	typeof AccountDetailsContractSchema.output
+>;

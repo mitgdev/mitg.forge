@@ -1,5 +1,5 @@
+import { AccountDetailsContractSchema } from "@/application/usecases/account/details/contract";
 import { isAuthenticatedProcedure } from "@/presentation/procedures/isAuthenticated";
-import { AccountDetailsSchema } from "./schema";
 
 export const detailsRoute = isAuthenticatedProcedure
 	.route({
@@ -9,8 +9,8 @@ export const detailsRoute = isAuthenticatedProcedure
 		description:
 			"Retrieve detailed information about the authenticated user's account.",
 	})
-	.input(AccountDetailsSchema.input)
-	.output(AccountDetailsSchema.output)
+	.input(AccountDetailsContractSchema.input)
+	.output(AccountDetailsContractSchema.output)
 	.handler(async ({ context }) => {
 		return context.usecases.account.detailsBySession.execute();
 	});
