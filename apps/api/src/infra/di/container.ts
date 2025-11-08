@@ -7,7 +7,6 @@ import {
 import {
 	AccountCharactersBySessionUseCase,
 	AccountDetailsBySessionUseCase,
-	AccountPermissionedUseCase,
 	SessionAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
@@ -15,6 +14,7 @@ import {
 } from "@/application/usecases";
 import { AccountLoginUseCase } from "@/application/usecases/account/login";
 import { AccountLogoutUseCase } from "@/application/usecases/account/logout";
+import { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
 import { makePrisma, type Prisma } from "@/domain/modules/clients";
 import { Cookies } from "@/domain/modules/cookies";
 import { HasherCrypto } from "@/domain/modules/crypto/hasher";

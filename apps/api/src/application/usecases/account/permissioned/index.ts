@@ -3,12 +3,15 @@ import { CatchDecorator } from "@/application/decorators/Catch";
 import type { AccountsService } from "@/application/services";
 import { TOKENS } from "@/infra/di/tokens";
 import type { UseCase } from "@/shared/interfaces/usecase";
-
-type AccountPermissionedInput = { permission?: Permission };
+import type {
+	AccountPermissionedContractInput,
+	AccountPermissionedContractOutput,
+} from "./contract";
 
 @injectable()
 export class AccountPermissionedUseCase
-	implements UseCase<AccountPermissionedInput, boolean>
+	implements
+		UseCase<AccountPermissionedContractInput, AccountPermissionedContractOutput>
 {
 	constructor(
 		@inject(TOKENS.AccountsService)
@@ -16,7 +19,9 @@ export class AccountPermissionedUseCase
 	) {}
 
 	@CatchDecorator()
-	async execute(input: AccountPermissionedInput): Promise<boolean> {
+	async execute(
+		input: AccountPermissionedContractInput,
+	): Promise<AccountPermissionedContractOutput> {
 		return await this.accountsService.hasPermission(input.permission);
 	}
 }
