@@ -4,17 +4,15 @@ import {
 	SessionService,
 	TibiaClientService,
 } from "@/application/services";
-import {
-	SessionAuthenticatedUseCase,
-	SessionInfoUseCase,
-	SessionNotAuthenticatedUseCase,
-	TibiaLoginUseCase,
-} from "@/application/usecases";
+import { TibiaLoginUseCase } from "@/application/usecases";
 import { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
 import { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
 import { AccountLoginUseCase } from "@/application/usecases/account/login";
 import { AccountLogoutUseCase } from "@/application/usecases/account/logout";
 import { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
+import { SessionAuthenticatedUseCase } from "@/application/usecases/session/authenticated";
+import { SessionInfoUseCase } from "@/application/usecases/session/info";
+import { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
 import { makePrisma, type Prisma } from "@/domain/modules/clients";
 import { Cookies } from "@/domain/modules/cookies";
 import { HasherCrypto } from "@/domain/modules/crypto/hasher";

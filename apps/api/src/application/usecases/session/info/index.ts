@@ -2,18 +2,21 @@ import { inject, injectable } from "tsyringe";
 import type { SessionService } from "@/application/services";
 import { TOKENS } from "@/infra/di/tokens";
 import type { UseCase } from "@/shared/interfaces/usecase";
+import type {
+	SessionInfoContractInput,
+	SessionInfoContractOutput,
+} from "./contract";
 
-/**
- * TODO: Add proper input and output types
- */
 @injectable()
-export class SessionNotAuthenticatedUseCase implements UseCase<void, unknown> {
+export class SessionInfoUseCase
+	implements UseCase<SessionInfoContractInput, SessionInfoContractOutput>
+{
 	constructor(
 		@inject(TOKENS.SessionService)
 		private readonly sessionService: SessionService,
 	) {}
 
-	async execute() {
-		return this.sessionService.isNotAuthenticated();
+	async execute(): Promise<SessionInfoContractOutput> {
+		return this.sessionService.info();
 	}
 }

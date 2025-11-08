@@ -5,14 +5,11 @@ import type { AccountDetailsBySessionUseCase } from "./account/details";
 import type { AccountLoginUseCase } from "./account/login";
 import type { AccountLogoutUseCase } from "./account/logout";
 import type { AccountPermissionedUseCase } from "./account/permissioned";
-import type {
-	SessionAuthenticatedUseCase,
-	SessionInfoUseCase,
-	SessionNotAuthenticatedUseCase,
-} from "./session";
+import type { SessionAuthenticatedUseCase } from "./session/authenticated";
+import type { SessionInfoUseCase } from "./session/info";
+import type { SessionNotAuthenticatedUseCase } from "./session/notAuthenticated";
 import type { TibiaLoginUseCase } from "./tibia";
 
-export * from "./session";
 export * from "./tibia";
 
 export class UseCases {
