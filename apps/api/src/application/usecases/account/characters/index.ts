@@ -40,9 +40,12 @@ export class AccountCharactersBySessionUseCase
 
 			return {
 				...char,
+				online: char.online,
 				depot_items: char.player_depotitems,
 				outfits: char.player_outfits,
 				rewards: char.player_rewards,
+				daily_reward_collected: char.isreward === 0,
+				daily_reward_history: char.daily_reward_history,
 				guild: guild
 					? {
 							...guild,

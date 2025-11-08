@@ -5,9 +5,9 @@ export const charactersRoute = isAuthenticatedProcedure
 	.route({
 		method: "GET",
 		path: "/characters",
-		summary: "Get Account Details",
+		summary: "Characters",
 		description:
-			"Retrieve detailed information about the authenticated user's account.",
+			"Retrieve a list of characters associated with the authenticated user's account.",
 	})
 	.input(AccountCharactersContractSchema.input)
 	.output(AccountCharactersContractSchema.output)

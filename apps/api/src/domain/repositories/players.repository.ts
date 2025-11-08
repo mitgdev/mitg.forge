@@ -6,6 +6,26 @@ import { TOKENS } from "@/infra/di/tokens";
 export class PlayersRepository {
 	constructor(@inject(TOKENS.Prisma) private readonly prisma: Prisma) {}
 
+	async isOnline(playerId: number) {
+		const player = await this.prisma.players_online.findUnique({
+			where: {
+				player_id: playerId,
+			},
+		});
+
+		return !!player;
+	}
+
+	async areOnline(playerIds: number[]) {
+		const onlinePlayers = await this.prisma.players_online.findMany({
+			where: {
+				player_id: { in: playerIds },
+			},
+		});
+
+		return onlinePlayers.map((p) => p.player_id);
+	}
+
 	async byAccountId(
 		accountId: number,
 		opts?: { page?: number; size?: number },
@@ -25,6 +45,7 @@ export class PlayersRepository {
 					player_depotitems: true,
 					player_outfits: true,
 					player_rewards: true,
+					daily_reward_history: true,
 					guilds: true,
 					guild_membership: {
 						include: {

@@ -5,7 +5,7 @@ export const detailsRoute = isAuthenticatedProcedure
 	.route({
 		method: "GET",
 		path: "/details",
-		summary: "Get Account Details",
+		summary: "Details",
 		description:
 			"Retrieve detailed information about the authenticated user's account.",
 	})

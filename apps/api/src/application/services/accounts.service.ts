@@ -114,6 +114,9 @@ export class AccountsService {
 			});
 		}
 
+		/**
+		 * TODO: Remove characters from this, to be in another route.
+		 */
 		return {
 			...account,
 			sessions: account.sessions,
@@ -171,6 +174,24 @@ export class AccountsService {
 			});
 		}
 
-		return this.playersRepository.byAccountId(account.id);
+		const { characters, total } = await this.playersRepository.byAccountId(
+			account.id,
+		);
+
+		const areOnline = await this.playersRepository.areOnline(
+			characters.map((char) => char.id),
+		);
+
+		return {
+			characters: characters.map((char) => {
+				const isOnline = areOnline.includes(char.id);
+
+				return {
+					...char,
+					online: isOnline,
+				};
+			}),
+			total: total,
+		};
 	}
 }

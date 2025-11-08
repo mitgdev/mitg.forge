@@ -31,6 +31,9 @@ export class AccountRepository {
 			where: {
 				account_id: accountId,
 			},
+			include: {
+				daily_reward_history: true,
+			},
 			orderBy: {
 				name: "asc",
 			},

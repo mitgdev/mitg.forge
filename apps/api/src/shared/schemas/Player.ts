@@ -88,6 +88,8 @@ export const PlayerSchema = z.object({
 	xpboost_value: z.number().nullable(), // how much percent
 	marriage_status: z.bigint(),
 	marriage_spouse: z.number(),
+	ismain: z.boolean(),
+	ishidden: z.boolean(),
 	bonus_rerolls: z.bigint(),
 	prey_wildcard: z.bigint(),
 	task_points: z.bigint(),

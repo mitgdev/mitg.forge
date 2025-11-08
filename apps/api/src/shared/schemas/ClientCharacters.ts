@@ -16,7 +16,7 @@ export const TibiaClientCharactersSchema = z.object({
 	ishidden: z.boolean(),
 	istournamentparticipant: z.boolean(),
 	ismaincharacter: z.boolean(),
-	dailyrewardstate: z.union([z.literal(0), z.literal(1)]), // 0 = not claimed | 1 = claimed
+	dailyrewardstate: z.number(), // 0 = not claimed | 1 = claimed
 	remainingdailytournamentplaytime: z.boolean(),
 });
 
