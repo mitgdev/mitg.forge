@@ -36,7 +36,7 @@ const LoginFileSchema = z.instanceof(File).transform(async (file) => {
 	return LoginSchema.parse(JSON.parse(text));
 });
 
-export const ClientLoginSchema = {
+export const ClientLoginContractSchema = {
 	input: z.instanceof(File),
 	output: z.union([
 		TibiaClientErrorSchema,
@@ -51,6 +51,12 @@ export const ClientLoginSchema = {
 	inside: LoginFileSchema,
 };
 
-export type ClientLoginInput = z.infer<typeof ClientLoginSchema.input>;
-export type ClientLoginInside = z.infer<typeof ClientLoginSchema.inside>;
-export type ClientLoginOutput = z.infer<typeof ClientLoginSchema.output>;
+export type ClientLoginContractInput = z.infer<
+	typeof ClientLoginContractSchema.input
+>;
+export type ClientLoginContractInside = z.infer<
+	typeof ClientLoginContractSchema.inside
+>;
+export type ClientLoginContractOutput = z.infer<
+	typeof ClientLoginContractSchema.output
+>;

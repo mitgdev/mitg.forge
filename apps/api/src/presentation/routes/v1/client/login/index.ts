@@ -1,5 +1,5 @@
+import { ClientLoginContractSchema } from "@/application/usecases/tibia/login/contract";
 import { base } from "@/infra/rpc/base";
-import { ClientLoginSchema } from "./schema";
 
 export const loginRoute = base
 	.route({
@@ -9,8 +9,8 @@ export const loginRoute = base
 		summary: "Client login",
 		description: "Endpoint for client login",
 	})
-	.input(ClientLoginSchema.input)
-	.output(ClientLoginSchema.output)
+	.input(ClientLoginContractSchema.input)
+	.output(ClientLoginContractSchema.output)
 	.handler(async ({ input, context }) => {
 		return context.usecases.tibia.login.execute(input);
 	});

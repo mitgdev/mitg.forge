@@ -1,5 +1,5 @@
+import z from "zod";
 import { publicProcedure } from "@/presentation/procedures/public";
-import { PingSchema } from "./schema";
 
 export const pingRoute = publicProcedure
 	.route({
@@ -9,8 +9,7 @@ export const pingRoute = publicProcedure
 		summary: "Ping endpoint",
 		description: "A simple endpoint to check if the server is running",
 	})
-	.input(PingSchema.input)
-	.output(PingSchema.output)
+	.output(z.object({ status: z.literal("pong") }))
 	.handler(() => {
 		return { status: "pong" };
 	});

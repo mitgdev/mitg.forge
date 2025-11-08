@@ -8,9 +8,7 @@ import type { AccountPermissionedUseCase } from "./account/permissioned";
 import type { SessionAuthenticatedUseCase } from "./session/authenticated";
 import type { SessionInfoUseCase } from "./session/info";
 import type { SessionNotAuthenticatedUseCase } from "./session/notAuthenticated";
-import type { TibiaLoginUseCase } from "./tibia";
-
-export * from "./tibia";
+import type { TibiaLoginUseCase } from "./tibia/login";
 
 export class UseCases {
 	constructor(private readonly di: DependencyContainer) {}
