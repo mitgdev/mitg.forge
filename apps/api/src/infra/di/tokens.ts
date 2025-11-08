@@ -5,13 +5,13 @@ import type {
 	TibiaClientService,
 } from "@/application/services";
 import type {
-	AccountCharactersBySessionUseCase,
 	AccountDetailsBySessionUseCase,
 	SessionAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
 	TibiaLoginUseCase,
 } from "@/application/usecases";
+import type { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
 import type { AccountLoginUseCase } from "@/application/usecases/account/login";
 import type { AccountLogoutUseCase } from "@/application/usecases/account/logout";
 import type { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";

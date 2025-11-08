@@ -1,9 +1,7 @@
 import type { DependencyContainer } from "tsyringe";
 import { TOKENS } from "@/infra/di/tokens";
-import type {
-	AccountCharactersBySessionUseCase,
-	AccountDetailsBySessionUseCase,
-} from "./account";
+import type { AccountDetailsBySessionUseCase } from "./account";
+import type { AccountCharactersBySessionUseCase } from "./account/characters";
 import type { AccountLoginUseCase } from "./account/login";
 import type { AccountLogoutUseCase } from "./account/logout";
 import type { AccountPermissionedUseCase } from "./account/permissioned";

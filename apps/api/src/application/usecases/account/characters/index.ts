@@ -3,15 +3,16 @@ import type { AccountsService } from "@/application/services";
 import type { Metadata } from "@/domain/modules/metadata";
 import type { Pagination } from "@/domain/modules/pagination";
 import { TOKENS } from "@/infra/di/tokens";
-import type {
-	AccountCharactersInput,
-	AccountCharactersOutput,
-} from "@/presentation/routes/v1/accounts/characters/schema";
 import type { UseCase } from "@/shared/interfaces/usecase";
+import type {
+	AccountCharactersContractInput,
+	AccountCharactersContractOutput,
+} from "./contract";
 
 @injectable()
 export class AccountCharactersBySessionUseCase
-	implements UseCase<AccountCharactersInput, AccountCharactersOutput>
+	implements
+		UseCase<AccountCharactersContractInput, AccountCharactersContractOutput>
 {
 	constructor(
 		@inject(TOKENS.AccountsService)
@@ -21,8 +22,8 @@ export class AccountCharactersBySessionUseCase
 	) {}
 
 	async execute(
-		input: AccountCharactersInput,
-	): Promise<AccountCharactersOutput> {
+		input: AccountCharactersContractInput,
+	): Promise<AccountCharactersContractOutput> {
 		const session = this.metadata.session();
 
 		const { characters, total } = await this.accountsService.characters(
@@ -50,7 +51,7 @@ export class AccountCharactersBySessionUseCase
 						}
 					: null,
 			};
-		}) satisfies AccountCharactersOutput["results"];
+		}) satisfies AccountCharactersContractOutput["results"];
 
 		return this.pagination.paginate(data, {
 			page: input.page ?? 1,

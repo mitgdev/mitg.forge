@@ -7,11 +7,7 @@ import { PlayerOutfitSchema } from "@/shared/schemas/PlayerOutfits";
 import { PlayerRewardSchema } from "@/shared/schemas/PlayerReward";
 import { createPaginateSchema, InputPageSchema } from "@/utils/paginate";
 
-/**
- * TODO: Maybe when can move all route schemas to application/dto/something
- * so they are not mixed with presentation layer.
- */
-export const AccountCharactersSchema = {
+export const AccountCharactersContractSchema = {
 	input: InputPageSchema,
 	output: createPaginateSchema(
 		PlayerSchema.omit({ lastip: true }).extend({
@@ -28,9 +24,9 @@ export const AccountCharactersSchema = {
 	),
 };
 
-export type AccountCharactersInput = z.infer<
-	typeof AccountCharactersSchema.input
+export type AccountCharactersContractInput = z.infer<
+	typeof AccountCharactersContractSchema.input
 >;
-export type AccountCharactersOutput = z.input<
-	typeof AccountCharactersSchema.output
+export type AccountCharactersContractOutput = z.input<
+	typeof AccountCharactersContractSchema.output
 >;
