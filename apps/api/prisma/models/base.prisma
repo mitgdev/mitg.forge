@@ -70,20 +70,20 @@ model account_viplist {
 }
 
 model accounts {
-  id                  Int                   @id @default(autoincrement()) @db.UnsignedInt
-  name                String                @unique(map: "accounts_unique") @db.VarChar(32)
-  password            String                @db.Text
-  email               String                @default("") @db.VarChar(255)
-  premdays            Int                   @default(0)
-  premdays_purchased  Int                   @default(0)
-  lastday             Int                   @default(0) @db.UnsignedInt
-  type                Int                   @default(1) @db.UnsignedTinyInt
-  coins               Int                   @default(0) @db.UnsignedInt
-  coins_transferable  Int                   @default(0) @db.UnsignedInt
-  tournament_coins    Int                   @default(0) @db.UnsignedInt
-  creation            Int                   @default(0) @db.UnsignedInt
-  recruiter           Int?                  @default(0)
-  house_bid_id        Int                   @default(0)
+  id                  Int                        @id @default(autoincrement()) @db.UnsignedInt
+  name                String                     @unique(map: "accounts_unique") @db.VarChar(32)
+  password            String                     @db.Text
+  email               String                     @default("") @db.VarChar(255)
+  premdays            Int                        @default(0)
+  premdays_purchased  Int                        @default(0)
+  lastday             Int                        @default(0) @db.UnsignedInt
+  type                Int                        @default(1) @db.UnsignedTinyInt
+  coins               Int                        @default(0) @db.UnsignedInt
+  coins_transferable  Int                        @default(0) @db.UnsignedInt
+  tournament_coins    Int                        @default(0) @db.UnsignedInt
+  creation            Int                        @default(0) @db.UnsignedInt
+  recruiter           Int?                       @default(0)
+  house_bid_id        Int                        @default(0)
   account_ban_history account_ban_history[]
   account_bans        account_bans?
   account_vipgroups   account_vipgroups[]
@@ -91,7 +91,7 @@ model accounts {
   coins_transactions  coins_transactions[]
   players             players[]
   store_history       store_history[]
-  sessions            miforge_sessions[]
+  sessions            miforge_account_sessions[]
 }
 
 model boosted_boss {
