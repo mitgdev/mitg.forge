@@ -21,7 +21,7 @@ export const AccountDetailGeneralInformation = () => {
 	return (
 		<Container title="General Information">
 			<InnerContainer className="p-0">
-				<List zebra labelCol="150px" className="leading-tight">
+				<List zebra labelCol="180px" className="leading-tight">
 					<List.Item title="Email Address">
 						<span className="font-verdana text-secondary text-sm">
 							{data?.email}
@@ -42,6 +42,7 @@ export const AccountDetailGeneralInformation = () => {
 							{isPremium ? "Premium Account" : "Free Account"}
 						</span>
 					</List.Item>
+
 					<List.Item title="Tibia Coins">
 						<div className="flex flex-row flex-wrap items-center gap-2">
 							<div className="flex flex-row items-center gap-0.5">
@@ -72,6 +73,23 @@ export const AccountDetailGeneralInformation = () => {
 							<Tooltip content="Transferable coins can be used in the Tibia Store and traded with other players.">
 								<img alt="coins info" src="/assets/icons/global/info.gif" />
 							</Tooltip>
+						</div>
+					</List.Item>
+					<List.Item title="Tournament Coins">
+						<div className="flex flex-row flex-wrap items-center gap-2">
+							<div className="flex flex-row items-center gap-0.5">
+								<span className="font-verdana text-secondary text-sm">
+									{data.coins_transferable}
+								</span>
+								<Tooltip content="Tournament coins">
+									<img
+										alt="tibia coins"
+										src="/assets/icons/global/icon-tournamentcoin.png"
+										width={12}
+										height={12}
+									/>
+								</Tooltip>
+							</div>
 						</div>
 					</List.Item>
 					<List.Item title="Loyalty Points">
