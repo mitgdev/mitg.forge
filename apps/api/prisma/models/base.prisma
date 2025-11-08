@@ -587,113 +587,120 @@ model player_wheeldata {
 }
 
 model players {
-  id                                                       Int                    @id @default(autoincrement())
-  name                                                     String                 @unique(map: "players_unique") @db.VarChar(255)
-  group_id                                                 Int                    @default(1)
-  account_id                                               Int                    @default(0) @db.UnsignedInt
-  level                                                    Int                    @default(1)
-  vocation                                                 Int                    @default(0)
-  health                                                   Int                    @default(150)
-  healthmax                                                Int                    @default(150)
-  experience                                               BigInt                 @default(0)
-  lookbody                                                 Int                    @default(0)
-  lookfeet                                                 Int                    @default(0)
-  lookhead                                                 Int                    @default(0)
-  looklegs                                                 Int                    @default(0)
-  looktype                                                 Int                    @default(136)
-  lookaddons                                               Int                    @default(0)
-  maglevel                                                 Int                    @default(0)
-  mana                                                     Int                    @default(0)
-  manamax                                                  Int                    @default(0)
-  manaspent                                                BigInt                 @default(0) @db.UnsignedBigInt
-  soul                                                     Int                    @default(0) @db.UnsignedInt
-  town_id                                                  Int                    @default(1)
-  posx                                                     Int                    @default(0)
-  posy                                                     Int                    @default(0)
-  posz                                                     Int                    @default(0)
-  conditions                                               Bytes                  @db.MediumBlob
-  cap                                                      Int                    @default(0)
-  sex                                                      Int                    @default(0)
-  pronoun                                                  Int                    @default(0)
-  lastlogin                                                BigInt                 @default(0) @db.UnsignedBigInt
-  lastip                                                   Int                    @default(0) @db.UnsignedInt
-  save                                                     Int                    @default(1) @db.TinyInt
-  skull                                                    Int                    @default(0) @db.TinyInt
-  skulltime                                                BigInt                 @default(0)
-  lastlogout                                               BigInt                 @default(0) @db.UnsignedBigInt
-  blessings                                                Int                    @default(0) @db.TinyInt
-  blessings1                                               Int                    @default(0) @db.TinyInt
-  blessings2                                               Int                    @default(0) @db.TinyInt
-  blessings3                                               Int                    @default(0) @db.TinyInt
-  blessings4                                               Int                    @default(0) @db.TinyInt
-  blessings5                                               Int                    @default(0) @db.TinyInt
-  blessings6                                               Int                    @default(0) @db.TinyInt
-  blessings7                                               Int                    @default(0) @db.TinyInt
-  blessings8                                               Int                    @default(0) @db.TinyInt
-  onlinetime                                               Int                    @default(0)
-  deletion                                                 BigInt                 @default(0)
-  balance                                                  BigInt                 @default(0) @db.UnsignedBigInt
-  offlinetraining_time                                     Int                    @default(43200) @db.UnsignedSmallInt
-  offlinetraining_skill                                    Int                    @default(-1) @db.TinyInt
-  stamina                                                  Int                    @default(2520) @db.UnsignedSmallInt
-  skill_fist                                               Int                    @default(10) @db.UnsignedInt
-  skill_fist_tries                                         BigInt                 @default(0) @db.UnsignedBigInt
-  skill_club                                               Int                    @default(10) @db.UnsignedInt
-  skill_club_tries                                         BigInt                 @default(0) @db.UnsignedBigInt
-  skill_sword                                              Int                    @default(10) @db.UnsignedInt
-  skill_sword_tries                                        BigInt                 @default(0) @db.UnsignedBigInt
-  skill_axe                                                Int                    @default(10) @db.UnsignedInt
-  skill_axe_tries                                          BigInt                 @default(0) @db.UnsignedBigInt
-  skill_dist                                               Int                    @default(10) @db.UnsignedInt
-  skill_dist_tries                                         BigInt                 @default(0) @db.UnsignedBigInt
-  skill_shielding                                          Int                    @default(10) @db.UnsignedInt
-  skill_shielding_tries                                    BigInt                 @default(0) @db.UnsignedBigInt
-  skill_fishing                                            Int                    @default(10) @db.UnsignedInt
-  skill_fishing_tries                                      BigInt                 @default(0) @db.UnsignedBigInt
-  skill_critical_hit_chance                                Int                    @default(0) @db.UnsignedInt
-  skill_critical_hit_chance_tries                          BigInt                 @default(0) @db.UnsignedBigInt
-  skill_critical_hit_damage                                Int                    @default(0) @db.UnsignedInt
-  skill_critical_hit_damage_tries                          BigInt                 @default(0) @db.UnsignedBigInt
-  skill_life_leech_chance                                  Int                    @default(0) @db.UnsignedInt
-  skill_life_leech_chance_tries                            BigInt                 @default(0) @db.UnsignedBigInt
-  skill_life_leech_amount                                  Int                    @default(0) @db.UnsignedInt
-  skill_life_leech_amount_tries                            BigInt                 @default(0) @db.UnsignedBigInt
-  skill_mana_leech_chance                                  Int                    @default(0) @db.UnsignedInt
-  skill_mana_leech_chance_tries                            BigInt                 @default(0) @db.UnsignedBigInt
-  skill_mana_leech_amount                                  Int                    @default(0) @db.UnsignedInt
-  skill_mana_leech_amount_tries                            BigInt                 @default(0) @db.UnsignedBigInt
-  skill_criticalhit_chance                                 BigInt                 @default(0) @db.UnsignedBigInt
-  skill_criticalhit_damage                                 BigInt                 @default(0) @db.UnsignedBigInt
-  skill_lifeleech_chance                                   BigInt                 @default(0) @db.UnsignedBigInt
-  skill_lifeleech_amount                                   BigInt                 @default(0) @db.UnsignedBigInt
-  skill_manaleech_chance                                   BigInt                 @default(0) @db.UnsignedBigInt
-  skill_manaleech_amount                                   BigInt                 @default(0) @db.UnsignedBigInt
-  manashield                                               Int                    @default(0) @db.UnsignedInt
-  max_manashield                                           Int                    @default(0) @db.UnsignedInt
-  xpboost_stamina                                          Int?                   @db.UnsignedSmallInt
-  xpboost_value                                            Int?                   @db.UnsignedTinyInt // is unsigned
-  marriage_status                                          BigInt                 @default(0) @db.UnsignedBigInt
-  marriage_spouse                                          Int                    @default(-1)
-  bonus_rerolls                                            BigInt                 @default(0)
-  prey_wildcard                                            BigInt                 @default(0)
-  task_points                                              BigInt                 @default(0)
-  quickloot_fallback                                       Int                    @default(0) @db.TinyInt
-  lookmountbody                                            Int                    @default(0) @db.UnsignedTinyInt
-  lookmountfeet                                            Int                    @default(0) @db.UnsignedTinyInt
-  lookmounthead                                            Int                    @default(0) @db.UnsignedTinyInt
-  lookmountlegs                                            Int                    @default(0) @db.UnsignedTinyInt
-  currentmount                                             Int                    @default(0) @db.UnsignedSmallInt
-  lookfamiliarstype                                        Int                    @default(0) @db.UnsignedInt
-  isreward                                                 Int                    @default(1) @db.TinyInt
-  istutorial                                               Int                    @default(0) @db.TinyInt
-  forge_dusts                                              BigInt                 @default(0)
-  forge_dust_level                                         BigInt                 @default(100)
-  randomize_mount                                          Int                    @default(0) @db.TinyInt
-  boss_points                                              Int                    @default(0)
-  loyalty_points                                           Int                    @default(0) @db.UnsignedInt
-  animus_mastery                                           Bytes?                 @db.MediumBlob
-  virtue                                                   Int                    @default(0) @db.UnsignedInt
-  harmony                                                  Int                    @default(0) @db.UnsignedInt
+  id                              Int    @id @default(autoincrement())
+  name                            String @unique(map: "players_unique") @db.VarChar(255)
+  group_id                        Int    @default(1)
+  account_id                      Int    @default(0) @db.UnsignedInt
+  level                           Int    @default(1)
+  vocation                        Int    @default(0)
+  health                          Int    @default(150)
+  healthmax                       Int    @default(150)
+  experience                      BigInt @default(0)
+  lookbody                        Int    @default(0)
+  lookfeet                        Int    @default(0)
+  lookhead                        Int    @default(0)
+  looklegs                        Int    @default(0)
+  looktype                        Int    @default(136)
+  lookaddons                      Int    @default(0)
+  maglevel                        Int    @default(0)
+  mana                            Int    @default(0)
+  manamax                         Int    @default(0)
+  manaspent                       BigInt @default(0) @db.UnsignedBigInt
+  soul                            Int    @default(0) @db.UnsignedInt
+  town_id                         Int    @default(1)
+  posx                            Int    @default(0)
+  posy                            Int    @default(0)
+  posz                            Int    @default(0)
+  conditions                      Bytes  @db.MediumBlob
+  cap                             Int    @default(0)
+  sex                             Int    @default(0)
+  pronoun                         Int    @default(0)
+  lastlogin                       BigInt @default(0) @db.UnsignedBigInt
+  lastip                          Int    @default(0) @db.UnsignedInt
+  save                            Int    @default(1) @db.TinyInt
+  skull                           Int    @default(0) @db.TinyInt
+  skulltime                       BigInt @default(0)
+  lastlogout                      BigInt @default(0) @db.UnsignedBigInt
+  blessings                       Int    @default(0) @db.TinyInt
+  blessings1                      Int    @default(0) @db.TinyInt
+  blessings2                      Int    @default(0) @db.TinyInt
+  blessings3                      Int    @default(0) @db.TinyInt
+  blessings4                      Int    @default(0) @db.TinyInt
+  blessings5                      Int    @default(0) @db.TinyInt
+  blessings6                      Int    @default(0) @db.TinyInt
+  blessings7                      Int    @default(0) @db.TinyInt
+  blessings8                      Int    @default(0) @db.TinyInt
+  onlinetime                      Int    @default(0)
+  deletion                        BigInt @default(0)
+  balance                         BigInt @default(0) @db.UnsignedBigInt
+  offlinetraining_time            Int    @default(43200) @db.UnsignedSmallInt
+  offlinetraining_skill           Int    @default(-1) @db.TinyInt
+  stamina                         Int    @default(2520) @db.UnsignedSmallInt
+  skill_fist                      Int    @default(10) @db.UnsignedInt
+  skill_fist_tries                BigInt @default(0) @db.UnsignedBigInt
+  skill_club                      Int    @default(10) @db.UnsignedInt
+  skill_club_tries                BigInt @default(0) @db.UnsignedBigInt
+  skill_sword                     Int    @default(10) @db.UnsignedInt
+  skill_sword_tries               BigInt @default(0) @db.UnsignedBigInt
+  skill_axe                       Int    @default(10) @db.UnsignedInt
+  skill_axe_tries                 BigInt @default(0) @db.UnsignedBigInt
+  skill_dist                      Int    @default(10) @db.UnsignedInt
+  skill_dist_tries                BigInt @default(0) @db.UnsignedBigInt
+  skill_shielding                 Int    @default(10) @db.UnsignedInt
+  skill_shielding_tries           BigInt @default(0) @db.UnsignedBigInt
+  skill_fishing                   Int    @default(10) @db.UnsignedInt
+  skill_fishing_tries             BigInt @default(0) @db.UnsignedBigInt
+  skill_critical_hit_chance       Int    @default(0) @db.UnsignedInt
+  skill_critical_hit_chance_tries BigInt @default(0) @db.UnsignedBigInt
+  skill_critical_hit_damage       Int    @default(0) @db.UnsignedInt
+  skill_critical_hit_damage_tries BigInt @default(0) @db.UnsignedBigInt
+  skill_life_leech_chance         Int    @default(0) @db.UnsignedInt
+  skill_life_leech_chance_tries   BigInt @default(0) @db.UnsignedBigInt
+  skill_life_leech_amount         Int    @default(0) @db.UnsignedInt
+  skill_life_leech_amount_tries   BigInt @default(0) @db.UnsignedBigInt
+  skill_mana_leech_chance         Int    @default(0) @db.UnsignedInt
+  skill_mana_leech_chance_tries   BigInt @default(0) @db.UnsignedBigInt
+  skill_mana_leech_amount         Int    @default(0) @db.UnsignedInt
+  skill_mana_leech_amount_tries   BigInt @default(0) @db.UnsignedBigInt
+  skill_criticalhit_chance        BigInt @default(0) @db.UnsignedBigInt
+  skill_criticalhit_damage        BigInt @default(0) @db.UnsignedBigInt
+  skill_lifeleech_chance          BigInt @default(0) @db.UnsignedBigInt
+  skill_lifeleech_amount          BigInt @default(0) @db.UnsignedBigInt
+  skill_manaleech_chance          BigInt @default(0) @db.UnsignedBigInt
+  skill_manaleech_amount          BigInt @default(0) @db.UnsignedBigInt
+  manashield                      Int    @default(0) @db.UnsignedInt
+  max_manashield                  Int    @default(0) @db.UnsignedInt
+  xpboost_stamina                 Int?   @db.UnsignedSmallInt
+  xpboost_value                   Int?   @db.UnsignedTinyInt // is unsigned
+  marriage_status                 BigInt @default(0) @db.UnsignedBigInt
+  marriage_spouse                 Int    @default(-1)
+  bonus_rerolls                   BigInt @default(0)
+  prey_wildcard                   BigInt @default(0)
+  task_points                     BigInt @default(0)
+  quickloot_fallback              Int    @default(0) @db.TinyInt
+  lookmountbody                   Int    @default(0) @db.UnsignedTinyInt
+  lookmountfeet                   Int    @default(0) @db.UnsignedTinyInt
+  lookmounthead                   Int    @default(0) @db.UnsignedTinyInt
+  lookmountlegs                   Int    @default(0) @db.UnsignedTinyInt
+  currentmount                    Int    @default(0) @db.UnsignedSmallInt
+  lookfamiliarstype               Int    @default(0) @db.UnsignedInt
+  isreward                        Int    @default(1) @db.TinyInt
+  istutorial                      Int    @default(0) @db.TinyInt
+  forge_dusts                     BigInt @default(0)
+  forge_dust_level                BigInt @default(100)
+  randomize_mount                 Int    @default(0) @db.TinyInt
+  boss_points                     Int    @default(0)
+  loyalty_points                  Int    @default(0) @db.UnsignedInt
+  animus_mastery                  Bytes? @db.MediumBlob
+  virtue                          Int    @default(0) @db.UnsignedInt
+  harmony                         Int    @default(0) @db.UnsignedInt
+
+  /**
+   * CUSTOM
+   */
+  ismain   Boolean @default(false)
+  ishidden Boolean @default(false)
+
   account_ban_history                                      account_ban_history[]
   account_bans                                             account_bans[]
   account_vipgrouplist                                     account_vipgrouplist[]
