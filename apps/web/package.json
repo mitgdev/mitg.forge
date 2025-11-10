@@ -37,6 +37,8 @@
 		"zod": "catalog:"
 	},
 	"devDependencies": {
+		"@types/react": "catalog:react",
+		"@types/react-dom": "catalog:react",
 		"@vitejs/plugin-react": "^5.1.0",
 		"typescript": "catalog:ts",
 		"vite": "^7.2.2"
