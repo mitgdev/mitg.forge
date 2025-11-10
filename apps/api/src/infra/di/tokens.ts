@@ -15,6 +15,7 @@ import type { SessionInfoUseCase } from "@/application/usecases/session/info";
 import type { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
 import type { TibiaLoginUseCase } from "@/application/usecases/tibia/login";
 import type { Prisma } from "@/domain/modules/clients";
+import type { Mailer } from "@/domain/modules/clients/mailer";
 import type { Cookies } from "@/domain/modules/cookies";
 import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
@@ -26,6 +27,7 @@ import type {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
+import type { MailerRepository } from "@/domain/repositories/mailer.repository";
 
 export const token = <T>(desc: string) => Symbol(desc) as InjectionToken<T>;
 
@@ -39,6 +41,7 @@ export const TOKENS = {
 
 	// Clients
 	Prisma: token<Prisma>("Prisma"),
+	Mailer: token<Mailer>("Mailer"),
 
 	// Utils
 	Metadata: token<Metadata>("Metadata"),
@@ -53,6 +56,8 @@ export const TOKENS = {
 	AccountRepository: token<AccountRepository>("AccountRepository"),
 	PlayersRepository: token<PlayersRepository>("PlayersRepository"),
 	SessionRepository: token<SessionRepository>("SessionRepository"),
+
+	MailerRepository: token<MailerRepository>("MailerRepository"),
 
 	// Services
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),

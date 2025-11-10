@@ -15,6 +15,7 @@ import { SessionInfoUseCase } from "@/application/usecases/session/info";
 import { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
 import { TibiaLoginUseCase } from "@/application/usecases/tibia/login";
 import { makePrisma, type Prisma } from "@/domain/modules/clients";
+import { Mailer } from "@/domain/modules/clients/mailer";
 import { Cookies } from "@/domain/modules/cookies";
 import { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import { JwtCrypto } from "@/domain/modules/crypto/jwt";
@@ -27,6 +28,7 @@ import {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
+import { MailerRepository } from "@/domain/repositories/mailer.repository";
 import { env } from "@/infra/env";
 import { TOKENS } from "./tokens";
 
@@ -52,6 +54,13 @@ export function bootstrapContainer() {
 
 	container.registerInstance(TOKENS.RootLogger, rootLogger);
 	container.registerInstance(TOKENS.Prisma, prisma);
+
+	// Mailer
+	container.register(
+		TOKENS.Mailer,
+		{ useClass: Mailer },
+		{ lifecycle: Lifecycle.Singleton },
+	);
 
 	// Registrations “globais” que não dependem de request:
 	container.register(
@@ -114,6 +123,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.SessionRepository,
 		{ useClass: SessionRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.MailerRepository,
+		{ useClass: MailerRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

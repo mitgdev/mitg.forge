@@ -1,0 +1,14 @@
+{
+	"name": "@miforge/emails",
+	"version": "0.0.0",
+	"private": true,
+	"main": "src/index.ts",
+	"scripts": {
+		"preview": "email dev -p 3001 --dir ./src/templates"
+	},
+	"dependencies": {
+		"@react-email/components": "^1.0.0",
+		"@react-email/preview-server": "^5.0.1",
+		"react-email": "^5.0.1"
+	}
+}
