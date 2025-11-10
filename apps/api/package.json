@@ -20,7 +20,6 @@
 		"prepare": "pnpm run db:generate && pnpm run build && pnpm run build:types"
 	},
 	"dependencies": {
-		"@miforge/emails": "workspace:*",
 		"@orpc/client": "^1.11.1",
 		"@orpc/json-schema": "^1.11.1",
 		"@orpc/openapi": "^1.11.1",
@@ -33,8 +32,6 @@
 		"hono": "^4.10.4",
 		"jsonwebtoken": "^9.0.2",
 		"nodemailer": "^7.0.10",
-		"react": "catalog:react",
-		"react-dom": "catalog:react",
 		"reflect-metadata": "^0.2.2",
 		"tsyringe": "^4.10.0",
 		"zod": "catalog:"

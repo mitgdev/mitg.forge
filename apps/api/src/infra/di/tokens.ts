@@ -27,7 +27,6 @@ import type {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
-import type { MailerRepository } from "@/domain/repositories/mailer.repository";
 
 export const token = <T>(desc: string) => Symbol(desc) as InjectionToken<T>;
 
@@ -56,8 +55,6 @@ export const TOKENS = {
 	AccountRepository: token<AccountRepository>("AccountRepository"),
 	PlayersRepository: token<PlayersRepository>("PlayersRepository"),
 	SessionRepository: token<SessionRepository>("SessionRepository"),
-
-	MailerRepository: token<MailerRepository>("MailerRepository"),
 
 	// Services
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),

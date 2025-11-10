@@ -28,7 +28,6 @@ import {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
-import { MailerRepository } from "@/domain/repositories/mailer.repository";
 import { env } from "@/infra/env";
 import { TOKENS } from "./tokens";
 
@@ -123,11 +122,6 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.SessionRepository,
 		{ useClass: SessionRepository },
-		{ lifecycle: Lifecycle.ResolutionScoped },
-	);
-	childContainer.register(
-		TOKENS.MailerRepository,
-		{ useClass: MailerRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

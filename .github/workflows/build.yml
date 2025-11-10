@@ -35,12 +35,6 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Print tool versions (sanity)
-        run: |
-          pnpm --filter @miforge/api exec tsc -v
-          pnpm why typescript
-          pnpm why react react-dom
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
