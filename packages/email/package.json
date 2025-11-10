@@ -9,6 +9,11 @@
 	"dependencies": {
 		"@react-email/components": "^1.0.0",
 		"@react-email/preview-server": "^5.0.1",
+		"react": "catalog:react",
+		"react-dom": "catalog:react",
 		"react-email": "^5.0.1"
+	},
+	"devDependencies": {
+		"@types/bun": "catalog:"
 	}
 }

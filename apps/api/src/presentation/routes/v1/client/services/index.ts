@@ -8,7 +8,7 @@ export const servicesRoute = base
 		summary: "Get client services",
 		description: "Endpoint to retrieve client services",
 	})
-	.handler(async ({ input, context }) => {
+	.handler(async () => {
 		// const ct = file.type || "text/plain;charset=utf-8";
 		// const m = /charset=([^;]+)/i.exec(ct);
 		// const encoding = m?.[1]?.toLowerCase() || "utf-8";

@@ -1,1 +1,17 @@
-packages: ["apps/*", "packages/*"]
+packages:
+  - apps/*
+  - packages/*
+
+catalog:
+  typescript: ^5.9.3
+  "@types/bun": ^1.3.2
+  zod: ^4.1.12
+
+catalogs:
+  react:
+    react: ^19.2.0
+    react-dom: ^19.2.0
+
+overrides:
+  react: "catalog:react"
+  react-dom: "catalog:react"

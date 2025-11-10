@@ -4,7 +4,6 @@ import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { useSession } from "@/sdk/contexts/session";
 import { api } from "@/sdk/lib/api/factory";
 import { Button } from "@/ui/Buttons/Button";
 import { Container } from "@/ui/Container";
