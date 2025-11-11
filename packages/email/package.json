@@ -27,6 +27,7 @@
 	},
 	"dependencies": {
 		"@react-email/components": "^1.0.0",
+		"@react-email/render": "^2.0.0",
 		"react-email": "^5.0.1"
 	},
 	"devDependencies": {
