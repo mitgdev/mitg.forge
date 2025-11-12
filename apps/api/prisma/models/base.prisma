@@ -354,10 +354,10 @@ model player_bosstiary {
 model player_charms {
   id                     Int     @id @default(autoincrement())
   player_id              Int
-  charm_points           Int     @default(0) @db.SmallInt
-  minor_charm_echoes     Int     @default(0) @db.SmallInt
-  max_charm_points       Int     @default(0) @db.SmallInt
-  max_minor_charm_echoes Int     @default(0) @db.SmallInt
+  charm_points           Int     @default(0) @db.UnsignedInt
+  minor_charm_echoes     Int     @default(0) @db.UnsignedInt
+  max_charm_points       Int     @default(0) @db.UnsignedInt
+  max_minor_charm_echoes Int     @default(0) @db.UnsignedInt
   charm_expansion        Boolean @default(false)
   UsedRunesBit           Int     @default(0)
   UnlockedRunesBit       Int     @default(0)
@@ -668,6 +668,7 @@ model players {
   skill_lifeleech_amount          BigInt @default(0) @db.UnsignedBigInt
   skill_manaleech_chance          BigInt @default(0) @db.UnsignedBigInt
   skill_manaleech_amount          BigInt @default(0) @db.UnsignedBigInt
+  weapon_proficiencies            Bytes? @db.MediumBlob
   manashield                      Int    @default(0) @db.UnsignedInt
   max_manashield                  Int    @default(0) @db.UnsignedInt
   xpboost_stamina                 Int?   @db.UnsignedSmallInt
