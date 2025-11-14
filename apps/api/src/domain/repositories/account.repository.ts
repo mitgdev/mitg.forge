@@ -92,7 +92,11 @@ export class AccountRepository {
 			},
 			include: {
 				sessions: true,
-				players: true,
+				registrations: {
+					omit: {
+						recoveryKey: true,
+					},
+				},
 			},
 		});
 	}

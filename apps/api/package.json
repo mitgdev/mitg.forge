@@ -17,9 +17,10 @@
 		"types": "tsc -b",
 		"check": "biome check .",
 		"lint": "biome lint .",
-		"prepare": "pnpm run db:generate && pnpm run build && pnpm run build:types"
+		"prepare": "pnpm run db:generate"
 	},
 	"dependencies": {
+		"@miforge/core": "workspace:*",
 		"@miforge/email": "workspace:*",
 		"@orpc/client": "^1.11.1",
 		"@orpc/json-schema": "^1.11.1",

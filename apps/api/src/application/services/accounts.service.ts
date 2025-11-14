@@ -121,6 +121,7 @@ export class AccountsService {
 		return {
 			...account,
 			sessions: account.sessions,
+			registration: account.registrations,
 		};
 	}
 
