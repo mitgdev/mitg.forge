@@ -1,0 +1,30 @@
+{
+	"name": "@miforge/core",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./geo": {
+			"types": "./dist/geo.d.ts",
+			"import": "./dist/geo.js",
+			"require": "./dist/geo.js"
+		}
+	},
+	"scripts": {
+		"dev": "tsdown --watch ./src",
+		"clean": "rimraf ./dist",
+		"build": "tsdown",
+		"prepare": "pnpm run build"
+	},
+	"devDependencies": {
+		"rimraf": "^6.0.1",
+		"tsdown": "catalog:",
+		"typescript": "catalog:ts"
+	}
+}
