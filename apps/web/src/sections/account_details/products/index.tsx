@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/sdk/lib/api/factory";
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 import { Tooltip } from "@/ui/Tooltip";
@@ -31,9 +31,9 @@ export const AccountDetailsProducts = () => {
 						</span>
 					</div>
 					<div>
-						<ButtonLink variant="green" to="/">
+						<ButtonImageLink variant="green" to="/">
 							Get Tibia Coins
-						</ButtonLink>
+						</ButtonImageLink>
 					</div>
 				</div>
 			</InnerContainer>
@@ -48,9 +48,9 @@ export const AccountDetailsProducts = () => {
 						</span>
 					</div>
 					<div>
-						<ButtonLink variant="green" to="/">
+						<ButtonImageLink variant="green" to="/">
 							Buy Recovery Key
-						</ButtonLink>
+						</ButtonImageLink>
 					</div>
 				</div>
 			</InnerContainer>
@@ -66,9 +66,9 @@ export const AccountDetailsProducts = () => {
 						</span>
 					</div>
 					<div>
-						<ButtonLink variant="info" to="/">
+						<ButtonImageLink variant="info" to="/">
 							Use Game Code
-						</ButtonLink>
+						</ButtonImageLink>
 					</div>
 				</div>
 			</InnerContainer>

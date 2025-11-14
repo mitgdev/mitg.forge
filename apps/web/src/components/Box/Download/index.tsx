@@ -1,10 +1,10 @@
 import { MenuBox } from "@/components/Box/Menu";
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 
 export const BoxDownload = () => {
 	return (
 		<MenuBox background chains>
-			<ButtonLink to="/">Download</ButtonLink>
+			<ButtonImageLink to="/">Download</ButtonImageLink>
 		</MenuBox>
 	);
 };

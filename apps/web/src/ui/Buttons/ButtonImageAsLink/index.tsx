@@ -6,7 +6,7 @@ type Props = LinkHTMLAttributes<HTMLAnchorElement> & {
 	variant?: "regular" | "large" | "info" | "green" | "red";
 };
 
-export const ButtonAsLink = forwardRef<HTMLAnchorElement, Props>(
+export const ButtonImageAsLink = forwardRef<HTMLAnchorElement, Props>(
 	function Button(
 		{ variant = "regular", className: classNameProp, ...props },
 		ref,

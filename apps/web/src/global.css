@@ -72,6 +72,9 @@
 	--color-warning: #f57c00;
 	--color-info: #1976d2;
 
+	--color-popover: var(--color-white);
+	--color-popover-foreground: var(--color-quaternary);
+
 	--text-xxs: 0.625rem; /* 10px */
 
 	--text-shadow-title:

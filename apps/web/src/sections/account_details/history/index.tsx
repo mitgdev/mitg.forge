@@ -1,4 +1,4 @@
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 
@@ -16,9 +16,9 @@ export const AccountDetailsHistory = () => {
 						</span>
 					</div>
 					<div>
-						<ButtonLink variant="info" to="/">
+						<ButtonImageLink variant="info" to="/">
 							View History
-						</ButtonLink>
+						</ButtonImageLink>
 					</div>
 				</div>
 			</InnerContainer>
@@ -34,9 +34,9 @@ export const AccountDetailsHistory = () => {
 						</span>
 					</div>
 					<div>
-						<ButtonLink variant="info" to="/account/coins_history">
+						<ButtonImageLink variant="info" to="/account/coins_history">
 							View History
-						</ButtonLink>
+						</ButtonImageLink>
 					</div>
 				</div>
 			</InnerContainer>

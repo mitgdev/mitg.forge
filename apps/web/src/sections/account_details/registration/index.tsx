@@ -1,4 +1,4 @@
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 
@@ -14,9 +14,9 @@ export const AccountDetailsRegistration = () => {
 						Your account is not registered yet.
 					</span>
 					<div className="self-end">
-						<ButtonLink variant="info" to="/">
+						<ButtonImageLink variant="info" to="/">
 							Register Account
-						</ButtonLink>
+						</ButtonImageLink>
 					</div>
 				</div>
 			</InnerContainer>

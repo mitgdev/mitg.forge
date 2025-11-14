@@ -3,7 +3,7 @@ import { List } from "@/components/List";
 import { useTimezone } from "@/sdk/hooks/useTimezone";
 import { api } from "@/sdk/lib/api/factory";
 import { cn } from "@/sdk/utils/cn";
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 import { Tooltip } from "@/ui/Tooltip";
@@ -105,15 +105,15 @@ export const AccountDetailGeneralInformation = () => {
 				</List>
 			</InnerContainer>
 			<div className="flex flex-row flex-wrap justify-end gap-1">
-				<ButtonLink variant="red" to="/">
+				<ButtonImageLink variant="red" to="/">
 					Terminate Account
-				</ButtonLink>
-				<ButtonLink variant="info" to="/">
+				</ButtonImageLink>
+				<ButtonImageLink variant="info" to="/">
 					Change Password
-				</ButtonLink>
-				<ButtonLink variant="info" to="/">
+				</ButtonImageLink>
+				<ButtonImageLink variant="info" to="/">
 					Change Email
-				</ButtonLink>
+				</ButtonImageLink>
 			</div>
 		</Container>
 	);

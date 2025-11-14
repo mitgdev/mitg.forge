@@ -8,7 +8,7 @@ import { PlayerRole } from "@/components/Player/Role";
 import { PlayerVocation } from "@/components/Player/Vocation";
 import { api } from "@/sdk/lib/api/factory";
 import { makeOutfit } from "@/sdk/utils/outfit";
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 
@@ -141,12 +141,12 @@ export const AccountCharacters = () => {
 				</table>
 			</InnerContainer>
 			<div className="flex w-full flex-wrap justify-end gap-2">
-				<ButtonLink variant="green" to="/">
+				<ButtonImageLink variant="green" to="/">
 					Change Main
-				</ButtonLink>
-				<ButtonLink variant="info" to="/">
+				</ButtonImageLink>
+				<ButtonImageLink variant="info" to="/">
 					Create Character
-				</ButtonLink>
+				</ButtonImageLink>
 			</div>
 		</Container>
 	);

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/sdk/lib/api/factory";
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 
@@ -24,9 +24,9 @@ export const AccountDetailsBadges = () => {
 							for your character.
 						</span>
 					</div>
-					<ButtonLink variant="info" to="/">
+					<ButtonImageLink variant="info" to="/">
 						Edit
-					</ButtonLink>
+					</ButtonImageLink>
 				</div>
 			</InnerContainer>
 			<InnerContainer>

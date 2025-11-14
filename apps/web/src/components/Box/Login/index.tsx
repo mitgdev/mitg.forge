@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { MenuBox } from "@/components/Box/Menu";
 import { ButtonLogout } from "@/components/Buttons/ButtonLogout";
 import { useSession } from "@/sdk/contexts/session";
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 
 export const BoxLogin = () => {
 	const { session } = useSession();
@@ -22,14 +22,14 @@ export const BoxLogin = () => {
 				<div className="flex flex-col items-center gap-1">
 					{session ? (
 						<>
-							<ButtonLink to="/account">My Account</ButtonLink>
+							<ButtonImageLink to="/account">My Account</ButtonImageLink>
 							<ButtonLogout />
 						</>
 					) : (
 						<>
-							<ButtonLink to="/login" preload={false}>
+							<ButtonImageLink to="/login" preload={false}>
 								Login
-							</ButtonLink>
+							</ButtonImageLink>
 							<Link to="/" className="fondamento-title text-xs hover:underline">
 								Create Account
 							</Link>
