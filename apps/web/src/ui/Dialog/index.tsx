@@ -1,7 +1,6 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import type * as React from "react";
 import { cn } from "@/sdk/utils/cn";
-import { InnerContainer } from "../Container/Inner";
 
 function Dialog({
 	...props

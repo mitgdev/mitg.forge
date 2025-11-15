@@ -1,4 +1,4 @@
-import { COUNTRY_CODES, STATE_CODES } from "@miforge/core/geo";
+import * as geo from "@miforge/core/geo";
 import z from "zod";
 import { RegistrationKeySchema } from "@/shared/schemas/Registrations";
 
@@ -11,8 +11,8 @@ export const AccountRegistrationKeyContractSchema = {
 		id: true,
 		phone: true,
 	}).extend({
-		country: z.enum(COUNTRY_CODES),
-		state: z.enum(STATE_CODES),
+		country: z.enum(geo.COUNTRY_CODES),
+		state: z.enum(geo.STATE_CODES),
 	}),
 	output: RegistrationKeySchema,
 };

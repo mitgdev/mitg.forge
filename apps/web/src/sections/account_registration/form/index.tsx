@@ -27,12 +27,12 @@ import {
 	CommandList,
 } from "@/ui/Command";
 import { Container } from "@/ui/Container";
-import { DialogHeader } from "@/ui/Container/Dialog";
 import { InnerContainer } from "@/ui/Container/Inner";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogHeader,
 	DialogTitle,
 } from "@/ui/Dialog";
 import {

@@ -16,6 +16,9 @@
 			"require": "./dist/geo.js"
 		}
 	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"dev": "tsdown --watch ./src",
 		"clean": "rimraf ./dist",
