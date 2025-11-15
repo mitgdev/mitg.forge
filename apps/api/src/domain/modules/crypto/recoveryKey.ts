@@ -9,12 +9,17 @@ export class RecoveryKey {
 
 	generate(): string {
 		const totalChars = this.groups * this.size;
-		const bytes = randomBytes(totalChars);
 		const chars: string[] = [];
 
-		for (let i = 0; i < totalChars; i++) {
-			const index = bytes[i] % this.charset.length;
-			chars.push(this.charset[index]);
+		let generated = 0;
+		while (generated < totalChars) {
+			const byte = randomBytes(1)[0];
+			const max = 256 - (256 % this.charset.length);
+			if (byte < max) {
+				const index = byte % this.charset.length;
+				chars.push(this.charset[index]);
+				generated++;
+			}
 		}
 
 		const raw = chars.join("");
