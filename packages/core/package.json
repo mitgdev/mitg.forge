@@ -20,7 +20,6 @@
 		"dist"
 	],
 	"scripts": {
-		"dev": "tsdown --watch ./src",
 		"clean": "rimraf ./dist",
 		"build": "tsdown",
 		"prepare": "pnpm run build"

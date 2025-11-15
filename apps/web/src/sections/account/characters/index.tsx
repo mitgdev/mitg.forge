@@ -144,7 +144,7 @@ export const AccountCharacters = () => {
 				<ButtonImageLink variant="green" to="/">
 					Change Main
 				</ButtonImageLink>
-				<ButtonImageLink variant="info" to="/">
+				<ButtonImageLink variant="info" to="/account/player/create">
 					Create Character
 				</ButtonImageLink>
 			</div>

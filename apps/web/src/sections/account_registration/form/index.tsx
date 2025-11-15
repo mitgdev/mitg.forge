@@ -360,6 +360,7 @@ export const AccountRegistrationForm = () => {
 																<Button
 																	variant="default"
 																	role="combobox"
+																	size="sm"
 																	aria-expanded={countryOpen}
 																	className="w-full justify-between md:w-[250px]"
 																>
@@ -445,6 +446,7 @@ export const AccountRegistrationForm = () => {
 																<Button
 																	variant="default"
 																	role="combobox"
+																	size="sm"
 																	aria-expanded={stateOpen}
 																	className="w-full justify-between md:w-[250px]"
 																>

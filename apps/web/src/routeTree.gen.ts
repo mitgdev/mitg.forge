@@ -28,6 +28,9 @@ const AuthAccountDetailsIndexLazyRouteImport = createFileRoute(
 const AuthAccountCoins_historyIndexLazyRouteImport = createFileRoute(
   '/_auth/account/coins_history/',
 )()
+const AuthAccountPlayerCreateIndexLazyRouteImport = createFileRoute(
+  '/_auth/account/player/create/',
+)()
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -95,6 +98,16 @@ const AuthAccountCoins_historyIndexLazyRoute =
       (d) => d.Route,
     ),
   )
+const AuthAccountPlayerCreateIndexLazyRoute =
+  AuthAccountPlayerCreateIndexLazyRouteImport.update({
+    id: '/account/player/create/',
+    path: '/account/player/create/',
+    getParentRoute: () => AuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/account/player/create/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
@@ -104,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/account/coins_history': typeof AuthAccountCoins_historyIndexLazyRoute
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
+  '/account/player/create': typeof AuthAccountPlayerCreateIndexLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -113,6 +127,7 @@ export interface FileRoutesByTo {
   '/account/coins_history': typeof AuthAccountCoins_historyIndexLazyRoute
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
+  '/account/player/create': typeof AuthAccountPlayerCreateIndexLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -126,6 +141,7 @@ export interface FileRoutesById {
   '/_auth/account/coins_history/': typeof AuthAccountCoins_historyIndexLazyRoute
   '/_auth/account/details/': typeof AuthAccountDetailsIndexLazyRoute
   '/_auth/account/registration/': typeof AuthAccountRegistrationIndexLazyRoute
+  '/_auth/account/player/create/': typeof AuthAccountPlayerCreateIndexLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,6 +153,7 @@ export interface FileRouteTypes {
     | '/account/coins_history'
     | '/account/details'
     | '/account/registration'
+    | '/account/player/create'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -146,6 +163,7 @@ export interface FileRouteTypes {
     | '/account/coins_history'
     | '/account/details'
     | '/account/registration'
+    | '/account/player/create'
   id:
     | '__root__'
     | '/_auth'
@@ -158,6 +176,7 @@ export interface FileRouteTypes {
     | '/_auth/account/coins_history/'
     | '/_auth/account/details/'
     | '/_auth/account/registration/'
+    | '/_auth/account/player/create/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -238,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAccountCoins_historyIndexLazyRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/account/player/create/': {
+      id: '/_auth/account/player/create/'
+      path: '/account/player/create'
+      fullPath: '/account/player/create'
+      preLoaderRoute: typeof AuthAccountPlayerCreateIndexLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
   }
 }
 
@@ -246,6 +272,7 @@ interface AuthRouteRouteChildren {
   AuthAccountCoins_historyIndexLazyRoute: typeof AuthAccountCoins_historyIndexLazyRoute
   AuthAccountDetailsIndexLazyRoute: typeof AuthAccountDetailsIndexLazyRoute
   AuthAccountRegistrationIndexLazyRoute: typeof AuthAccountRegistrationIndexLazyRoute
+  AuthAccountPlayerCreateIndexLazyRoute: typeof AuthAccountPlayerCreateIndexLazyRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -254,6 +281,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
     AuthAccountCoins_historyIndexLazyRoute,
   AuthAccountDetailsIndexLazyRoute: AuthAccountDetailsIndexLazyRoute,
   AuthAccountRegistrationIndexLazyRoute: AuthAccountRegistrationIndexLazyRoute,
+  AuthAccountPlayerCreateIndexLazyRoute: AuthAccountPlayerCreateIndexLazyRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
