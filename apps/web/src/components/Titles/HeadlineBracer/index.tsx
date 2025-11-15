@@ -5,7 +5,7 @@ export const HeadlineBracerTitle = ({ title }: { title: string }) => {
 				alt={`headline-bracer-left-${title}`}
 				src="/assets/borders/headline-bracer.gif"
 			/>
-			<span className="font-bold font-verdana text-lg text-secondary">
+			<span className="text-center font-bold font-verdana text-lg text-secondary">
 				{title}
 			</span>
 			<img
