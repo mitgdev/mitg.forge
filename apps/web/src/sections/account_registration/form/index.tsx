@@ -4,6 +4,7 @@ import {
 	COUNTRY_CODES,
 	type CountryCode,
 	getStatesByCountry,
+	type StateCode,
 } from "@miforge/core/geo";
 import { ORPCError } from "@orpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -130,7 +131,7 @@ export const AccountRegistrationForm = () => {
 					postal: data.postal,
 					city: data.city,
 					country: data.country,
-					state: data.state,
+					state: data.state as StateCode,
 				});
 
 				router.invalidate();
