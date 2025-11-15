@@ -5,9 +5,12 @@ import {
 	type CountryCode,
 	getStatesByCountry,
 } from "@miforge/core/geo";
-import { useQuery } from "@tanstack/react-query";
-import { useCallback, useMemo, useState } from "react";
+import { ORPCError } from "@orpc/client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 import { api } from "@/sdk/lib/api/factory";
 import { cn } from "@/sdk/utils/cn";
@@ -23,7 +26,14 @@ import {
 	CommandList,
 } from "@/ui/Command";
 import { Container } from "@/ui/Container";
+import { DialogHeader } from "@/ui/Container/Dialog";
 import { InnerContainer } from "@/ui/Container/Inner";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogTitle,
+} from "@/ui/Dialog";
 import {
 	Form,
 	FormControl,
@@ -54,9 +64,18 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>;
 
 export const AccountRegistrationForm = () => {
+	const [recoveryKey, setRecoveryKey] = useState<string | null>(null);
+	const [showRecoveryKeyDialog, setShowRecoveryKeyDialog] = useState(false);
 	const [countryOpen, setCountryOpen] = useState(false);
 	const [stateOpen, setStateOpen] = useState(false);
-	const { data } = useQuery(api.query.miforge.accounts.details.queryOptions());
+	const queryClient = useQueryClient();
+	const { data, isLoading } = useQuery(
+		api.query.miforge.accounts.details.queryOptions(),
+	);
+	const router = useRouter();
+	const { mutateAsync: updateRegistration, isPending } = useMutation(
+		api.query.miforge.accounts.registrationKey.mutationOptions(),
+	);
 
 	const hasRegistration = Boolean(data?.registration);
 
@@ -76,23 +95,117 @@ export const AccountRegistrationForm = () => {
 		},
 	});
 
+	useEffect(() => {
+		if (data?.registration) {
+			form.reset({
+				firstName: data.registration.firstName || "",
+				lastName: data.registration.lastName || "",
+				street: data.registration.street || "",
+				number: data.registration.number || "",
+				additional: data.registration.additional || "",
+				postal: data.registration.postal || "",
+				city: data.registration.city || "",
+				country: (data.registration.country as CountryCode) || "",
+				state: data.registration.state || "",
+				phone: data.registration.phone || "",
+			});
+		}
+	}, [data, form]);
+
 	const country = form.watch("country");
 
 	const states = useMemo(() => {
 		return getStatesByCountry(country);
 	}, [country]);
 
-	const handleSubmit = useCallback(async (data: FormValues) => {
-		console.log("Form submitted:", data);
-	}, []);
+	const handleSubmit = useCallback(
+		async (data: FormValues) => {
+			try {
+				const output = await updateRegistration({
+					firstName: data.firstName,
+					lastName: data.lastName,
+					street: data.street,
+					number: data.number,
+					additional: data.additional ?? null,
+					postal: data.postal,
+					city: data.city,
+					country: data.country,
+					state: data.state,
+				});
+
+				router.invalidate();
+
+				queryClient.invalidateQueries(
+					api.query.miforge.accounts.details.queryOptions(),
+				);
+
+				if (output.recoveryKey) {
+					setShowRecoveryKeyDialog(true);
+					setRecoveryKey(output.recoveryKey);
+
+					return;
+				}
+
+				router.navigate({
+					to: "/account/details",
+					hash: "registration",
+					replace: true,
+				});
+
+				toast.success(
+					hasRegistration
+						? "Registration updated successfully."
+						: "Account registered successfully.",
+				);
+			} catch (error) {
+				if (error instanceof ORPCError) {
+					return toast.error(`${error.message}`);
+				}
+
+				toast.error("An unexpected error occurred. Please try again.");
+			}
+		},
+		[updateRegistration, router, hasRegistration, queryClient],
+	);
 
 	return (
 		<Container
 			title={hasRegistration ? "Update Registration" : "Register Account"}
 		>
-			<InnerContainer className="p-1">
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(handleSubmit)}>
+			<Dialog
+				open={showRecoveryKeyDialog}
+				onOpenChange={(open) => {
+					if (!open) {
+						setRecoveryKey(null);
+						router.navigate({
+							to: "/account/details",
+							hash: "registration",
+							replace: true,
+						});
+					}
+					setShowRecoveryKeyDialog(open);
+				}}
+			>
+				<DialogContent title="Recovery Key">
+					<InnerContainer>
+						<DialogHeader>
+							<DialogDescription>
+								Please save your recovery key in a safe place. You will need it
+								to recover your account if you forget your password. This is the
+								only time you will be shown the recovery key.
+							</DialogDescription>
+						</DialogHeader>
+					</InnerContainer>
+					<InnerContainer className="mb-0">
+						<DialogTitle className="break-all text-center font-mono text-lg text-secondary">
+							{recoveryKey}
+						</DialogTitle>
+					</InnerContainer>
+				</DialogContent>
+			</Dialog>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(handleSubmit)}>
+					<InnerContainer className="p-1">
 						<div className="flex flex-col gap-3">
 							<div className="flex flex-col gap-2">
 								<FormField
@@ -397,17 +510,29 @@ export const AccountRegistrationForm = () => {
 									}}
 								/>
 							</div>
-							<div className="flex flex-row flex-wrap items-end justify-end gap-2">
-								<ButtonImageLink variant="info">Back</ButtonImageLink>
-								<ButtonImage variant="info">
-									{/* <img alt="teste" src="/assets/icons/global/spinner.png" /> */}
-									{hasRegistration ? "Update Registration" : "Register"}
-								</ButtonImage>
-							</div>
 						</div>
-					</form>
-				</Form>
-			</InnerContainer>
+					</InnerContainer>
+					<InnerContainer className="p-1">
+						<div className="flex flex-row flex-wrap items-end justify-end gap-2">
+							<ButtonImageLink
+								variant="info"
+								to="/account/details"
+								hash="registration"
+							>
+								Back
+							</ButtonImageLink>
+							<ButtonImage
+								variant="info"
+								disabled={isLoading || isPending}
+								loading={isLoading || isPending}
+								type="submit"
+							>
+								{hasRegistration ? "Update" : "Register"}
+							</ButtonImage>
+						</div>
+					</InnerContainer>
+				</form>
+			</Form>
 		</Container>
 	);
 };

@@ -3,6 +3,8 @@ import { inject, injectable } from "tsyringe";
 import type { Cookies } from "@/domain/modules/cookies";
 import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
+import type { RecoveryKey } from "@/domain/modules/crypto/recoveryKey";
+import type { DetectionChanges } from "@/domain/modules/detection/changes";
 import type { Logger } from "@/domain/modules/logging/logger";
 import type { Metadata } from "@/domain/modules/metadata";
 import type {
@@ -10,8 +12,10 @@ import type {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
+import type { AccountRegistrationRepository } from "@/domain/repositories/accountRegistration";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
+import type { EmailQueue } from "@/jobs/queue/email.queue";
 import { getAccountType, getAccountTypeId } from "@/utils/account/type";
 import type { PaginationInput } from "@/utils/paginate";
 import { CatchDecorator } from "../decorators/Catch";
@@ -34,6 +38,12 @@ export class AccountsService {
 		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
 		@inject(TOKENS.PlayersRepository)
 		private readonly playersRepository: PlayersRepository,
+		@inject(TOKENS.AccountRegistrationRepository)
+		private readonly accountRegistrationRepository: AccountRegistrationRepository,
+		@inject(TOKENS.RecoveryKey) private readonly recoveryKey: RecoveryKey,
+		@inject(TOKENS.EmailQueue) private readonly emailQueue: EmailQueue,
+		@inject(TOKENS.DetectionChanges)
+		private readonly detection: DetectionChanges,
 	) {}
 
 	@CatchDecorator()
@@ -202,5 +212,100 @@ export class AccountsService {
 		return this.accountRepository.storeHistory(session.id, {
 			pagination,
 		});
+	}
+
+	@CatchDecorator()
+	async upsertRegistration(
+		email: string,
+		input: {
+			city: string;
+			country: string;
+			firstName: string;
+			number: string;
+			lastName: string;
+			street: string;
+			postal: string;
+			state: string;
+			additional: string | null;
+		},
+	) {
+		const account = await this.accountRepository.findByEmail(email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const alreadyHasRegistration =
+			await this.accountRegistrationRepository.findByAccountId(account.id);
+		let recoveryKey: string | null = null;
+
+		if (!alreadyHasRegistration) {
+			recoveryKey = this.recoveryKey.generate();
+
+			const alreadyExists =
+				await this.accountRegistrationRepository.findByRecoveryKey(recoveryKey);
+
+			if (alreadyExists) {
+				// Extremely unlikely, but just in case, we generate a new one.
+				recoveryKey = this.recoveryKey.generate();
+			}
+
+			/**
+			 * TODO: Find a better way to handle subject and template naming conventions.
+			 * Maybe whe can implement i18n here as well.
+			 */
+			this.emailQueue.add({
+				kind: "EmailJob",
+				to: account.email,
+				props: {
+					code: recoveryKey,
+					user: account.name,
+				},
+				subject: "Your Account Recovery Key",
+				template: "RecoveryKey",
+			});
+		}
+
+		if (
+			alreadyHasRegistration &&
+			!this.detection.hasChanges(input, alreadyHasRegistration, {
+				fields: [
+					"city",
+					"country",
+					"firstName",
+					"lastName",
+					"number",
+					"postal",
+					"state",
+					"street",
+					"additional",
+				],
+			})
+		) {
+			throw new ORPCError("UNPROCESSABLE_CONTENT", {
+				message: "No changes detected in registration data",
+			});
+		}
+
+		const updatedRegistration =
+			await this.accountRegistrationRepository.upsertByAccountId(account.id, {
+				city: input.city,
+				country: input.country,
+				firstName: input.firstName,
+				number: input.number,
+				lastName: input.lastName,
+				street: input.street,
+				postal: input.postal,
+				state: input.state,
+				additional: input.additional,
+				...(recoveryKey ? { recoveryKey: recoveryKey } : {}),
+			});
+
+		return {
+			...updatedRegistration,
+			recoveryKey,
+		};
 	}
 }

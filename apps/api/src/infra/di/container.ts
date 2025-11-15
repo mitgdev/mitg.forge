@@ -9,6 +9,7 @@ import { AccountDetailsBySessionUseCase } from "@/application/usecases/account/d
 import { AccountLoginUseCase } from "@/application/usecases/account/login";
 import { AccountLogoutUseCase } from "@/application/usecases/account/logout";
 import { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
+import { AccountRegistrationUseCase } from "@/application/usecases/account/registration";
 import { AccountStoreHistoryUseCase } from "@/application/usecases/account/storeHistory";
 import { SessionAuthenticatedUseCase } from "@/application/usecases/session/authenticated";
 import { SessionInfoUseCase } from "@/application/usecases/session/info";
@@ -24,6 +25,8 @@ import {
 import { Cookies } from "@/domain/modules/cookies";
 import { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import { JwtCrypto } from "@/domain/modules/crypto/jwt";
+import { RecoveryKey } from "@/domain/modules/crypto/recoveryKey";
+import { DetectionChanges } from "@/domain/modules/detection/changes";
 import { RootLogger } from "@/domain/modules/logging/logger";
 import { makeRequestLogger } from "@/domain/modules/logging/request-logger";
 import { Metadata } from "@/domain/modules/metadata";
@@ -33,6 +36,7 @@ import {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
+import { AccountRegistrationRepository } from "@/domain/repositories/accountRegistration";
 import { env } from "@/infra/env";
 import { EmailQueue } from "@/jobs/queue/email.queue";
 import { EmailWorker } from "@/jobs/workers/email.worker";
@@ -104,6 +108,16 @@ export function bootstrapContainer() {
 		{ useClass: JwtCrypto },
 		{ lifecycle: Lifecycle.Singleton },
 	);
+	container.register(
+		TOKENS.RecoveryKey,
+		{ useClass: RecoveryKey },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.DetectionChanges,
+		{ useClass: DetectionChanges },
+		{ lifecycle: Lifecycle.Singleton },
+	);
 
 	global.__BOOTSTRAPPED__ = true;
 	return container;
@@ -144,6 +158,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.AccountRepository,
 		{ useClass: AccountRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountRegistrationRepository,
+		{ useClass: AccountRegistrationRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 	childContainer.register(
@@ -219,6 +238,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.SessionNotAuthenticatedUseCase,
 		{ useClass: SessionNotAuthenticatedUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountRegistrationUseCase,
+		{ useClass: AccountRegistrationUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

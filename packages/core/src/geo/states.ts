@@ -76,6 +76,7 @@ export const STATES: readonly State[] = [
 	// ...
 ] as const;
 
+export const STATE_CODES = STATES.map((s) => s.code) as StateCode[];
 export function getStatesByCountry(countryCode: CountryCode): State[] {
 	return STATES.filter((s) => s.countryCode === countryCode);
 }

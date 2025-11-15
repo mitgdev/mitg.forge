@@ -3,11 +3,21 @@ import { assets } from "@/assets";
 import { cn } from "@/sdk/utils/cn";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+	loading?: boolean;
 	variant?: "regular" | "large" | "info" | "green" | "red";
 };
 
 export const ButtonImage = forwardRef<HTMLButtonElement, Props>(
-	({ variant = "regular", className: classNameProp, ...props }, ref) => {
+	(
+		{
+			variant = "regular",
+			className: classNameProp,
+			children,
+			loading = false,
+			...props
+		},
+		ref,
+	) => {
 		const backgroundImage = useMemo<string>(() => {
 			switch (variant) {
 				case "red":
@@ -42,7 +52,12 @@ export const ButtonImage = forwardRef<HTMLButtonElement, Props>(
 				style={{
 					backgroundImage: `url('${backgroundImage}')`,
 				}}
-			/>
+			>
+				{loading && (
+					<img alt="loading" src="/assets/icons/global/spinner.png" />
+				)}
+				{!loading && children}
+			</button>
 		);
 	},
 );

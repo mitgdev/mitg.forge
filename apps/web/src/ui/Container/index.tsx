@@ -10,6 +10,8 @@ type Props = React.HTMLAttributes<HTMLDivElement> & {
 
 export const Container = forwardRef<HTMLDivElement, Props>(
 	({ children, className, innerContainer, title, actions, ...props }, ref) => {
+		const anchorId = title.toLowerCase().replace(/\s+/g, "-");
+
 		const corner = cn(
 			"absolute h-[5px] w-[5px] bg-[url('/assets/borders/box-frame-edge.gif')] bg-no-repeat",
 		);
@@ -23,7 +25,7 @@ export const Container = forwardRef<HTMLDivElement, Props>(
 		);
 
 		return (
-			<div ref={ref} {...props} className={cn(className)}>
+			<div ref={ref} {...props} className={cn(className)} id={anchorId}>
 				<div className="relative">
 					<span className={`${borderAboves}`} />
 					<span className={`${borderSides} -right-px`} />
