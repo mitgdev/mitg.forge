@@ -1,7 +1,17 @@
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/sdk/lib/api/factory";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { MessageContainer } from "@/ui/Container/Message";
 
 export const AccountRecoveryKey = () => {
+	const { data } = useQuery(api.query.miforge.accounts.details.queryOptions());
+
+	const isRegistered = !!data?.registration;
+
+	if (isRegistered) {
+		return null;
+	}
+
 	return (
 		<MessageContainer>
 			<div className="flex flex-col gap-3 p-2 md:gap-1">
@@ -9,9 +19,9 @@ export const AccountRecoveryKey = () => {
 					<span className="font-bold text-secondary">
 						Your account is not registered!
 					</span>
-					<ButtonLink variant="info" to="/">
+					<ButtonImageLink variant="info" to="/account/registration">
 						Register Account
-					</ButtonLink>
+					</ButtonImageLink>
 				</div>
 				<span className="max-w-lg text-secondary text-sm">
 					You can register your account for increased protection. Click on

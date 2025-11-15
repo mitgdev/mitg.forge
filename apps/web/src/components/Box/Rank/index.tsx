@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useLocalStorage } from "usehooks-ts";
 import { ThemeBox } from "@/components/Themebox";
 import { cn } from "@/sdk/utils/cn";
+import { Tooltip } from "@/ui/Tooltip";
 
 const mockPlayers: Array<{
 	name: string;
@@ -107,6 +108,16 @@ export const RankBox = () => {
 								)}
 								key={`${index}-${player.name}`}
 							>
+								<Tooltip content={`Rank ${index + 1}`}>
+									<div className="-bottom-1.5 absolute right-0">
+										<img
+											src={`/assets/icons/highscores/rank${index + 1}.png`}
+											alt={`rank ${index + 1}-${player.name}`}
+											className="h-[38px] w-[19px]"
+										/>
+									</div>
+								</Tooltip>
+
 								<div className="h-12 w-8 min-w-8">
 									<img
 										src={player.outfitUrl}

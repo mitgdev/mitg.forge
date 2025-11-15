@@ -53,6 +53,7 @@ export class SessionService {
 
 		this.context.set("session", {
 			token,
+			id: account.id,
 			email: account.email,
 			type: getAccountType(account.type),
 		});

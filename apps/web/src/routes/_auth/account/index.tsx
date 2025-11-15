@@ -6,5 +6,14 @@ export const Route = createFileRoute("/_auth/account/")({
 		await context.clients.query.ensureQueryData(
 			api.query.miforge.accounts.details.queryOptions(),
 		);
+
+		await context.clients.query.ensureQueryData(
+			api.query.miforge.accounts.characters.queryOptions({
+				input: {
+					page: 1,
+					limit: 99,
+				},
+			}),
+		);
 	},
 });

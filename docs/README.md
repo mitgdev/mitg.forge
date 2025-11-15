@@ -3,6 +3,12 @@
   <a href="https://github.com/mitgdev/mitg.forge/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
   <a href="https://discord.gg/mitg"><img alt="Discord" src="https://img.shields.io/discord/1308861105145385081?label=Discord"></a>
   <br />
+  <a href="https://sonarcloud.io/summary/new_code?id=mitgdev_mitg.forge"><img src="https://sonarcloud.io/api/project_badges/measure?project=mitgdev_mitg.forge&metric=bugs" /></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=mitgdev_mitg.forge"><img src="https://sonarcloud.io/api/project_badges/measure?project=mitgdev_mitg.forge&metric=code_smells" /></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=mitgdev_mitg.forge"><img src="https://sonarcloud.io/api/project_badges/measure?project=mitgdev_mitg.forge&metric=duplicated_lines_density" /></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=mitgdev_mitg.forge"><img src="https://sonarcloud.io/api/project_badges/measure?project=mitgdev_mitg.forge&metric=security_rating" /></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=mitgdev_mitg.forge"><img src="https://sonarcloud.io/api/project_badges/measure?project=mitgdev_mitg.forge&metric=sqale_rating" /></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=mitgdev_mitg.forge"><img src="https://sonarcloud.io/api/project_badges/measure?project=mitgdev_mitg.forge&metric=vulnerabilities" /></a>
   <hr />
 </div>
 

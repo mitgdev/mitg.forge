@@ -10,6 +10,14 @@
   - changed-files:
       - any-glob-to-any-file: ["apps/web/**"]
 
+"Area: Email":
+  - changed-files:
+      - any-glob-to-any-file: ["packages/email/**"]
+
+"Area: Core":
+  - changed-files:
+      - any-glob-to-any-file: ["packages/core/**"]
+
 "Area: Docs":
   - changed-files:
       - any-glob-to-any-file:

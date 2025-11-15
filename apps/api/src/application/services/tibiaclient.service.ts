@@ -113,10 +113,10 @@ export class TibiaClientService {
 							legscolor: char.looklegs,
 							detailcolor: char.lookfeet,
 							addonsflags: char.lookaddons,
-							ishidden: false,
+							ishidden: char.ishidden,
 							istournamentparticipant: false,
-							ismaincharacter: true,
-							dailyrewardstate: char.isreward ? 1 : 0, // 0 = not claimed | 1 = claimed
+							ismaincharacter: char.ismain,
+							dailyrewardstate: char.isreward, // 0 = not claimed | 1 = claimed
 							remainingdailytournamentplaytime: false,
 						};
 					}),

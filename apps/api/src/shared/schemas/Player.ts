@@ -82,12 +82,15 @@ export const PlayerSchema = z.object({
 	skill_lifeleech_amount: z.bigint(),
 	skill_manaleech_chance: z.bigint(),
 	skill_manaleech_amount: z.bigint(),
+	weapon_proficiencies: z.instanceof(Uint8Array).or(z.null()),
 	manashield: z.number(),
 	max_manashield: z.number(),
 	xpboost_stamina: z.number().nullable(), // is in seconds
 	xpboost_value: z.number().nullable(), // how much percent
 	marriage_status: z.bigint(),
 	marriage_spouse: z.number(),
+	ismain: z.boolean(),
+	ishidden: z.boolean(),
 	bonus_rerolls: z.bigint(),
 	prey_wildcard: z.bigint(),
 	task_points: z.bigint(),

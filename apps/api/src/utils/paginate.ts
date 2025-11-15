@@ -5,6 +5,8 @@ export const InputPageSchema = z.object({
 	size: z.coerce.number().int().min(1).max(100).default(10),
 });
 
+export type PaginationInput = z.infer<typeof InputPageSchema>;
+
 export function createPaginateSchema<T extends z.ZodTypeAny>(itemSchema: T) {
 	return z.object({
 		meta: z.object({

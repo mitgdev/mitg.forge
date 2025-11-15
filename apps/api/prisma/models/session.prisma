@@ -1,4 +1,9 @@
-model miforge_sessions {
+/**
+ * TODO: Maybe add user agent or device info in the future
+ * to track from where the user is connecting and emit alerts
+ * if a new device is used.
+ */
+model miforge_account_sessions {
   id         Int      @id @default(autoincrement())
   token      String   @unique @db.VarChar(512)
   expires_at DateTime
@@ -12,5 +17,5 @@ model miforge_sessions {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map("miforge_sessions")
+  @@map("miforge_account_sessions")
 }

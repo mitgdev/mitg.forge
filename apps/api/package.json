@@ -17,31 +17,41 @@
 		"types": "tsc -b",
 		"check": "biome check .",
 		"lint": "biome lint .",
-		"prepare": "pnpm run db:generate && pnpm run build && pnpm run build:types"
+		"prepare": "pnpm run db:generate"
 	},
 	"dependencies": {
-		"@orpc/client": "^1.10.0",
-		"@orpc/json-schema": "^1.10.0",
-		"@orpc/openapi": "^1.10.0",
-		"@orpc/server": "^1.10.0",
-		"@orpc/zod": "^1.10.0",
-		"@prisma/adapter-mariadb": "^6.15.0",
-		"@prisma/client": "^6.15.0",
+		"@miforge/core": "workspace:*",
+		"@miforge/email": "workspace:*",
+		"@orpc/client": "^1.11.1",
+		"@orpc/json-schema": "^1.11.1",
+		"@orpc/openapi": "^1.11.1",
+		"@orpc/server": "^1.11.1",
+		"@orpc/zod": "^1.11.1",
+		"@prisma/adapter-mariadb": "^6.19.0",
+		"@prisma/client": "^6.19.0",
+		"bullmq": "^5.63.0",
 		"dotenv-flow": "^4.1.0",
-		"envalid": "^8.1.0",
-		"hono": "^4.10.3",
+		"envalid": "^8.1.1",
+		"hono": "^4.10.4",
+		"ioredis": "^5.8.2",
 		"jsonwebtoken": "^9.0.2",
+		"nodemailer": "^7.0.10",
+		"react": "catalog:react",
+		"react-dom": "catalog:react",
 		"reflect-metadata": "^0.2.2",
 		"tsyringe": "^4.10.0",
-		"zod": "^4.1.12"
+		"zod": "catalog:"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.3.0",
+		"@types/bun": "catalog:",
 		"@types/jsonwebtoken": "^9.0.10",
-		"prisma": "^6.15.0",
+		"@types/nodemailer": "^7.0.3",
+		"@types/react": "catalog:react",
+		"@types/react-dom": "catalog:react",
+		"prisma": "^6.19.0",
 		"prisma-dbml-generator": "^0.12.0",
-		"tsdown": "^0.15.9",
-		"typescript": "^5.9.3"
+		"tsdown": "catalog:",
+		"typescript": "catalog:ts"
 	},
 	"packageManager": "pnpm@10.18.3"
 }

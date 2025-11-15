@@ -5,6 +5,8 @@ import type { AccountDetailsBySessionUseCase } from "./account/details";
 import type { AccountLoginUseCase } from "./account/login";
 import type { AccountLogoutUseCase } from "./account/logout";
 import type { AccountPermissionedUseCase } from "./account/permissioned";
+import type { AccountRegistrationUseCase } from "./account/registration";
+import type { AccountStoreHistoryUseCase } from "./account/storeHistory";
 import type { SessionAuthenticatedUseCase } from "./session/authenticated";
 import type { SessionInfoUseCase } from "./session/info";
 import type { SessionNotAuthenticatedUseCase } from "./session/notAuthenticated";
@@ -30,6 +32,12 @@ export class UseCases {
 			this.di.resolve<AccountCharactersBySessionUseCase>(
 				TOKENS.AccountCharactersBySessionUseCase,
 			);
+		const storeHistory = this.di.resolve<AccountStoreHistoryUseCase>(
+			TOKENS.AccountStoreHistoryUseCase,
+		);
+		const registrationKey = this.di.resolve<AccountRegistrationUseCase>(
+			TOKENS.AccountRegistrationUseCase,
+		);
 
 		return {
 			login,
@@ -37,6 +45,8 @@ export class UseCases {
 			permissioned,
 			detailsBySession,
 			charactersBySession,
+			storeHistory,
+			registrationKey,
 		} as const;
 	}
 

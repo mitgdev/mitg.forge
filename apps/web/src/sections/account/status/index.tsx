@@ -1,8 +1,8 @@
 import { useSession } from "@/sdk/contexts/session";
 import { useTimezone } from "@/sdk/hooks/useTimezone";
 import { cn } from "@/sdk/utils/cn";
-import { Button } from "@/ui/Buttons/Button";
-import { ButtonLink } from "@/ui/Buttons/ButtonLink";
+import { ButtonImage } from "@/ui/Buttons/ButtonImage";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 
@@ -24,6 +24,9 @@ export const AccountStatus = ({
 	 * TODO - Add a alert when premium is about to expire
 	 * changing the border color of the container to yellow/orange
 	 * and adding a tooltip on hover to notify the user
+	 *
+	 * TODO - The crystal server has premium and vip in the same system as premium
+	 * we when vip system is enabled we should show as vip instead of premium
 	 */
 
 	return (
@@ -47,11 +50,13 @@ export const AccountStatus = ({
 									"text-error": !premium,
 								})}
 							>
-								{premium ? "VIP Account" : "Free Account"}
+								{premium ? "Premium Account" : "Free Account"}
 							</span>
 							{premiumExpiresAt && (
 								<span className="text-xs">
-									Your VIP Time expired at {formatDate(premiumExpiresAt)}.
+									{premium
+										? `Your Premium Time expired at ${formatDate(premiumExpiresAt)}`
+										: "Your premium time is expired."}
 								</span>
 							)}
 
@@ -61,15 +66,15 @@ export const AccountStatus = ({
 						</div>
 					</div>
 					<div className="flex flex-row flex-wrap gap-1 md:flex-col">
-						<ButtonLink variant="info" to="/account/details">
+						<ButtonImageLink variant="info" to="/account/details">
 							Manage Account
-						</ButtonLink>
-						<ButtonLink variant="green" to="/">
+						</ButtonImageLink>
+						<ButtonImageLink variant="green" to="/">
 							Get Premium
-						</ButtonLink>
-						<Button variant="red" onClick={logout}>
+						</ButtonImageLink>
+						<ButtonImage variant="red" onClick={logout}>
 							Logout
-						</Button>
+						</ButtonImage>
 					</div>
 				</div>
 			</InnerContainer>

@@ -6,6 +6,7 @@ import { app } from "@/infra/config/app";
 import { bootstrapContainer } from "@/infra/di/container";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
+import { bootstrapJobs } from "@/jobs/bootstrap";
 
 dotenv({
 	node_env: process.env.NODE_ENV || "development",
@@ -17,11 +18,13 @@ bootstrapContainer();
 const logger = container.resolve<Logger>(TOKENS.RootLogger);
 
 if (import.meta.main) {
+	bootstrapJobs();
+
 	const server = Bun.serve({
 		fetch: app.fetch,
 		port: env.PORT,
 	});
-	logger.info(`Server running on port ${env.PORT}`);
+	logger.info(`[Server]: running on port ${env.PORT}`);
 
 	const shutdown = async (signal: string) => {
 		logger.info(`Received ${signal}, shutting down server...`);
@@ -36,7 +39,7 @@ if (import.meta.main) {
 
 	if (env.isDev && import.meta.hot) {
 		import.meta.hot.accept();
-		import.meta.hot.dispose(() => {
+		import.meta.hot.dispose(async () => {
 			try {
 				server.stop(true);
 				logger.info("HMR: Server stopped");

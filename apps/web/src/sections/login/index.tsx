@@ -4,9 +4,8 @@ import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { useSession } from "@/sdk/contexts/session";
 import { api } from "@/sdk/lib/api/factory";
-import { Button } from "@/ui/Buttons/Button";
+import { ButtonImage } from "@/ui/Buttons/ButtonImage";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 import {
@@ -135,12 +134,12 @@ export const LoginSection = () => {
 										/>
 									</div>
 									<div className="flex flex-row-reverse gap-1 self-end md:flex-col md:self-start">
-										<Button type="submit" variant="info">
+										<ButtonImage type="submit" variant="info">
 											Login
-										</Button>
-										<Button type="button" variant="info">
+										</ButtonImage>
+										<ButtonImage type="button" variant="info">
 											Lost Account
-										</Button>
+										</ButtonImage>
 									</div>
 								</div>
 							</form>

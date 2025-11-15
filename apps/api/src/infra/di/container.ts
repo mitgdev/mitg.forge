@@ -9,14 +9,24 @@ import { AccountDetailsBySessionUseCase } from "@/application/usecases/account/d
 import { AccountLoginUseCase } from "@/application/usecases/account/login";
 import { AccountLogoutUseCase } from "@/application/usecases/account/logout";
 import { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
+import { AccountRegistrationUseCase } from "@/application/usecases/account/registration";
+import { AccountStoreHistoryUseCase } from "@/application/usecases/account/storeHistory";
 import { SessionAuthenticatedUseCase } from "@/application/usecases/session/authenticated";
 import { SessionInfoUseCase } from "@/application/usecases/session/info";
 import { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
 import { TibiaLoginUseCase } from "@/application/usecases/tibia/login";
-import { makePrisma, type Prisma } from "@/domain/modules/clients";
+import {
+	Mailer,
+	makePrisma,
+	makeRedis,
+	type Prisma,
+	type Redis,
+} from "@/domain/modules/clients";
 import { Cookies } from "@/domain/modules/cookies";
 import { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import { JwtCrypto } from "@/domain/modules/crypto/jwt";
+import { RecoveryKey } from "@/domain/modules/crypto/recoveryKey";
+import { DetectionChanges } from "@/domain/modules/detection/changes";
 import { RootLogger } from "@/domain/modules/logging/logger";
 import { makeRequestLogger } from "@/domain/modules/logging/request-logger";
 import { Metadata } from "@/domain/modules/metadata";
@@ -26,10 +36,14 @@ import {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
+import { AccountRegistrationRepository } from "@/domain/repositories/accountRegistration";
 import { env } from "@/infra/env";
+import { EmailQueue } from "@/jobs/queue/email.queue";
+import { EmailWorker } from "@/jobs/workers/email.worker";
 import { TOKENS } from "./tokens";
 
 declare global {
+	var __REDIS__: Redis | undefined;
 	var __PRISMA__: Prisma | undefined;
 	var __BOOTSTRAPPED__: boolean | undefined;
 }
@@ -46,11 +60,42 @@ export function bootstrapContainer() {
 
 	const prisma: Prisma = global.__PRISMA__ ?? makePrisma(rootLogger);
 	if (env.isDev) {
+		rootLogger.info("[Prisma]: Using shared Prisma instance for development");
 		global.__PRISMA__ = prisma;
 	}
 
+	const redis: Redis = global.__REDIS__ ?? makeRedis(rootLogger);
+	if (env.isDev) {
+		rootLogger.info("[Redis]: Using shared Redis instance for development");
+		global.__REDIS__ = redis;
+	}
+
 	container.registerInstance(TOKENS.RootLogger, rootLogger);
+	container.registerInstance(TOKENS.Logger, rootLogger);
 	container.registerInstance(TOKENS.Prisma, prisma);
+	container.registerInstance(TOKENS.Redis, redis);
+	container.registerInstance(TOKENS.BullConnection, redis);
+
+	// Mailer
+	container.register(
+		TOKENS.Mailer,
+		{ useClass: Mailer },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+
+	// Queues
+	container.register(
+		TOKENS.EmailQueue,
+		{ useClass: EmailQueue },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+
+	// Workers
+	container.register(
+		TOKENS.EmailWorker,
+		{ useClass: EmailWorker },
+		{ lifecycle: Lifecycle.Singleton },
+	);
 
 	// Registrations “globais” que não dependem de request:
 	container.register(
@@ -61,6 +106,16 @@ export function bootstrapContainer() {
 	container.register(
 		TOKENS.JwtCrypto,
 		{ useClass: JwtCrypto },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.RecoveryKey,
+		{ useClass: RecoveryKey },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.DetectionChanges,
+		{ useClass: DetectionChanges },
 		{ lifecycle: Lifecycle.Singleton },
 	);
 
@@ -103,6 +158,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.AccountRepository,
 		{ useClass: AccountRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountRegistrationRepository,
+		{ useClass: AccountRegistrationRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 	childContainer.register(
@@ -159,6 +219,11 @@ export function createRequestContainer(
 		{ useClass: AccountCharactersBySessionUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
+	childContainer.register(
+		TOKENS.AccountStoreHistoryUseCase,
+		{ useClass: AccountStoreHistoryUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
 
 	childContainer.register(
 		TOKENS.SessionInfoUseCase,
@@ -173,6 +238,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.SessionNotAuthenticatedUseCase,
 		{ useClass: SessionNotAuthenticatedUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountRegistrationUseCase,
+		{ useClass: AccountRegistrationUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

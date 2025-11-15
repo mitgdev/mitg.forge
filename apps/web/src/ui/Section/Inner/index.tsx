@@ -12,7 +12,7 @@ export const InnerSection = forwardRef<HTMLDivElement, Props>(
 
 		return (
 			<div className="p-1">
-				<div ref={ref} className={classnames} {...props}>
+				<div ref={ref} className={cn(classnames)} {...props}>
 					{children}
 				</div>
 			</div>

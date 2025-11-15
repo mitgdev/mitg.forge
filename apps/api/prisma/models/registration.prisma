@@ -1,0 +1,25 @@
+model miforge_account_registration {
+  id Int @id @default(autoincrement())
+
+  firstName   String  @map("first_name") @db.VarChar(255)
+  lastName    String  @map("last_name") @db.VarChar(255)
+  street      String  @db.VarChar(255)
+  number      String  @db.VarChar(50)
+  postal      String  @db.VarChar(20)
+  city        String  @db.VarChar(100)
+  country     String  @db.VarChar(100)
+  state       String  @db.VarChar(100)
+  additional  String? @db.VarChar(255)
+  phone       String? @db.VarChar(50)
+  recoveryKey String? @unique @map("recovery_key") @db.VarChar(255)
+
+  accountId Int      @unique @map("account_id") @db.UnsignedInt
+  account   accounts @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([accountId], name: "idx_account_id")
+  @@index([recoveryKey], name: "idx_recovery_key")
+  @@map("miforge_account_registration")
+}

@@ -19,6 +19,8 @@ services:
     container_name: cache
     restart: unless-stopped
     env_file: .env
+    networks:
+      - devnet
     command: >
       keydb-server
       --appendonly yes

@@ -1,7 +1,10 @@
 import { createContext } from "@/infra/context";
-import { generateOpenAPISpec, openApiHandler } from "@/infra/rpc/open_api";
-import { rpcApiHandler } from "@/infra/rpc/rpc_api";
 import { generateSwaggerDocument } from "@/infra/rpc/scalar_swagger";
+import {
+	generateOpenAPISpec,
+	openApiHandler,
+} from "@/presentation/v1/handlers/openapi";
+import { rpcApiHandler } from "@/presentation/v1/handlers/rpc";
 
 export function setupRoutes(app: ExtendedHono) {
 	app.use("/v1/rpc/*", async (c, next) => {

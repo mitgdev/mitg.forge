@@ -9,6 +9,7 @@ declare global {
 
 	export type AuthenticatedSession = {
 		token: string;
+		id: number;
 		email: string;
 		type: AccountType;
 	};

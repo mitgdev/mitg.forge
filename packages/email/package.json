@@ -1,0 +1,41 @@
+{
+	"name": "@miforge/email",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"preview": "email dev -p 3001 --dir ./src/templates",
+		"clean": "rm -rf ./dist",
+		"build": "pnpm run clean && tsdown && tsc -p tsconfig.types.json",
+		"typecheck": "tsc -p tsconfig.types.json --noEmit",
+		"prepare": "pnpm run build"
+	},
+	"peerDependencies": {
+		"react": "catalog:react",
+		"react-dom": "catalog:react"
+	},
+	"dependencies": {
+		"@react-email/components": "^1.0.0",
+		"@react-email/render": "^2.0.0",
+		"react-email": "^5.0.1"
+	},
+	"devDependencies": {
+		"@react-email/preview-server": "^5.0.1",
+		"@types/react": "catalog:react",
+		"@types/react-dom": "catalog:react",
+		"rimraf": "^6.0.1",
+		"tsdown": "catalog:",
+		"typescript": "catalog:ts"
+	}
+}

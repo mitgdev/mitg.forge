@@ -1,6 +1,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { routeTree } from "@/routeTree.gen";
+import { Toaster } from "@/ui/Toaster";
 import { getQueryClient } from "./sdk/lib/react-query";
 
 export type RouterContext = {
@@ -24,6 +25,7 @@ export function createRouter() {
 			return (
 				<QueryClientProvider client={getQueryClient()}>
 					{children}
+					<Toaster />
 				</QueryClientProvider>
 			);
 		},

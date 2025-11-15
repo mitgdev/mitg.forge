@@ -19,7 +19,7 @@ export class SessionRepository {
 		accountId: number;
 		expiresAt: Date;
 	}) {
-		return this.prisma.miforge_sessions.create({
+		return this.prisma.miforge_account_sessions.create({
 			data: {
 				token: token,
 				accountId: accountId,
@@ -30,7 +30,7 @@ export class SessionRepository {
 	}
 
 	async findByToken(token: string) {
-		return this.prisma.miforge_sessions.findUnique({
+		return this.prisma.miforge_account_sessions.findUnique({
 			where: {
 				token,
 			},
@@ -38,7 +38,7 @@ export class SessionRepository {
 	}
 
 	async findByAccountId(accountId: number) {
-		return this.prisma.miforge_sessions.findMany({
+		return this.prisma.miforge_account_sessions.findMany({
 			where: {
 				accountId,
 			},
@@ -46,7 +46,7 @@ export class SessionRepository {
 	}
 
 	async deleteByToken(token: string) {
-		return this.prisma.miforge_sessions.delete({
+		return this.prisma.miforge_account_sessions.delete({
 			where: {
 				token,
 			},
@@ -54,7 +54,7 @@ export class SessionRepository {
 	}
 
 	async clearAllSessionByAccountId(accountId: number) {
-		return this.prisma.miforge_sessions.deleteMany({
+		return this.prisma.miforge_account_sessions.deleteMany({
 			where: {
 				accountId,
 			},

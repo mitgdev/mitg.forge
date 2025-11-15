@@ -8,7 +8,7 @@ const server_configs: Array<{
   value: string
 }> = [{
   key: "db_version",
-  value: "57" // migration from crystalserver only to no trigger on the server
+  value: "59" // migration from crystalserver only to no trigger on the server
 }, {
   key: "motd_hash",
   value: ""
