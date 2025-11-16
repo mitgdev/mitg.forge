@@ -104,7 +104,7 @@ export class TibiaClientService {
 							worldid: 0,
 							name: char.name,
 							ismale: char.sex === 1,
-							tutorial: char.istutorial,
+							tutorial: char.istutorial === 1,
 							level: char.level,
 							vocation: getVocationName(char.vocation),
 							outfitid: char.looktype,

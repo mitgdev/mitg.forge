@@ -4,7 +4,7 @@ export const TibiaClientCharactersSchema = z.object({
 	worldid: z.number(),
 	name: z.string(),
 	ismale: z.boolean(),
-	tutorial: z.number(),
+	tutorial: z.boolean(),
 	level: z.number(),
 	vocation: z.string(),
 	outfitid: z.number(),
