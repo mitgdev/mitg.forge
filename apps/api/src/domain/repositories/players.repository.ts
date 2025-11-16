@@ -1,3 +1,4 @@
+import type { player_items, players } from "generated/client";
 import { inject, injectable } from "tsyringe";
 import type { Prisma } from "@/domain/modules/clients";
 import { TOKENS } from "@/infra/di/tokens";
@@ -5,6 +6,38 @@ import { TOKENS } from "@/infra/di/tokens";
 @injectable()
 export class PlayersRepository {
 	constructor(@inject(TOKENS.Prisma) private readonly prisma: Prisma) {}
+
+	async byName(name: string) {
+		return this.prisma.players.findUnique({
+			where: {
+				name,
+			},
+		});
+	}
+
+	async items(playerId: number) {
+		return this.prisma.player_items.findMany({
+			where: {
+				player_id: playerId,
+			},
+		});
+	}
+
+	async create(
+		accountId: number,
+		data: Omit<players, "id" | "account_id">,
+		initialItems: player_items[] = [],
+	) {
+		return this.prisma.players.create({
+			data: {
+				account_id: accountId,
+				...data,
+				player_items: {
+					create: initialItems,
+				},
+			},
+		});
+	}
 
 	async isOnline(playerId: number) {
 		const player = await this.prisma.players_online.findUnique({
@@ -24,6 +57,14 @@ export class PlayersRepository {
 		});
 
 		return onlinePlayers.map((p) => p.player_id);
+	}
+
+	async totalByAccountId(accountId: number) {
+		return this.prisma.players.count({
+			where: {
+				account_id: accountId,
+			},
+		});
 	}
 
 	async byAccountId(

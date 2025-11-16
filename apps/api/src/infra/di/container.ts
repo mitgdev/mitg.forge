@@ -1,11 +1,13 @@
 import { container, type DependencyContainer, Lifecycle } from "tsyringe";
 import {
 	AccountsService,
+	PlayersService,
 	SessionService,
 	TibiaClientService,
+	WorldsService,
 } from "@/application/services";
-import { WorldsService } from "@/application/services/worlds.service";
 import { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
+import { AccountCreateCharacterUseCase } from "@/application/usecases/account/createCharacter";
 import { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
 import { AccountLoginUseCase } from "@/application/usecases/account/login";
 import { AccountLogoutUseCase } from "@/application/usecases/account/logout";
@@ -205,6 +207,11 @@ export function createRequestContainer(
 		{ useClass: WorldsService },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
+	childContainer.register(
+		TOKENS.PlayersService,
+		{ useClass: PlayersService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
 
 	// UseCases (scoped per request)
 	childContainer.register(
@@ -235,6 +242,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.AccountStoreHistoryUseCase,
 		{ useClass: AccountStoreHistoryUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountCreateCharacterUseCase,
+		{ useClass: AccountCreateCharacterUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

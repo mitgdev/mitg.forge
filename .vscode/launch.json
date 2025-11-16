@@ -6,7 +6,7 @@
 			"request": "attach",
 			"name": "[Bun] Backend",
 			"url": "ws://localhost:6499",
-			"localRoot": "${workspaceFolder}/apps/api"
+			"localRoot": "${workspaceFolder}"
 		},
 	]
 }

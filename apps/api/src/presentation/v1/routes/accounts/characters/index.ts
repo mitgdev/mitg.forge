@@ -1,16 +1,8 @@
-import { AccountCharactersContractSchema } from "@/application/usecases/account/characters/contract";
-import { isAuthenticatedProcedure } from "@/presentation/procedures/isAuthenticated";
+import { base } from "@/infra/rpc/base";
+import { createCharacterRoute } from "./create";
+import { charactersRoute } from "./list";
 
-export const charactersRoute = isAuthenticatedProcedure
-	.route({
-		method: "GET",
-		path: "/characters",
-		summary: "Characters",
-		description:
-			"Retrieve a list of characters associated with the authenticated user's account.",
-	})
-	.input(AccountCharactersContractSchema.input)
-	.output(AccountCharactersContractSchema.output)
-	.handler(async ({ context, input }) => {
-		return context.usecases.account.charactersBySession.execute(input);
-	});
+export const accountCharactersRoutes = base.prefix("/characters").router({
+	list: charactersRoute,
+	create: createCharacterRoute,
+});

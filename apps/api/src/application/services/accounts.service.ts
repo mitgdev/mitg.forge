@@ -13,11 +13,15 @@ import type {
 	SessionRepository,
 } from "@/domain/repositories";
 import type { AccountRegistrationRepository } from "@/domain/repositories/accountRegistration";
+import type { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
 import type { EmailQueue } from "@/jobs/queue/email.queue";
 import { getAccountType, getAccountTypeId } from "@/utils/account/type";
 import type { PaginationInput } from "@/utils/paginate";
+import { getVocationId, type Vocation } from "@/utils/player";
+import { type Gender, getPlayerGenderId } from "@/utils/player/gender";
+import { getSampleName } from "@/utils/player/sample";
 import { CatchDecorator } from "../decorators/Catch";
 import type { SessionService } from "./session.service";
 
@@ -44,6 +48,8 @@ export class AccountsService {
 		@inject(TOKENS.EmailQueue) private readonly emailQueue: EmailQueue,
 		@inject(TOKENS.DetectionChanges)
 		private readonly detection: DetectionChanges,
+		@inject(TOKENS.WorldsRepository)
+		private readonly worldsRepository: WorldsRepository,
 	) {}
 
 	@CatchDecorator()
@@ -202,6 +208,109 @@ export class AccountsService {
 				};
 			}),
 			total: total,
+		};
+	}
+
+	@CatchDecorator()
+	async createCharacter(
+		email: string,
+		{
+			gender,
+			name,
+			vocation,
+			worldId,
+		}: {
+			vocation: Vocation;
+			name: string;
+			gender: Gender;
+			worldId: number;
+		},
+	) {
+		/**
+		 * TODO - Implement a logic to get actual config of miforge to
+		 * set max limit of players per account.
+		 */
+		const MAX_PLAYERS_PER_ACCOUNT = 10; // Example limit, adjust as needed
+
+		const account = await this.accountRepository.findByEmail(email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const nameIsTaken = await this.playersRepository.byName(name);
+
+		if (nameIsTaken) {
+			throw new ORPCError("CONFLICT", {
+				message: `Character name "${name}" is already taken`,
+			});
+		}
+
+		const totalCharacters = await this.playersRepository.totalByAccountId(
+			account.id,
+		);
+
+		if (totalCharacters >= MAX_PLAYERS_PER_ACCOUNT) {
+			throw new ORPCError("LIMIT_EXCEEDED", {
+				message: "Maximum number of characters reached for this account",
+			});
+		}
+
+		const world = await this.worldsRepository.findById(worldId);
+
+		if (!world) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "World not found",
+			});
+		}
+
+		const vocationId = getVocationId(vocation);
+		const sampleName = getSampleName(vocationId);
+
+		const sampleCharacter = await this.playersRepository.byName(sampleName);
+
+		if (!sampleCharacter) {
+			throw new ORPCError("NOT_FOUND", {
+				message: `Sample "${sampleName}" not found`,
+			});
+		}
+
+		const sampleItems = await this.playersRepository.items(sampleCharacter.id);
+
+		const {
+			id: _,
+			name: __,
+			account_id: ___,
+			ismain: ____,
+			balance: _____,
+			group_id: ______,
+			sex: _______,
+			...sampleCharacterData
+		} = sampleCharacter;
+
+		/**
+		 * TODO - When multi-world is implemented, make sure to pass
+		 * worldId to create character from sample.
+		 */
+		const newPlayer = await this.playersRepository.create(
+			account.id,
+			{
+				...sampleCharacterData,
+				ismain: totalCharacters === 0,
+				name: name,
+				balance: BigInt(0),
+				group_id: getAccountTypeId("PLAYER"),
+				sex: getPlayerGenderId(gender),
+			},
+			sampleItems,
+		);
+
+		return {
+			name: newPlayer.name,
+			vocation: vocation,
+			gender: gender,
 		};
 	}
 

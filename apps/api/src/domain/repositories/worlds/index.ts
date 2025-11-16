@@ -7,6 +7,14 @@ import { TOKENS } from "@/infra/di/tokens";
 export class WorldsRepository {
 	constructor(@inject(TOKENS.Prisma) private readonly prisma: Prisma) {}
 
+	async findById(id: number) {
+		return this.prisma.worlds.findUnique({
+			where: {
+				id: id,
+			},
+		});
+	}
+
 	async findByType(type: WorldType) {
 		return this.prisma.worlds.findFirst({
 			where: {

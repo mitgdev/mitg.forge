@@ -1,4 +1,4 @@
-const Vocations = {
+export const Vocations = {
 	0: "No Vocation",
 	1: "Sorcerer",
 	2: "Druid",

@@ -149,7 +149,6 @@ export const AccountRegistrationForm = () => {
 
 				router.navigate({
 					to: "/account/details",
-					hash: "registration",
 					replace: true,
 				});
 
@@ -180,7 +179,6 @@ export const AccountRegistrationForm = () => {
 						setRecoveryKey(null);
 						router.navigate({
 							to: "/account/details",
-							hash: "registration",
 							replace: true,
 						});
 					}

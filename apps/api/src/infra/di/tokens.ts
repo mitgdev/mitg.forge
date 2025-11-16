@@ -1,11 +1,13 @@
 import type { InjectionToken } from "tsyringe";
 import type {
 	AccountsService,
+	PlayersService,
 	SessionService,
 	TibiaClientService,
 } from "@/application/services";
 import type { WorldsService } from "@/application/services/worlds.service";
 import type { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
+import type { AccountCreateCharacterUseCase } from "@/application/usecases/account/createCharacter";
 import type { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
 import type { AccountLoginUseCase } from "@/application/usecases/account/login";
 import type { AccountLogoutUseCase } from "@/application/usecases/account/logout";
@@ -83,6 +85,7 @@ export const TOKENS = {
 	AccountsService: token<AccountsService>("AccountsService"),
 	SessionService: token<SessionService>("SessionService"),
 	WorldsService: token<WorldsService>("WorldsService"),
+	PlayersService: token<PlayersService>("PlayersService"),
 
 	// UseCases
 	AccountLoginUseCase: token<AccountLoginUseCase>("LoginUseCase"),
@@ -101,6 +104,9 @@ export const TOKENS = {
 	),
 	AccountRegistrationUseCase: token<AccountRegistrationUseCase>(
 		"AccountRegistrationUseCase",
+	),
+	AccountCreateCharacterUseCase: token<AccountCreateCharacterUseCase>(
+		"AccountCreateCharacterUseCase",
 	),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),

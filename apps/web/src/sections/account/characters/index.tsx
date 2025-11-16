@@ -22,7 +22,7 @@ import { InnerContainer } from "@/ui/Container/Inner";
  */
 export const AccountCharacters = () => {
 	const { data } = useQuery(
-		api.query.miforge.accounts.characters.queryOptions({
+		api.query.miforge.accounts.characters.list.queryOptions({
 			input: {
 				page: 1,
 				limit: 99,

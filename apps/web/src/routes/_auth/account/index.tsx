@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_auth/account/")({
 		);
 
 		await context.clients.query.ensureQueryData(
-			api.query.miforge.accounts.characters.queryOptions({
+			api.query.miforge.accounts.characters.list.queryOptions({
 				input: {
 					page: 1,
 					limit: 99,

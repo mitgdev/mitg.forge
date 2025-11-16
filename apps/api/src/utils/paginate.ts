@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const InputPageSchema = z.object({
-	page: z.coerce.number().int().min(1).default(1),
+	page: z.coerce.number().int().min(1).max(1000000).default(1),
 	size: z.coerce.number().int().min(1).max(100).default(10),
 });
 
