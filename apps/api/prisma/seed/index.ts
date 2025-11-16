@@ -149,6 +149,23 @@ async function main() {
       }
     })
   }
+
+  console.log("[seed] Ensuring world Miforge exists")
+  await prisma.worlds.upsert({
+    where: {
+      name: "Miforge"
+    },
+    create: {
+      ip: "10.1.1.251",
+      location: "SOUTH_AMERICA",
+      motd: "Welcome to Miforge!",
+      name: "Miforge",
+      port: 7171,
+      port_status: 7172,
+      type: "NO_PVP"
+    },
+    update: {}
+  })
 }
 
 

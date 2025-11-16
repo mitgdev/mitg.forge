@@ -15,7 +15,7 @@ enum WorldLocation {
 
 model Worlds {
   id          Int           @id @default(autoincrement())
-  name        String        @db.VarChar(80)
+  name        String        @unique @db.VarChar(80)
   type        WorldType
   motd        String        @db.VarChar(255)
   location    WorldLocation
