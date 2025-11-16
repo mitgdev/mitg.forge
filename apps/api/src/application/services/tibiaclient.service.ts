@@ -2,11 +2,13 @@ import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
 import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import type { AccountRepository } from "@/domain/repositories";
+import type { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "@/infra/di/tokens";
 import type { TibiaClientCharacter } from "@/shared/schemas/ClientCharacters";
 import type { TibiaClientError } from "@/shared/schemas/ClientError";
 import type { TibiaClientSession } from "@/shared/schemas/ClientSession";
 import type { TibiaClientWorld } from "@/shared/schemas/ClientWorld";
+import { getPvpTypeId } from "@/utils/game/pvpType";
 import { getVocationName } from "@/utils/player";
 
 @injectable()
@@ -16,6 +18,8 @@ export class TibiaClientService {
 		private readonly hasherCrypto: HasherCrypto,
 		@inject(TOKENS.AccountRepository)
 		private readonly accountRepository: AccountRepository,
+		@inject(TOKENS.WorldsRepository)
+		private readonly worldsRepository: WorldsRepository,
 	) {}
 
 	async login(
@@ -63,15 +67,16 @@ export class TibiaClientService {
 			}
 
 			const characters = await this.accountRepository.characters(account.id);
+			const worlds = await this.worldsRepository.findAll();
 
 			return {
 				session: {
 					sessionkey: `${account.email}\n${password}`,
 					lastlogintime: account.lastday,
-					ispremium: false,
-					premiumuntil: 0,
-					status: "active",
-					returnernotification: false,
+					ispremium: true, // TODO: implement premium time
+					premiumuntil: 0, // TODO: implement premium time
+					status: "active", // TODO: implement status (active, blocked, deleted)
+					returnernotification: false, // show a notification to get a free boost and 7 days of premium
 					showrewardnews: true,
 					isreturner: false,
 					fpstracking: true,
@@ -80,28 +85,28 @@ export class TibiaClientService {
 					emailcoderequest: false,
 				},
 				playdata: {
-					worlds: [
-						{
-							id: 0,
-							name: "Crystal", // Same as config.lua
-							externaladdress: "10.1.1.251",
-							externaladdressprotected: "10.1.1.251",
-							externaladdressunprotected: "10.1.1.251",
-							externalport: 7172,
-							externalportprotected: 7172,
-							externalportunprotected: 7172,
+					worlds: worlds.map((world) => {
+						return {
+							id: world.id,
+							name: world.name, // Same as config.lua
+							externaladdress: world.ip,
+							externaladdressprotected: world.ip,
+							externaladdressunprotected: world.ip,
+							externalport: world.port,
+							externalportprotected: world.port,
+							externalportunprotected: world.port,
 							previewstate: 0, // if is experimental 0 = ok | 1 = experimental
-							location: "BRA",
+							location: world.location,
 							anticheatprotection: false,
-							pvptype: 0, // 0 = open | 1 = optional | 2 = hardcore
+							pvptype: getPvpTypeId(world.type),
 							istournamentworld: false,
 							restrictedstore: false,
 							currenttournamentphase: 2,
-						},
-					],
+						};
+					}),
 					characters: characters.map((char) => {
 						return {
-							worldid: 0,
+							worldid: worlds[0].id, // TODO: When multiple worlds is available, retrieve worldId from the character
 							name: char.name,
 							ismale: char.sex === 1,
 							tutorial: char.istutorial === 1,

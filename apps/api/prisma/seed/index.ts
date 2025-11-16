@@ -369,13 +369,13 @@ async function main() {
       name: "Miforge"
     },
     create: {
-      ip: "10.1.1.251",
-      location: "SOUTH_AMERICA",
+      ip: env.SERVER_HOST,
+      location: env.SERVER_LOCATION,
       motd: "Welcome to Miforge!",
-      name: "Miforge",
-      port: 7171,
-      port_status: 7172,
-      type: "NO_PVP"
+      name: env.SERVER_NAME,
+      port: env.SERVER_GAME_PROTOCOL_PORT,
+      port_status: env.SERVER_STATUS_PROTOCOL_PORT,
+      type: env.SERVER_PVP_TYPE,
     },
     update: {}
   })

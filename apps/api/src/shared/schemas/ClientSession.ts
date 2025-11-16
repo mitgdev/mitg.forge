@@ -5,7 +5,7 @@ export const TibiaClientSessionSchema = z.object({
 	lastlogintime: z.number(),
 	ispremium: z.boolean(),
 	premiumuntil: z.number(),
-	status: z.literal("active"),
+	status: z.enum(["active", "frozen", "suspended"]),
 	returnernotification: z.boolean(),
 	showrewardnews: z.boolean(),
 	isreturner: z.boolean(),

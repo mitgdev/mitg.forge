@@ -4,30 +4,32 @@ const arrayFromString = makeValidator<string[]>((input) => {
 	return input.split(",").map((item) => item.trim());
 });
 
-export const env = cleanEnv(process.env, {
-	LOG_LEVEL: str({
-		choices: ["debug", "info", "warn", "error"],
-		default: "info",
-		desc: "The logging level",
+const SERVER_CONFIG = {
+	SERVER_HOST: str({
+		desc: "The IP address or hostname of the game server",
 	}),
-	SERVICE_NAME: str({
-		default: "miforge-api",
-		desc: "The name of this server",
+	SERVER_NAME: str({
+		desc: "The name of the game server",
 	}),
-	SESSION_TOKEN_NAME: str({
-		default: "token",
-		desc: "The name of the session token cookie",
+	SERVER_GAME_PROTOCOL_PORT: num({
+		desc: "The port number for the game protocol",
+		default: 7172,
 	}),
-	PORT: str({
-		default: "4000",
-		desc: "The port the server will listen on",
+	SERVER_STATUS_PROTOCOL_PORT: num({
+		desc: "The port number for the status protocol",
+		default: 7171,
 	}),
-	JWT_SECRET: str({
-		desc: "The secret key used to sign JWT tokens",
+	SERVER_LOCATION: str({
+		choices: ["SOUTH_AMERICA", "NORTH_AMERICA", "EUROPE", "OCEANIA"],
+		desc: "The location of the server",
 	}),
-	ALLOWED_ORIGINS: arrayFromString({
-		desc: "A comma-separated list of allowed origins for CORS",
+	SERVER_PVP_TYPE: str({
+		choices: ["NO_PVP", "PVP", "RETRO_PVP", "PVP_ENFORCED", "RETRO_HARDCORE"],
+		desc: "The PvP type of the server",
 	}),
+};
+
+const DATABASE_CONFIG = {
 	DATABASE_HOST: str({
 		desc: "Database host",
 	}),
@@ -40,9 +42,9 @@ export const env = cleanEnv(process.env, {
 	DATABASE_NAME: str({
 		desc: "Database name",
 	}),
-	REDIS_URL: str({
-		desc: "The Redis connection URL",
-	}),
+};
+
+const MAILER_CONFIG = {
 	MAILER_ENABLED: bool({
 		default: false,
 		desc: "Whether the mailer is enabled",
@@ -92,5 +94,42 @@ export const env = cleanEnv(process.env, {
 	MAILER_GOOGLE_REFRESH_TOKEN: str({
 		default: "",
 		desc: "The Google OAuth2 refresh token for sending emails",
+	}),
+};
+
+const AUTHENTICATION_CONFIG = {
+	SESSION_TOKEN_NAME: str({
+		default: "token",
+		desc: "The name of the session token cookie",
+	}),
+	ALLOWED_ORIGINS: arrayFromString({
+		desc: "A comma-separated list of allowed origins for CORS",
+	}),
+	JWT_SECRET: str({
+		desc: "The secret key used to sign JWT tokens",
+	}),
+};
+
+export const env = cleanEnv(process.env, {
+	...SERVER_CONFIG,
+	...DATABASE_CONFIG,
+	...MAILER_CONFIG,
+	...AUTHENTICATION_CONFIG,
+	LOG_LEVEL: str({
+		choices: ["debug", "info", "warn", "error"],
+		default: "info",
+		desc: "The logging level",
+	}),
+	SERVICE_NAME: str({
+		default: "miforge-api",
+		desc: "The name of this server",
+	}),
+	PORT: str({
+		default: "4000",
+		desc: "The port the server will listen on",
+	}),
+
+	REDIS_URL: str({
+		desc: "The Redis connection URL",
 	}),
 });
