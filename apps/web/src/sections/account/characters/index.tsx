@@ -98,7 +98,9 @@ export const AccountCharacters = () => {
 									</td>
 									<td className="hidden border border-septenary p-1 md:table-cell">
 										<div className="flex w-full justify-center">
-											<PlayerVocation vocation={character.vocation} />
+											<div className="scale-75">
+												<PlayerVocation vocation={character.vocation} />
+											</div>
 										</div>
 									</td>
 									<td className="hidden border border-septenary p-1 text-secondary md:table-cell">
