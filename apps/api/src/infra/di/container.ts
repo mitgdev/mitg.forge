@@ -31,6 +31,7 @@ import { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import { JwtCrypto } from "@/domain/modules/crypto/jwt";
 import { RecoveryKey } from "@/domain/modules/crypto/recoveryKey";
 import { DetectionChanges } from "@/domain/modules/detection/changes";
+import { PlayerNameDetection } from "@/domain/modules/detection/playerName";
 import { RootLogger } from "@/domain/modules/logging/logger";
 import { makeRequestLogger } from "@/domain/modules/logging/request-logger";
 import { Metadata } from "@/domain/modules/metadata";
@@ -121,6 +122,11 @@ export function bootstrapContainer() {
 	container.register(
 		TOKENS.DetectionChanges,
 		{ useClass: DetectionChanges },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.PlayerNameDetection,
+		{ useClass: PlayerNameDetection },
 		{ lifecycle: Lifecycle.Singleton },
 	);
 

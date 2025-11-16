@@ -5,6 +5,7 @@ import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
 import type { RecoveryKey } from "@/domain/modules/crypto/recoveryKey";
 import type { DetectionChanges } from "@/domain/modules/detection/changes";
+import type { PlayerNameDetection } from "@/domain/modules/detection/playerName";
 import type { Logger } from "@/domain/modules/logging/logger";
 import type { Metadata } from "@/domain/modules/metadata";
 import type {
@@ -50,6 +51,8 @@ export class AccountsService {
 		private readonly detection: DetectionChanges,
 		@inject(TOKENS.WorldsRepository)
 		private readonly worldsRepository: WorldsRepository,
+		@inject(TOKENS.PlayerNameDetection)
+		private readonly playerNameDetection: PlayerNameDetection,
 	) {}
 
 	@CatchDecorator()
@@ -240,11 +243,21 @@ export class AccountsService {
 			});
 		}
 
-		const nameIsTaken = await this.playersRepository.byName(name);
+		const nameValidation = await this.playerNameDetection.validate(name);
+
+		if (!nameValidation.valid) {
+			throw new ORPCError("UNPROCESSABLE_CONTENT", {
+				message: `Invalid character name: ${nameValidation.reason}`,
+			});
+		}
+
+		const validatedName = nameValidation.name;
+
+		const nameIsTaken = await this.playersRepository.byName(validatedName);
 
 		if (nameIsTaken) {
 			throw new ORPCError("CONFLICT", {
-				message: `Character name "${name}" is already taken`,
+				message: `Character name "${validatedName}" is already taken`,
 			});
 		}
 
@@ -299,7 +312,7 @@ export class AccountsService {
 			{
 				...sampleCharacterData,
 				ismain: totalCharacters === 0,
-				name: name,
+				name: validatedName,
 				balance: BigInt(0),
 				group_id: getAccountTypeId("PLAYER"),
 				sex: getPlayerGenderId(gender),

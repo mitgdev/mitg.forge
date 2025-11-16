@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { ORPCError } from "@orpc/client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link, useRouter } from "@tanstack/react-router";
 import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 import { PlayerVocation } from "@/components/Player/Vocation";
 import { PvpTypeIcon } from "@/components/PvpType";
@@ -32,9 +34,14 @@ const FormSchema = z.object({
 		.string({
 			error: "Name is required",
 		})
-		.min(1, "Name is required"),
-	sex: z.enum(["male", "female"]),
-	vocation: z.enum(["sorcerer", "druid", "paladin", "knight", "monk"], {
+		.min(4, "Name must be at least 4 characters")
+		.max(21, "Name must be at most 21 characters")
+		.refine((val) => {
+			const nameRegex = /^[A-Za-z][A-Za-z0-9 ]*$/;
+			return nameRegex.test(val);
+		}, "Name can only contain letters, numbers, and spaces, and must start with a letter"),
+	sex: z.enum(["Male", "Female"]),
+	vocation: z.enum(["Sorcerer", "Druid", "Paladin", "Knight", "Monk"], {
 		error: "Vocation selection is required",
 	}),
 	worldId: z.number({
@@ -55,6 +62,11 @@ export const AccountPlayerCreateForm = () => {
 	const { data: worlds = [] } = useQuery(
 		api.query.miforge.worlds.list.queryOptions(),
 	);
+	const { mutateAsync } = useMutation(
+		api.query.miforge.accounts.characters.create.mutationOptions(),
+	);
+	const queryClient = useQueryClient();
+	const router = useRouter();
 
 	const mostRecentCreated = useMemo(() => {
 		const orderedWorlds = [...worlds].sort((a, b) => {
@@ -68,14 +80,50 @@ export const AccountPlayerCreateForm = () => {
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
 			name: "",
-			sex: "male",
+			sex: "Male",
 			terms: false,
 		},
 	});
 
-	const handleSubmit = useCallback(async (data: FormValues) => {
-		console.log(data);
-	}, []);
+	const handleSubmit = useCallback(
+		async (data: FormValues) => {
+			try {
+				await mutateAsync({
+					gender: data.sex,
+					name: data.name,
+					vocation: data.vocation,
+					worldId: data.worldId,
+				});
+
+				queryClient.invalidateQueries(
+					api.query.miforge.accounts.characters.list.queryOptions({
+						input: {},
+					}),
+				);
+
+				router.navigate({
+					to: "/account",
+					replace: true,
+				});
+
+				toast.success("Character created successfully!");
+			} catch (error) {
+				if (error instanceof ORPCError) {
+					if (error.status === 409) {
+						form.setError("name", {
+							type: "custom",
+							message: error.message,
+						});
+					}
+
+					return toast.error(`${error.message}`);
+				}
+
+				toast.error("An unexpected error occurred. Please try again.");
+			}
+		},
+		[mutateAsync, queryClient, router, form.setError],
+	);
 
 	return (
 		<Container title="Create Character">
@@ -86,13 +134,20 @@ export const AccountPlayerCreateForm = () => {
 							<FormField
 								control={form.control}
 								name="name"
-								render={({ field }) => {
+								render={({ field: { onChange, value, ...field } }) => {
 									return (
 										<FormItem className="flex flex-1 flex-col gap-0.5">
 											<FormLabel>Name:</FormLabel>
 											<div className="flex w-full flex-col">
 												<FormControl>
-													<Input {...field} className="max-w-sm" />
+													<Input
+														{...field}
+														value={value}
+														onChange={(event) => {
+															onChange(event.target.value);
+														}}
+														className="max-w-sm"
+													/>
 												</FormControl>
 												<FormMessage className="text-red-500" />
 											</div>
@@ -117,11 +172,11 @@ export const AccountPlayerCreateForm = () => {
 												value={value}
 											>
 												<div className="flex items-center gap-2">
-													<RadioGroupItem value="male" id="male" />
+													<RadioGroupItem value="Male" id="male" />
 													<Label htmlFor="male">Male</Label>
 												</div>
 												<div className="flex items-center gap-2">
-													<RadioGroupItem value="female" id="female" />
+													<RadioGroupItem value="Female" id="female" />
 													<Label htmlFor="female">Female</Label>
 												</div>
 											</RadioGroup>
@@ -187,9 +242,9 @@ export const AccountPlayerCreateForm = () => {
 																{/**
 																 * TODO: Add real description from the API
 																 */}
-																<span className="text-start text-secondary text-xs leading-tight">
+																{/* <span className="text-start text-secondary text-xs leading-tight">
 																	Description
-																</span>
+																</span> */}
 															</div>
 														</div>
 
@@ -233,7 +288,7 @@ export const AccountPlayerCreateForm = () => {
 												onValueChange={(value) => onChange(value)}
 											>
 												<div className="flex items-center gap-2 justify-self-center">
-													<RadioGroupItem value="sorcerer" id="sorcerer" />
+													<RadioGroupItem value="Sorcerer" id="sorcerer" />
 													<Label
 														htmlFor="sorcerer"
 														className="flex flex-col items-center gap-1"
@@ -243,7 +298,7 @@ export const AccountPlayerCreateForm = () => {
 													</Label>
 												</div>
 												<div className="flex items-center gap-2 justify-self-center">
-													<RadioGroupItem value="druid" id="druid" />
+													<RadioGroupItem value="Druid" id="druid" />
 													<Label
 														htmlFor="druid"
 														className="flex flex-col items-center gap-1"
@@ -253,7 +308,7 @@ export const AccountPlayerCreateForm = () => {
 													</Label>
 												</div>
 												<div className="flex items-center gap-2 justify-self-center">
-													<RadioGroupItem value="paladin" id="paladin" />
+													<RadioGroupItem value="Paladin" id="paladin" />
 													<Label
 														htmlFor="paladin"
 														className="flex flex-col items-center gap-1"
@@ -263,7 +318,7 @@ export const AccountPlayerCreateForm = () => {
 													</Label>
 												</div>
 												<div className="flex items-center gap-2 justify-self-center">
-													<RadioGroupItem value="knight" id="knight" />
+													<RadioGroupItem value="Knight" id="knight" />
 													<Label
 														htmlFor="knight"
 														className="flex flex-col items-center gap-1"
@@ -273,7 +328,7 @@ export const AccountPlayerCreateForm = () => {
 													</Label>
 												</div>
 												<div className="flex items-center gap-2 justify-self-center">
-													<RadioGroupItem value="monk" id="monk" />
+													<RadioGroupItem value="Monk" id="monk" />
 													<Label
 														htmlFor="monk"
 														className="flex flex-col items-center gap-1"

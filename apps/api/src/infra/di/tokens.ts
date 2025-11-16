@@ -25,6 +25,7 @@ import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
 import type { RecoveryKey } from "@/domain/modules/crypto/recoveryKey";
 import type { DetectionChanges } from "@/domain/modules/detection/changes";
+import type { PlayerNameDetection } from "@/domain/modules/detection/playerName";
 import type { Logger, RootLogger } from "@/domain/modules/logging/logger";
 import type { Metadata } from "@/domain/modules/metadata";
 import type { Pagination } from "@/domain/modules/pagination";
@@ -65,6 +66,7 @@ export const TOKENS = {
 	Cookies: token<Cookies>("Cookies"),
 	Pagination: token<Pagination>("Pagination"),
 	DetectionChanges: token<DetectionChanges>("DetectionChanges"),
+	PlayerNameDetection: token<PlayerNameDetection>("PlayerNameDetection"),
 
 	// Crypto
 	HasherCrypto: token<HasherCrypto>("HasherCrypto"),
