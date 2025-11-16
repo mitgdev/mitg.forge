@@ -29,7 +29,7 @@ export const PlayerVocation = ({ vocation }: { vocation: Vocation }) => {
 
 	return (
 		<Tooltip content={vocation}>
-			<img alt={`vocation-${vocation}`} src={mappedVocationsIcon} width={32} />
+			<img alt={`vocation-${vocation}`} src={mappedVocationsIcon} />
 		</Tooltip>
 	);
 };

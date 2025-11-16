@@ -4,6 +4,7 @@ import type {
 	SessionService,
 	TibiaClientService,
 } from "@/application/services";
+import type { WorldsService } from "@/application/services/worlds.service";
 import type { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
 import type { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
 import type { AccountLoginUseCase } from "@/application/usecases/account/login";
@@ -15,6 +16,7 @@ import type { SessionAuthenticatedUseCase } from "@/application/usecases/session
 import type { SessionInfoUseCase } from "@/application/usecases/session/info";
 import type { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
 import type { TibiaLoginUseCase } from "@/application/usecases/tibia/login";
+import type { WorldsListUseCase } from "@/application/usecases/worlds/list";
 import type { Mailer, Prisma, Redis } from "@/domain/modules/clients";
 import type { Cookies } from "@/domain/modules/cookies";
 import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
@@ -30,6 +32,7 @@ import type {
 	SessionRepository,
 } from "@/domain/repositories";
 import type { AccountRegistrationRepository } from "@/domain/repositories/accountRegistration";
+import type { WorldsRepository } from "@/domain/repositories/worlds";
 import type { EmailQueue } from "@/jobs/queue/email.queue";
 import type { EmailWorker } from "@/jobs/workers/email.worker";
 
@@ -73,11 +76,13 @@ export const TOKENS = {
 	),
 	PlayersRepository: token<PlayersRepository>("PlayersRepository"),
 	SessionRepository: token<SessionRepository>("SessionRepository"),
+	WorldsRepository: token<WorldsRepository>("WorldsRepository"),
 
 	// Services
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),
 	AccountsService: token<AccountsService>("AccountsService"),
 	SessionService: token<SessionService>("SessionService"),
+	WorldsService: token<WorldsService>("WorldsService"),
 
 	// UseCases
 	AccountLoginUseCase: token<AccountLoginUseCase>("LoginUseCase"),
@@ -97,6 +102,8 @@ export const TOKENS = {
 	AccountRegistrationUseCase: token<AccountRegistrationUseCase>(
 		"AccountRegistrationUseCase",
 	),
+
+	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),
 
 	SessionInfoUseCase: token<SessionInfoUseCase>("SessionInfoUseCase"),
 	SessionAuthenticatedUseCase: token<SessionAuthenticatedUseCase>(

@@ -1,8 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { PlayerVocation } from "@/components/Player/Vocation";
+import { PvpTypeIcon } from "@/components/PvpType";
+import { RegionIcon } from "@/components/Region";
+import { api } from "@/sdk/lib/api/factory";
 import { cn } from "@/sdk/utils/cn";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
 import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
@@ -21,45 +26,6 @@ import { Input } from "@/ui/Input";
 import { Label } from "@/ui/Label";
 import { RadioGroup, RadioGroupItem } from "@/ui/RadioGroup";
 import { Tooltip } from "@/ui/Tooltip";
-
-const worlds: Array<{
-	id: number;
-	name: string;
-	description?: string;
-	new?: boolean;
-	region: "eu" | "na" | "sa";
-	pvpType: "open" | "optional" | "hardcore" | "retro";
-}> = [
-	{
-		id: 1,
-		name: "Ferumbra",
-		description: "A vibrant world full of adventure.",
-		new: true,
-		region: "sa",
-		pvpType: "open",
-	},
-	{
-		id: 2,
-		name: "Wadebra",
-		region: "sa",
-		description: "A world with optional PvP settings.",
-		pvpType: "optional",
-	},
-	{
-		id: 3,
-		name: "Zanera",
-		region: "na",
-		description: "A classic retro PvP experience.",
-		pvpType: "retro",
-	},
-	{
-		id: 4,
-		name: "Duskora",
-		region: "eu",
-		description: "For the bravest adventurers seeking hardcore PvP.",
-		pvpType: "hardcore",
-	},
-];
 
 const FormSchema = z.object({
 	name: z
@@ -86,9 +52,22 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>;
 
 export const AccountPlayerCreateForm = () => {
+	const { data: worlds = [] } = useQuery(
+		api.query.miforge.worlds.list.queryOptions(),
+	);
+
+	const mostRecentCreated = useMemo(() => {
+		const orderedWorlds = [...worlds].sort((a, b) => {
+			return b.created_at.getTime() - a.created_at.getTime();
+		});
+
+		return orderedWorlds[0] || null;
+	}, [worlds]);
+
 	const form = useForm<FormValues>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
+			name: "",
 			sex: "male",
 			terms: false,
 		},
@@ -97,34 +76,6 @@ export const AccountPlayerCreateForm = () => {
 	const handleSubmit = useCallback(async (data: FormValues) => {
 		console.log(data);
 	}, []);
-
-	const getPvpTypeIcon = (pvpType: string) => {
-		switch (pvpType) {
-			case "open":
-				return "/assets/icons/global/option_server_pvp_type_open.gif";
-			case "optional":
-				return "/assets/icons/global/option_server_pvp_type_optional.gif";
-			case "hardcore":
-				return "/assets/icons/global/option_server_pvp_type_hardcore.gif";
-			case "retro":
-				return "/assets/icons/global/option_server_pvp_type_retro.gif";
-			default:
-				return "/assets/icons/global/option_server_pvp_type_open.gif";
-		}
-	};
-
-	const getWorldIcon = (region: string) => {
-		switch (region) {
-			case "eu":
-				return "/assets/icons/global/option_server_location_eur.png";
-			case "na":
-				return "/assets/icons/global/option_server_location_usa.png";
-			case "sa":
-				return "/assets/icons/global/option_server_location_bra.png";
-			default:
-				return "/assets/icons/global/option_server_location_all.png";
-		}
-	};
 
 	return (
 		<Container title="Create Character">
@@ -190,6 +141,7 @@ export const AccountPlayerCreateForm = () => {
 										<div className="grid grid-cols-1 gap-1 p-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 											{worlds.map((world) => {
 												const selected = value === world.id;
+												const mostRecent = world.id === mostRecentCreated?.id;
 
 												return (
 													<button
@@ -202,10 +154,15 @@ export const AccountPlayerCreateForm = () => {
 														)}
 														key={world.id}
 														onClick={() => {
+															const alreadySelected = value === world.id;
+															if (alreadySelected) {
+																onChange(undefined);
+																return;
+															}
 															onChange(world.id);
 														}}
 													>
-														{world.new && (
+														{mostRecent && (
 															<div className="absolute top-0 left-0">
 																<Tooltip content="New Server">
 																	<img
@@ -218,27 +175,20 @@ export const AccountPlayerCreateForm = () => {
 
 														<div className="flex flex-row gap-1">
 															<div className="relative flex h-12 min-h-12 w-12 min-w-12">
-																<img
-																	alt="world-region"
-																	src={getWorldIcon(world.region)}
-																	className="h-12 w-12"
-																/>
+																<RegionIcon region={world.location} />
 																<div className="-bottom-1 -left-1 absolute">
-																	<Tooltip content={world.pvpType}>
-																		<img
-																			alt="world-type"
-																			src={getPvpTypeIcon(world.pvpType)}
-																			className="h-6 w-6 object-contain"
-																		/>
-																	</Tooltip>
+																	<PvpTypeIcon type={world.type} />
 																</div>
 															</div>
 															<div className="flex flex-col">
 																<span className="text-start font-bold font-verdana text-lg text-secondary leading-tight">
 																	{world.name}
 																</span>
+																{/**
+																 * TODO: Add real description from the API
+																 */}
 																<span className="text-start text-secondary text-xs leading-tight">
-																	{world.description}
+																	Description
 																</span>
 															</div>
 														</div>
@@ -272,7 +222,7 @@ export const AccountPlayerCreateForm = () => {
 								control={form.control}
 								name="vocation"
 								render={({
-									field: { value, onChange },
+									field: { onChange },
 									formState: { defaultValues },
 								}) => {
 									return (
@@ -281,7 +231,6 @@ export const AccountPlayerCreateForm = () => {
 												defaultValue={defaultValues?.vocation}
 												className="flex flex-row flex-wrap justify-around md:grid md:grid-cols-5"
 												onValueChange={(value) => onChange(value)}
-												value={value}
 											>
 												<div className="flex items-center gap-2 justify-self-center">
 													<RadioGroupItem value="sorcerer" id="sorcerer" />
@@ -290,10 +239,7 @@ export const AccountPlayerCreateForm = () => {
 														className="flex flex-col items-center gap-1"
 													>
 														<span className="text-secondary">Sorcerer</span>
-														<img
-															alt="vocation-sorcerer"
-															src="/assets/vocations/sorcerer.png"
-														/>
+														<PlayerVocation vocation="Sorcerer" />
 													</Label>
 												</div>
 												<div className="flex items-center gap-2 justify-self-center">
@@ -303,10 +249,7 @@ export const AccountPlayerCreateForm = () => {
 														className="flex flex-col items-center gap-1"
 													>
 														<span className="text-secondary">Druid</span>
-														<img
-															alt="vocation-druid"
-															src="/assets/vocations/druid.png"
-														/>
+														<PlayerVocation vocation="Druid" />
 													</Label>
 												</div>
 												<div className="flex items-center gap-2 justify-self-center">
@@ -316,10 +259,7 @@ export const AccountPlayerCreateForm = () => {
 														className="flex flex-col items-center gap-1"
 													>
 														<span className="text-secondary">Paladin</span>
-														<img
-															alt="vocation-paladin"
-															src="/assets/vocations/paladin.png"
-														/>
+														<PlayerVocation vocation="Paladin" />
 													</Label>
 												</div>
 												<div className="flex items-center gap-2 justify-self-center">
@@ -329,10 +269,7 @@ export const AccountPlayerCreateForm = () => {
 														className="flex flex-col items-center gap-1"
 													>
 														<span className="text-secondary">Knight</span>
-														<img
-															alt="vocation-knight"
-															src="/assets/vocations/knight.png"
-														/>
+														<PlayerVocation vocation="Knight" />
 													</Label>
 												</div>
 												<div className="flex items-center gap-2 justify-self-center">
@@ -342,10 +279,7 @@ export const AccountPlayerCreateForm = () => {
 														className="flex flex-col items-center gap-1"
 													>
 														<span className="text-secondary">Monk</span>
-														<img
-															alt="vocation-monk"
-															src="/assets/vocations/monk.png"
-														/>
+														<PlayerVocation vocation="Monk" />
 													</Label>
 												</div>
 											</RadioGroup>

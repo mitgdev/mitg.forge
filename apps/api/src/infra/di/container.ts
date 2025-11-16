@@ -4,6 +4,7 @@ import {
 	SessionService,
 	TibiaClientService,
 } from "@/application/services";
+import { WorldsService } from "@/application/services/worlds.service";
 import { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
 import { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
 import { AccountLoginUseCase } from "@/application/usecases/account/login";
@@ -15,6 +16,7 @@ import { SessionAuthenticatedUseCase } from "@/application/usecases/session/auth
 import { SessionInfoUseCase } from "@/application/usecases/session/info";
 import { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
 import { TibiaLoginUseCase } from "@/application/usecases/tibia/login";
+import { WorldsListUseCase } from "@/application/usecases/worlds/list";
 import {
 	Mailer,
 	makePrisma,
@@ -37,6 +39,7 @@ import {
 	SessionRepository,
 } from "@/domain/repositories";
 import { AccountRegistrationRepository } from "@/domain/repositories/accountRegistration";
+import { WorldsRepository } from "@/domain/repositories/worlds";
 import { env } from "@/infra/env";
 import { EmailQueue } from "@/jobs/queue/email.queue";
 import { EmailWorker } from "@/jobs/workers/email.worker";
@@ -175,6 +178,11 @@ export function createRequestContainer(
 		{ useClass: SessionRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
+	childContainer.register(
+		TOKENS.WorldsRepository,
+		{ useClass: WorldsRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
 
 	// Serviços de domínio (scoped per request)
 	childContainer.register(
@@ -190,6 +198,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.SessionService,
 		{ useClass: SessionService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.WorldsService,
+		{ useClass: WorldsService },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 
@@ -243,6 +256,12 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.AccountRegistrationUseCase,
 		{ useClass: AccountRegistrationUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	childContainer.register(
+		TOKENS.WorldsListUseCase,
+		{ useClass: WorldsListUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

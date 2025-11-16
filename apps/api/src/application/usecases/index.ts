@@ -11,6 +11,7 @@ import type { SessionAuthenticatedUseCase } from "./session/authenticated";
 import type { SessionInfoUseCase } from "./session/info";
 import type { SessionNotAuthenticatedUseCase } from "./session/notAuthenticated";
 import type { TibiaLoginUseCase } from "./tibia/login";
+import type { WorldsListUseCase } from "./worlds/list";
 
 export class UseCases {
 	constructor(private readonly di: DependencyContainer) {}
@@ -55,6 +56,14 @@ export class UseCases {
 
 		return {
 			login,
+		} as const;
+	}
+
+	get world() {
+		const list = this.di.resolve<WorldsListUseCase>(TOKENS.WorldsListUseCase);
+
+		return {
+			list,
 		} as const;
 	}
 
