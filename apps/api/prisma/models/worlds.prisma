@@ -1,0 +1,31 @@
+enum WorldType {
+  NO_PVP         @map("no-pvp")
+  PVP            @map("pvp")
+  RETRO_PVP      @map("retro-pvp")
+  PVP_ENFORCED   @map("pvp-enforced")
+  RETRO_HARDCORE @map("retro-hardcore")
+}
+
+enum WorldLocation {
+  EUROPE        @map("Europe")
+  NORTH_AMERICA @map("North America")
+  SOUTH_AMERICA @map("South America")
+  OCEANIA       @map("Oceania")
+}
+
+model Worlds {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(80)
+  type        WorldType
+  motd        String        @db.VarChar(255)
+  location    WorldLocation
+  ip          String        @db.VarChar(45)
+  port        Int           @db.UnsignedSmallInt
+  port_status Int           @db.UnsignedMediumInt
+  creation    Int           @default(0)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("worlds")
+}
