@@ -19,6 +19,7 @@ import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
 import type { EmailQueue } from "@/jobs/queue/email.queue";
 import { getAccountType, getAccountTypeId } from "@/utils/account/type";
+import { parseWeaponProficiencies } from "@/utils/game/proficiencies";
 import type { PaginationInput } from "@/utils/paginate";
 import { getVocationId, type Vocation } from "@/utils/player";
 import { type Gender, getPlayerGenderId } from "@/utils/player/gender";
@@ -428,6 +429,31 @@ export class AccountsService {
 		return {
 			...updatedRegistration,
 			recoveryKey,
+		};
+	}
+
+	@CatchDecorator()
+	async findCharacterByName(name: string) {
+		const session = this.metadata.session();
+
+		const character = await this.accountRepository.findCharacterByName(
+			name,
+			session.id,
+		);
+
+		if (!character) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Character not found",
+			});
+		}
+
+		const proficiencies = parseWeaponProficiencies(
+			character.weapon_proficiencies,
+		);
+
+		return {
+			...character,
+			proficiencies: proficiencies,
 		};
 	}
 }

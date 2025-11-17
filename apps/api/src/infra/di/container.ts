@@ -9,6 +9,7 @@ import {
 import { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
 import { AccountCreateCharacterUseCase } from "@/application/usecases/account/createCharacter";
 import { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
+import { AccountFindCharacterUseCase } from "@/application/usecases/account/findCharacter";
 import { AccountLoginUseCase } from "@/application/usecases/account/login";
 import { AccountLogoutUseCase } from "@/application/usecases/account/logout";
 import { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
@@ -253,6 +254,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.AccountCreateCharacterUseCase,
 		{ useClass: AccountCreateCharacterUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountFindCharacterUseCase,
+		{ useClass: AccountFindCharacterUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

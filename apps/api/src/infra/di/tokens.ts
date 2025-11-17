@@ -9,6 +9,7 @@ import type { WorldsService } from "@/application/services/worlds.service";
 import type { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
 import type { AccountCreateCharacterUseCase } from "@/application/usecases/account/createCharacter";
 import type { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
+import type { AccountFindCharacterUseCase } from "@/application/usecases/account/findCharacter";
 import type { AccountLoginUseCase } from "@/application/usecases/account/login";
 import type { AccountLogoutUseCase } from "@/application/usecases/account/logout";
 import type { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
@@ -109,6 +110,9 @@ export const TOKENS = {
 	),
 	AccountCreateCharacterUseCase: token<AccountCreateCharacterUseCase>(
 		"AccountCreateCharacterUseCase",
+	),
+	AccountFindCharacterUseCase: token<AccountFindCharacterUseCase>(
+		"AccountFindCharacterUseCase",
 	),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),

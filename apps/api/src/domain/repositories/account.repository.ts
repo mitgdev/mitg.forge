@@ -27,6 +27,15 @@ export class AccountRepository {
 		});
 	}
 
+	async findCharacterByName(name: string, account_id: number) {
+		return this.prisma.players.findFirst({
+			where: {
+				account_id: account_id,
+				name,
+			},
+		});
+	}
+
 	async characters(accountId: number) {
 		return this.prisma.players.findMany({
 			where: {

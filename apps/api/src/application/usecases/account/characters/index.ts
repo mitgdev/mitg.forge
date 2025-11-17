@@ -4,6 +4,7 @@ import type { Metadata } from "@/domain/modules/metadata";
 import type { Pagination } from "@/domain/modules/pagination";
 import { TOKENS } from "@/infra/di/tokens";
 import type { UseCase } from "@/shared/interfaces/usecase";
+import { parseWeaponProficiencies } from "@/utils/game/proficiencies";
 import type {
 	AccountCharactersContractInput,
 	AccountCharactersContractOutput,
@@ -46,6 +47,7 @@ export class AccountCharactersBySessionUseCase
 				rewards: char.player_rewards,
 				daily_reward_collected: char.isreward === 0,
 				daily_reward_history: char.daily_reward_history,
+				proficiencies: parseWeaponProficiencies(char.weapon_proficiencies),
 				guild: guild
 					? {
 							...guild,

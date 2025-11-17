@@ -2,6 +2,17 @@ import z from "zod";
 import { unixTimestampToDate } from "@/utils/date";
 import { getPlayerRole, getVocationName } from "@/utils/player";
 
+const WeaponPerk = z.object({
+	proficiency_level: z.number(),
+	perk_position: z.number(),
+});
+
+const WeaponProficiency = z.object({
+	item_id: z.number(),
+	experience: z.number(),
+	active_perks: z.array(WeaponPerk),
+});
+
 export const PlayerSchema = z.object({
 	id: z.number(),
 	name: z.string(),
@@ -82,7 +93,7 @@ export const PlayerSchema = z.object({
 	skill_lifeleech_amount: z.bigint(),
 	skill_manaleech_chance: z.bigint(),
 	skill_manaleech_amount: z.bigint(),
-	weapon_proficiencies: z.instanceof(Uint8Array).or(z.null()),
+	proficiencies: z.array(WeaponProficiency),
 	manashield: z.number(),
 	max_manashield: z.number(),
 	xpboost_stamina: z.number().nullable(), // is in seconds

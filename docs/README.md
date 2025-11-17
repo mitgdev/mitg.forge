@@ -19,3 +19,11 @@ MiForge é um portal/AAC inspirado no tibia.com, desenvolvido para facilitar o g
 ## Exemplo
 
 ![MiForge Example](./images/example.png)
+
+## Roadmap
+
+| TODO | Status | PR |
+|---|---|---|
+| AAC (Front / API) | ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/5) | None
+| Launcher | ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0) | None
+| Client | ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0) | None

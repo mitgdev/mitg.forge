@@ -4,7 +4,7 @@ import { isAuthenticatedProcedure } from "@/presentation/procedures/isAuthentica
 export const charactersRoute = isAuthenticatedProcedure
 	.route({
 		method: "GET",
-		path: "/",
+		path: "/characters",
 		summary: "Characters",
 		description:
 			"Retrieve a list of characters associated with the authenticated user's account.",

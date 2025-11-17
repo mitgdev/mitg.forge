@@ -4,7 +4,7 @@ import { isAuthenticatedProcedure } from "@/presentation/procedures/isAuthentica
 export const createCharacterRoute = isAuthenticatedProcedure
 	.route({
 		method: "POST",
-		path: "/",
+		path: "/characters",
 		summary: "Create character",
 		successStatus: 201,
 		description:
