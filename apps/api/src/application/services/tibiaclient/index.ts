@@ -8,8 +8,8 @@ import type { TibiaClientCharacter } from "@/shared/schemas/ClientCharacters";
 import type { TibiaClientError } from "@/shared/schemas/ClientError";
 import type { TibiaClientSession } from "@/shared/schemas/ClientSession";
 import type { TibiaClientWorld } from "@/shared/schemas/ClientWorld";
-import { getPvpTypeId } from "@/utils/game/pvpType";
-import { getVocationName } from "@/utils/player";
+import { getPvpTypeId } from "@/shared/utils/game/pvpType";
+import { getVocationName } from "@/shared/utils/player";
 
 @injectable()
 export class TibiaClientService {

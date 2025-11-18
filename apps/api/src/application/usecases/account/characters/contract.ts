@@ -6,7 +6,7 @@ import { PlayerDailyRewardHistorySchema } from "@/shared/schemas/PlayerDailyRewa
 import { PlayerDepotItemSchema } from "@/shared/schemas/PlayerDepotItem";
 import { PlayerOutfitSchema } from "@/shared/schemas/PlayerOutfits";
 import { PlayerRewardSchema } from "@/shared/schemas/PlayerReward";
-import { createPaginateSchema, InputPageSchema } from "@/utils/paginate";
+import { createPaginateSchema, InputPageSchema } from "@/shared/utils/paginate";
 
 export const AccountCharactersContractSchema = {
 	input: InputPageSchema,

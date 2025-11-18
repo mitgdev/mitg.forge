@@ -1,4 +1,4 @@
-import type { Coins } from "@miforge/api/utils/coins";
+import type { Coins } from "@miforge/api/shared/utils/coins";
 import { useMemo } from "react";
 import { Tooltip } from "@/ui/Tooltip";
 

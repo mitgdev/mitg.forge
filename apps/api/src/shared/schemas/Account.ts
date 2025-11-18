@@ -1,5 +1,5 @@
 import z from "zod";
-import { unixTimestampToDate } from "@/utils/date";
+import { unixTimestampToDate } from "@/shared/utils/date";
 
 export const AccountSchema = z.object({
 	id: z.number(),

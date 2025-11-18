@@ -21,12 +21,12 @@ import type { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
 import type { EmailQueue } from "@/jobs/queue/email";
-import { getAccountType, getAccountTypeId } from "@/utils/account/type";
-import { parseWeaponProficiencies } from "@/utils/game/proficiencies";
-import type { PaginationInput } from "@/utils/paginate";
-import { getVocationId, type Vocation } from "@/utils/player";
-import { type Gender, getPlayerGenderId } from "@/utils/player/gender";
-import { getSampleName } from "@/utils/player/sample";
+import { getAccountType, getAccountTypeId } from "@/shared/utils/account/type";
+import { parseWeaponProficiencies } from "@/shared/utils/game/proficiencies";
+import type { PaginationInput } from "@/shared/utils/paginate";
+import { getVocationId, type Vocation } from "@/shared/utils/player";
+import { type Gender, getPlayerGenderId } from "@/shared/utils/player/gender";
+import { getSampleName } from "@/shared/utils/player/sample";
 import type { SessionService } from "../session";
 
 @injectable()

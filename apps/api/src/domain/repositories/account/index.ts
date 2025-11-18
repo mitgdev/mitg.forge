@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { Prisma } from "@/domain/clients";
 import { TOKENS } from "@/infra/di/tokens";
-import type { PaginationInput } from "@/utils/paginate";
+import type { PaginationInput } from "@/shared/utils/paginate";
 
 @injectable()
 export class AccountRepository {

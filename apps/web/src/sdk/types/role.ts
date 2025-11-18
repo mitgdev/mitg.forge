@@ -1,3 +1,3 @@
-import type { Roles } from "@miforge/api/utils/player/group";
+import type { Roles } from "@miforge/api/shared/utils/player/group";
 
 export type Role = Roles;

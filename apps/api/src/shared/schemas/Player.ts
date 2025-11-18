@@ -1,6 +1,6 @@
 import z from "zod";
-import { unixTimestampToDate } from "@/utils/date";
-import { getPlayerRole, getVocationName } from "@/utils/player";
+import { unixTimestampToDate } from "@/shared/utils/date";
+import { getPlayerRole, getVocationName } from "@/shared/utils/player";
 
 const WeaponPerk = z.object({
 	proficiency_level: z.number(),

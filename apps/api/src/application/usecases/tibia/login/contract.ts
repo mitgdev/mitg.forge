@@ -3,7 +3,7 @@ import { TibiaClientCharactersSchema } from "@/shared/schemas/ClientCharacters";
 import { TibiaClientErrorSchema } from "@/shared/schemas/ClientError";
 import { TibiaClientSessionSchema } from "@/shared/schemas/ClientSession";
 import { TibiaClientWorldSchema } from "@/shared/schemas/ClientWorld";
-import { FileToText } from "@/utils/fileToText";
+import { FileToText } from "@/shared/utils/fileToText";
 
 const LoginSchema = z
 	.object({

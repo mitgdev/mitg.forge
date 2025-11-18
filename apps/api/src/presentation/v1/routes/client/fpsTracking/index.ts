@@ -1,6 +1,6 @@
 import { inflateSync } from "node:zlib";
 import { base } from "@/infra/rpc/base";
-import { FileToText } from "@/utils/fileToText";
+import { FileToText } from "@/shared/utils/fileToText";
 
 export const fpsTrackingRoute = base
 	.route({

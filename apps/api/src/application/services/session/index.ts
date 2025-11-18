@@ -8,7 +8,7 @@ import type {
 } from "@/domain/repositories";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
-import { getAccountType } from "@/utils/account/type";
+import { getAccountType } from "@/shared/utils/account/type";
 
 @injectable()
 export class SessionService {

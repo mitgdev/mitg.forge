@@ -1,6 +1,6 @@
 import z from "zod";
-import { getCoinType } from "@/utils/coins";
-import { unixTimestampToDate } from "@/utils/date";
+import { getCoinType } from "@/shared/utils/coins";
+import { unixTimestampToDate } from "@/shared/utils/date";
 
 export const StoreHistory = z.object({
 	id: z.number(),
