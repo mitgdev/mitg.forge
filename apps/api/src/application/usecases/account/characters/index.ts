@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { AccountsService } from "@/application/services";
-import type { Metadata } from "@/domain/modules/metadata";
-import type { Pagination } from "@/domain/modules/pagination";
+import type { Metadata, Pagination } from "@/domain/modules";
 import { TOKENS } from "@/infra/di/tokens";
 import type { UseCase } from "@/shared/interfaces/usecase";
 import { parseWeaponProficiencies } from "@/utils/game/proficiencies";

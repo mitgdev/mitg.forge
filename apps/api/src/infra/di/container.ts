@@ -2,8 +2,8 @@ import { container, type DependencyContainer } from "tsyringe";
 
 import type { Prisma, Redis } from "@/domain/clients";
 
-import type { RootLogger } from "@/domain/modules/logging/logger";
-import { makeRequestLogger } from "@/domain/modules/logging/request-logger";
+import type { RootLogger } from "@/domain/modules";
+import { makeRequestLogger } from "@/domain/modules";
 import { env } from "@/infra/env";
 import {
 	registerCore,

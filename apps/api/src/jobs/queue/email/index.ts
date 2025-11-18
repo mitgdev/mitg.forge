@@ -2,11 +2,17 @@ import type { TemplateName } from "@miforge/email";
 import { inject, injectable } from "tsyringe";
 import type { Redis } from "@/domain/clients";
 import { TOKENS } from "@/infra/di/tokens";
-import { makeQueue, makeQueueEvents } from "@/jobs/factory";
+import {
+	makeQueue,
+	makeQueueEvents,
+	type QueueImplementation,
+} from "@/jobs/factory";
 import { type EmailJob, QueueName } from "@/jobs/types";
 
 @injectable()
-export class EmailQueue {
+export class EmailQueue implements QueueImplementation<QueueName.Email> {
+	public readonly name = QueueName.Email;
+	public readonly timeoutMs = 30_000;
 	private readonly queue: ReturnType<typeof makeQueue<QueueName.Email>>;
 	private readonly events: ReturnType<typeof makeQueueEvents>;
 
@@ -27,7 +33,7 @@ export class EmailQueue {
 
 	async addAndWait<T extends TemplateName>(
 		job: EmailJob<T>,
-		timeoutMs = 30_000,
+		timeoutMs = this.timeoutMs,
 	) {
 		const jobId = this.makeJobId(job);
 

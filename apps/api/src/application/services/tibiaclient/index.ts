@@ -1,6 +1,6 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
-import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
+import type { HasherCrypto } from "@/domain/modules";
 import type { AccountRepository } from "@/domain/repositories";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "@/infra/di/tokens";

@@ -1,12 +1,14 @@
 import { container, Lifecycle } from "tsyringe";
-import { Cookies } from "@/domain/modules/cookies";
-import { HasherCrypto } from "@/domain/modules/crypto/hasher";
-import { JwtCrypto } from "@/domain/modules/crypto/jwt";
-import { RecoveryKey } from "@/domain/modules/crypto/recoveryKey";
-import { DetectionChanges } from "@/domain/modules/detection/changes";
-import { PlayerNameDetection } from "@/domain/modules/detection/playerName";
-import { Metadata } from "@/domain/modules/metadata";
-import { Pagination } from "@/domain/modules/pagination";
+import {
+	Cookies,
+	DetectionChanges,
+	HasherCrypto,
+	JwtCrypto,
+	Metadata,
+	Pagination,
+	PlayerNameDetection,
+	RecoveryKey,
+} from "@/domain/modules";
 import { TOKENS } from "../tokens";
 
 export function registerModules() {

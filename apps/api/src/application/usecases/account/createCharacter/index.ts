@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { AccountsService } from "@/application/services";
-import type { Metadata } from "@/domain/modules/metadata";
+import type { Metadata } from "@/domain/modules";
 import { TOKENS } from "@/infra/di/tokens";
 import type { UseCase } from "@/shared/interfaces/usecase";
 import type {

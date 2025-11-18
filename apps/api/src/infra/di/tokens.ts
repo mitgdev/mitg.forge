@@ -6,30 +6,35 @@ import type {
 	TibiaClientService,
 	WorldsService,
 } from "@/application/services";
-import type { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
-import type { AccountCreateCharacterUseCase } from "@/application/usecases/account/createCharacter";
-import type { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
-import type { AccountFindCharacterUseCase } from "@/application/usecases/account/findCharacter";
-import type { AccountLoginUseCase } from "@/application/usecases/account/login";
-import type { AccountLogoutUseCase } from "@/application/usecases/account/logout";
-import type { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
-import type { AccountRegistrationUseCase } from "@/application/usecases/account/registration";
-import type { AccountStoreHistoryUseCase } from "@/application/usecases/account/storeHistory";
-import type { SessionAuthenticatedUseCase } from "@/application/usecases/session/authenticated";
-import type { SessionInfoUseCase } from "@/application/usecases/session/info";
-import type { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
-import type { TibiaLoginUseCase } from "@/application/usecases/tibia/login";
-import type { WorldsListUseCase } from "@/application/usecases/worlds/list";
+import type {
+	AccountCharactersBySessionUseCase,
+	AccountCreateCharacterUseCase,
+	AccountDetailsBySessionUseCase,
+	AccountFindCharacterUseCase,
+	AccountLoginUseCase,
+	AccountLogoutUseCase,
+	AccountPermissionedUseCase,
+	AccountRegistrationUseCase,
+	AccountStoreHistoryUseCase,
+	SessionAuthenticatedUseCase,
+	SessionInfoUseCase,
+	SessionNotAuthenticatedUseCase,
+	TibiaLoginUseCase,
+	WorldsListUseCase,
+} from "@/application/usecases";
 import type { Mailer, Prisma, Redis } from "@/domain/clients";
-import type { Cookies } from "@/domain/modules/cookies";
-import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
-import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
-import type { RecoveryKey } from "@/domain/modules/crypto/recoveryKey";
-import type { DetectionChanges } from "@/domain/modules/detection/changes";
-import type { PlayerNameDetection } from "@/domain/modules/detection/playerName";
-import type { Logger, RootLogger } from "@/domain/modules/logging/logger";
-import type { Metadata } from "@/domain/modules/metadata";
-import type { Pagination } from "@/domain/modules/pagination";
+import type {
+	Cookies,
+	DetectionChanges,
+	HasherCrypto,
+	JwtCrypto,
+	Logger,
+	Metadata,
+	Pagination,
+	PlayerNameDetection,
+	RecoveryKey,
+	RootLogger,
+} from "@/domain/modules";
 import type {
 	AccountRepository,
 	PlayersRepository,
@@ -37,8 +42,8 @@ import type {
 } from "@/domain/repositories";
 import type { AccountRegistrationRepository } from "@/domain/repositories/account/registration";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
-import type { EmailQueue } from "@/jobs/queue/email.queue";
-import type { EmailWorker } from "@/jobs/workers/email.worker";
+import type { EmailQueue } from "@/jobs/queue/email";
+import type { EmailWorker } from "@/jobs/workers/email";
 
 export const token = <T>(desc: string) => Symbol(desc) as InjectionToken<T>;
 

@@ -1,6 +1,6 @@
 import { container, Lifecycle } from "tsyringe";
-import { EmailQueue } from "@/jobs/queue/email.queue";
-import { EmailWorker } from "@/jobs/workers/email.worker";
+import { EmailQueue } from "@/jobs/queue/email";
+import { EmailWorker } from "@/jobs/workers/email";
 import { TOKENS } from "../tokens";
 
 export function registerJobs() {

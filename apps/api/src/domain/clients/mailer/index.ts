@@ -1,6 +1,6 @@
 import nodemailer, { type Transporter } from "nodemailer";
 import { inject, injectable } from "tsyringe";
-import type { Logger } from "@/domain/modules/logging/logger";
+import type { Logger } from "@/domain/modules";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
 

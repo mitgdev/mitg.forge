@@ -1,18 +1,20 @@
 import { container, Lifecycle } from "tsyringe";
-import { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
-import { AccountCreateCharacterUseCase } from "@/application/usecases/account/createCharacter";
-import { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
-import { AccountFindCharacterUseCase } from "@/application/usecases/account/findCharacter";
-import { AccountLoginUseCase } from "@/application/usecases/account/login";
-import { AccountLogoutUseCase } from "@/application/usecases/account/logout";
-import { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
-import { AccountRegistrationUseCase } from "@/application/usecases/account/registration";
-import { AccountStoreHistoryUseCase } from "@/application/usecases/account/storeHistory";
-import { SessionAuthenticatedUseCase } from "@/application/usecases/session/authenticated";
-import { SessionInfoUseCase } from "@/application/usecases/session/info";
-import { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
-import { TibiaLoginUseCase } from "@/application/usecases/tibia/login";
-import { WorldsListUseCase } from "@/application/usecases/worlds/list";
+import {
+	AccountCharactersBySessionUseCase,
+	AccountCreateCharacterUseCase,
+	AccountDetailsBySessionUseCase,
+	AccountFindCharacterUseCase,
+	AccountLoginUseCase,
+	AccountLogoutUseCase,
+	AccountPermissionedUseCase,
+	AccountRegistrationUseCase,
+	AccountStoreHistoryUseCase,
+	SessionAuthenticatedUseCase,
+	SessionInfoUseCase,
+	SessionNotAuthenticatedUseCase,
+	TibiaLoginUseCase,
+	WorldsListUseCase,
+} from "@/application/usecases";
 import { TOKENS } from "../tokens";
 
 export function registerUseCases() {

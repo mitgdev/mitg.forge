@@ -1,5 +1,5 @@
 import IORedis from "ioredis";
-import type { Logger } from "@/domain/modules/logging/logger";
+import type { Logger } from "@/domain/modules";
 import { env } from "@/infra/env";
 
 export type Redis = IORedis;

@@ -6,7 +6,7 @@ import {
 	type Prisma,
 	type Redis,
 } from "@/domain/clients";
-import { RootLogger } from "@/domain/modules/logging/logger";
+import { RootLogger } from "@/domain/modules";
 import { env } from "@/infra/env";
 import { TOKENS } from "../tokens";
 

@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { config as dotenv } from "dotenv-flow";
 import { container } from "tsyringe";
-import type { Logger } from "@/domain/modules/logging/logger";
+import type { Logger } from "@/domain/modules";
 import { appFactory } from "@/infra/config/app";
 import { bootstrapContainer } from "@/infra/di/container";
 import { TOKENS } from "@/infra/di/tokens";

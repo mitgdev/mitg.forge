@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { WorldsService } from "@/application/services/worlds.service";
+import type { WorldsService } from "@/application/services";
 import { TOKENS } from "@/infra/di/tokens";
 import type { UseCase } from "@/shared/interfaces/usecase";
 import type {

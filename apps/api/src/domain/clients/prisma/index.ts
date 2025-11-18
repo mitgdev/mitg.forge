@@ -1,6 +1,6 @@
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "generated/client";
-import type { Logger } from "@/domain/modules/logging/logger";
+import type { Logger } from "@/domain/modules";
 import { env } from "@/infra/env";
 
 export type Prisma = PrismaClient;

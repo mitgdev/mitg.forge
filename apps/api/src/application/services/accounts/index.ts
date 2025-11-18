@@ -1,14 +1,16 @@
 import { ORPCError } from "@orpc/client";
+import type { Logger } from "nodemailer/lib/shared";
 import { inject, injectable } from "tsyringe";
 import { Catch } from "@/application/decorators/Catch";
-import type { Cookies } from "@/domain/modules/cookies";
-import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
-import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
-import type { RecoveryKey } from "@/domain/modules/crypto/recoveryKey";
-import type { DetectionChanges } from "@/domain/modules/detection/changes";
-import type { PlayerNameDetection } from "@/domain/modules/detection/playerName";
-import type { Logger } from "@/domain/modules/logging/logger";
-import type { Metadata } from "@/domain/modules/metadata";
+import type {
+	Cookies,
+	DetectionChanges,
+	HasherCrypto,
+	JwtCrypto,
+	Metadata,
+	PlayerNameDetection,
+	RecoveryKey,
+} from "@/domain/modules";
 import type {
 	AccountRepository,
 	PlayersRepository,
@@ -18,7 +20,7 @@ import type { AccountRegistrationRepository } from "@/domain/repositories/accoun
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
-import type { EmailQueue } from "@/jobs/queue/email.queue";
+import type { EmailQueue } from "@/jobs/queue/email";
 import { getAccountType, getAccountTypeId } from "@/utils/account/type";
 import { parseWeaponProficiencies } from "@/utils/game/proficiencies";
 import type { PaginationInput } from "@/utils/paginate";

@@ -1,25 +1,42 @@
 import { container } from "tsyringe";
-import type { Logger } from "@/domain/modules/logging/logger";
+import type { Logger } from "@/domain/modules";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
-import type { EmailWorker } from "./workers/email.worker";
+import type { WorkerImplementation } from "./factory";
+import type { EmailWorker } from "./workers";
 
 export const bootstrapJobs = () => {
-	const logger = container.resolve<Logger>(TOKENS.RootLogger);
-	const workers: { stop: () => Promise<void> }[] = [];
+	const logger = container.resolve<Logger>(TOKENS.Logger);
+	const runningWorkers: { stop: () => Promise<void> }[] = [];
 
-	const emailWorker = container.resolve<EmailWorker>(TOKENS.EmailWorker);
-	emailWorker.start();
-	workers.push({
-		stop: () => emailWorker.stop(),
+	// biome-ignore lint/suspicious/noExplicitAny: <any implementation>
+	const toStartWorkers: Array<WorkerImplementation<any>> = [
+		container.resolve<EmailWorker>(TOKENS.EmailWorker),
+	];
+
+	toStartWorkers.forEach((worker) => {
+		const instance = worker.start();
+		if (instance) {
+			runningWorkers.push(worker);
+			logger.info(`[Workers]: Started worker for ${instance.name}`);
+		} else {
+			logger.warn(
+				`[Workers]: Worker for ${worker.constructor.name} did not start.`,
+			);
+		}
 	});
 
+	if (toStartWorkers.length === 0) {
+		logger.warn("[Workers]: No job workers to start.");
+		return;
+	}
+
 	const shutdown = async (signal: string) => {
-		logger.info(`Received ${signal}, shutting down jobs...`);
+		logger.info(`[Workers]: Received ${signal}, shutting down workers...`);
 
-		await Promise.allSettled(workers.map((worker) => worker.stop()));
+		await Promise.allSettled(runningWorkers.map((worker) => worker.stop()));
 
-		logger.info("All jobs stopped.");
+		logger.info("[Workers]: All workers stopped.");
 		process.exit();
 	};
 
@@ -30,10 +47,10 @@ export const bootstrapJobs = () => {
 		import.meta.hot.accept();
 		import.meta.hot.dispose(async () => {
 			try {
-				await Promise.allSettled(workers.map((worker) => worker.stop()));
-				logger.info("HMR: Jobs stopped");
+				await Promise.allSettled(runningWorkers.map((worker) => worker.stop()));
+				logger.info("[Workers]:HMR: Jobs stopped");
 			} catch (error) {
-				logger.error("HMR: Error stopping jobs", { error });
+				logger.error("[Workers]:HMR: Error stopping jobs", { error });
 			}
 		});
 	}

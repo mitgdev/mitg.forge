@@ -1,9 +1,7 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
 import { Catch } from "@/application/decorators/Catch";
-import type { Cookies } from "@/domain/modules/cookies";
-import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
-import type { Metadata } from "@/domain/modules/metadata";
+import type { Cookies, JwtCrypto, Metadata } from "@/domain/modules";
 import type {
 	AccountRepository,
 	SessionRepository,
