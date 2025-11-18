@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import type { Prisma } from "@/domain/modules/clients";
+import type { Prisma } from "@/domain/clients";
 import type { Metadata } from "@/domain/modules/metadata";
 import { TOKENS } from "@/infra/di/tokens";
 

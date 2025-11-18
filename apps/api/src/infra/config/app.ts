@@ -2,9 +2,11 @@ import { Hono } from "hono";
 import { setupMiddlewares } from "./setupMiddlewares";
 import { setupRoutes } from "./setupRoutes";
 
-const app = new Hono<ContextEnv>();
+export function appFactory() {
+	const app = new Hono<ContextEnv>();
 
-setupMiddlewares(app);
-setupRoutes(app);
+	setupMiddlewares(app);
+	setupRoutes(app);
 
-export { app };
+	return app;
+}

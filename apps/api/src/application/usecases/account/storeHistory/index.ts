@@ -1,5 +1,4 @@
 import { inject, injectable } from "tsyringe";
-import { CatchDecorator } from "@/application/decorators/Catch";
 import type { AccountsService } from "@/application/services";
 import type { Pagination } from "@/domain/modules/pagination";
 import { TOKENS } from "@/infra/di/tokens";
@@ -20,7 +19,6 @@ export class AccountStoreHistoryUseCase
 		@inject(TOKENS.Pagination) private readonly pagination: Pagination,
 	) {}
 
-	@CatchDecorator()
 	async execute(
 		input: AccountStoreHistoryContractInput,
 	): Promise<AccountStoreHistoryContractOutput> {

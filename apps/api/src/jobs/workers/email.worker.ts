@@ -1,6 +1,6 @@
 import { renderTemplate } from "@miforge/email";
 import { inject, injectable } from "tsyringe";
-import type { Mailer, Redis } from "@/domain/modules/clients";
+import type { Mailer, Redis } from "@/domain/clients";
 import type { Logger } from "@/domain/modules/logging/logger";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";

@@ -1,5 +1,6 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
+import { Catch } from "@/application/decorators/Catch";
 import type { Cookies } from "@/domain/modules/cookies";
 import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
@@ -13,7 +14,7 @@ import type {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
-import type { AccountRegistrationRepository } from "@/domain/repositories/accountRegistration";
+import type { AccountRegistrationRepository } from "@/domain/repositories/account/registration";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
@@ -24,8 +25,7 @@ import type { PaginationInput } from "@/utils/paginate";
 import { getVocationId, type Vocation } from "@/utils/player";
 import { type Gender, getPlayerGenderId } from "@/utils/player/gender";
 import { getSampleName } from "@/utils/player/sample";
-import { CatchDecorator } from "../decorators/Catch";
-import type { SessionService } from "./session.service";
+import type { SessionService } from "../session";
 
 @injectable()
 export class AccountsService {
@@ -56,7 +56,7 @@ export class AccountsService {
 		private readonly playerNameDetection: PlayerNameDetection,
 	) {}
 
-	@CatchDecorator()
+	@Catch()
 	async login({ email, password }: { email: string; password: string }) {
 		/**
 		 * TODO - Implement check for banned accounts to prevent login,
@@ -120,12 +120,12 @@ export class AccountsService {
 		};
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async logout() {
 		return this.sessionService.destroy();
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async details(email: string) {
 		const account = await this.accountRepository.details(email);
 
@@ -145,7 +145,7 @@ export class AccountsService {
 		};
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async hasPermission(permission?: Permission): Promise<boolean> {
 		/**
 		 * TODO: Maybe this error shouldn't be here, or the message should be different.
@@ -184,7 +184,7 @@ export class AccountsService {
 		return true;
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async characters(email: string) {
 		const account = await this.accountRepository.findByEmail(email);
 
@@ -215,7 +215,7 @@ export class AccountsService {
 		};
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async createCharacter(
 		email: string,
 		{
@@ -328,7 +328,7 @@ export class AccountsService {
 		};
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async storeHistory({ pagination }: { pagination: PaginationInput }) {
 		const session = this.metadata.session();
 
@@ -337,7 +337,7 @@ export class AccountsService {
 		});
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async upsertRegistration(
 		email: string,
 		input: {
@@ -432,7 +432,7 @@ export class AccountsService {
 		};
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async findCharacterByName(name: string) {
 		const session = this.metadata.session();
 

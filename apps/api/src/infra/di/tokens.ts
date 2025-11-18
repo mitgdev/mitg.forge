@@ -4,8 +4,8 @@ import type {
 	PlayersService,
 	SessionService,
 	TibiaClientService,
+	WorldsService,
 } from "@/application/services";
-import type { WorldsService } from "@/application/services/worlds.service";
 import type { AccountCharactersBySessionUseCase } from "@/application/usecases/account/characters";
 import type { AccountCreateCharacterUseCase } from "@/application/usecases/account/createCharacter";
 import type { AccountDetailsBySessionUseCase } from "@/application/usecases/account/details";
@@ -20,7 +20,7 @@ import type { SessionInfoUseCase } from "@/application/usecases/session/info";
 import type { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
 import type { TibiaLoginUseCase } from "@/application/usecases/tibia/login";
 import type { WorldsListUseCase } from "@/application/usecases/worlds/list";
-import type { Mailer, Prisma, Redis } from "@/domain/modules/clients";
+import type { Mailer, Prisma, Redis } from "@/domain/clients";
 import type { Cookies } from "@/domain/modules/cookies";
 import type { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
@@ -35,7 +35,7 @@ import type {
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
-import type { AccountRegistrationRepository } from "@/domain/repositories/accountRegistration";
+import type { AccountRegistrationRepository } from "@/domain/repositories/account/registration";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import type { EmailQueue } from "@/jobs/queue/email.queue";
 import type { EmailWorker } from "@/jobs/workers/email.worker";

@@ -1,5 +1,4 @@
 import { inject, injectable } from "tsyringe";
-import { CatchDecorator } from "@/application/decorators/Catch";
 import type { AccountsService } from "@/application/services";
 import type { Metadata } from "@/domain/modules/metadata";
 import { TOKENS } from "@/infra/di/tokens";
@@ -23,7 +22,6 @@ export class AccountRegistrationUseCase
 		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
 	) {}
 
-	@CatchDecorator()
 	async execute(
 		input: AccountRegistrationKeyContractInput,
 	): Promise<AccountRegistrationKeyContractOutput> {

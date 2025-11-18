@@ -1,6 +1,6 @@
 import type { TemplateName } from "@miforge/email";
 import { inject, injectable } from "tsyringe";
-import type { Redis } from "@/domain/modules/clients";
+import type { Redis } from "@/domain/clients";
 import { TOKENS } from "@/infra/di/tokens";
 import { makeQueue, makeQueueEvents } from "@/jobs/factory";
 import { type EmailJob, QueueName } from "@/jobs/types";

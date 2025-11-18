@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
+import { Catch } from "@/application/decorators/Catch";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "@/infra/di/tokens";
-import { CatchDecorator } from "../decorators/Catch";
 
 @injectable()
 export class WorldsService {
@@ -10,7 +10,7 @@ export class WorldsService {
 		private readonly worldsRepository: WorldsRepository,
 	) {}
 
-	@CatchDecorator()
+	@Catch()
 	async findAllWorlds() {
 		return this.worldsRepository.findAll();
 	}

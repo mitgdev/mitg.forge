@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { config as dotenv } from "dotenv-flow";
 import { container } from "tsyringe";
 import type { Logger } from "@/domain/modules/logging/logger";
-import { app } from "@/infra/config/app";
+import { appFactory } from "@/infra/config/app";
 import { bootstrapContainer } from "@/infra/di/container";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
@@ -20,10 +20,13 @@ const logger = container.resolve<Logger>(TOKENS.RootLogger);
 if (import.meta.main) {
 	bootstrapJobs();
 
+	const app = appFactory();
+
 	const server = Bun.serve({
 		fetch: app.fetch,
 		port: env.PORT,
 	});
+
 	logger.info(`[Server]: running on port ${env.PORT}`);
 
 	const shutdown = async (signal: string) => {

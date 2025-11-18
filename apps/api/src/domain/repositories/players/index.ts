@@ -1,6 +1,6 @@
 import type { player_items, players } from "generated/client";
 import { inject, injectable } from "tsyringe";
-import type { Prisma } from "@/domain/modules/clients";
+import type { Prisma } from "@/domain/clients";
 import { TOKENS } from "@/infra/di/tokens";
 
 @injectable()

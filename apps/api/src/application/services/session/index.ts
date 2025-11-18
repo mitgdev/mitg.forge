@@ -1,6 +1,6 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
-import { CatchDecorator } from "@/application/decorators/Catch";
+import { Catch } from "@/application/decorators/Catch";
 import type { Cookies } from "@/domain/modules/cookies";
 import type { JwtCrypto } from "@/domain/modules/crypto/jwt";
 import type { Metadata } from "@/domain/modules/metadata";
@@ -25,7 +25,7 @@ export class SessionService {
 		private readonly sessionRepository: SessionRepository,
 	) {}
 
-	@CatchDecorator()
+	@Catch()
 	async isAuthenticated() {
 		const token = this.metadata.bearer() ?? this.metadata.bearerFromCookies();
 
@@ -61,7 +61,7 @@ export class SessionService {
 		return account;
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async isNotAuthenticated() {
 		const token = this.metadata.bearer() ?? this.metadata.bearerFromCookies();
 
@@ -86,7 +86,7 @@ export class SessionService {
 		});
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async destroy() {
 		const session = this.context.get("session");
 
@@ -103,7 +103,7 @@ export class SessionService {
 		await this.sessionRepository.deleteByToken(session.token);
 	}
 
-	@CatchDecorator()
+	@Catch()
 	async info() {
 		try {
 			const account = await this.isAuthenticated();

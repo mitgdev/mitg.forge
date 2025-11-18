@@ -13,7 +13,7 @@ function resolveClassName(target: any, self: any): string {
 	return "UnknownClass";
 }
 
-export function CatchDecorator() {
+export function Catch() {
 	return (
 		target: unknown,
 		propertyKey: string,

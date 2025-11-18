@@ -5,7 +5,7 @@ import type {
 	WorkerOptions,
 } from "bullmq";
 import { Queue, QueueEvents, Worker } from "bullmq";
-import type { Redis } from "@/domain/modules/clients";
+import type { Redis } from "@/domain/clients";
 import type { Logger } from "@/domain/modules/logging/logger";
 import type { JobMap, QueueName } from "@/jobs/types";
 
