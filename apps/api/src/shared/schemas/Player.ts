@@ -102,6 +102,7 @@ export const PlayerSchema = z.object({
 	marriage_spouse: z.number(),
 	ismain: z.boolean(),
 	ishidden: z.boolean(),
+	comment: z.string().nullable(),
 	bonus_rerolls: z.bigint(),
 	prey_wildcard: z.bigint(),
 	task_points: z.bigint(),

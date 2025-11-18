@@ -706,6 +706,7 @@ model players {
    */
   ismain   Boolean @default(false)
   ishidden Boolean @default(false)
+  comment  String? @db.VarChar(2000)
 
   account_ban_history                                      account_ban_history[]
   account_bans                                             account_bans[]
