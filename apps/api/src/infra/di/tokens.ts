@@ -10,6 +10,7 @@ import type {
 	AccountCharactersBySessionUseCase,
 	AccountCreateCharacterUseCase,
 	AccountDetailsBySessionUseCase,
+	AccountEditCharacterUseCase,
 	AccountFindCharacterUseCase,
 	AccountLoginUseCase,
 	AccountLogoutUseCase,
@@ -118,6 +119,9 @@ export const TOKENS = {
 	),
 	AccountFindCharacterUseCase: token<AccountFindCharacterUseCase>(
 		"AccountFindCharacterUseCase",
+	),
+	AccountEditCharacterUseCase: token<AccountEditCharacterUseCase>(
+		"AccountEditCharacterUseCase",
 	),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),

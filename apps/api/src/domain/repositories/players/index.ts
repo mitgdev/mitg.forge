@@ -7,6 +7,15 @@ import { TOKENS } from "@/infra/di/tokens";
 export class PlayersRepository {
 	constructor(@inject(TOKENS.Prisma) private readonly prisma: Prisma) {}
 
+	async editByName(name: string, data: Partial<players>) {
+		return this.prisma.players.update({
+			where: {
+				name,
+			},
+			data,
+		});
+	}
+
 	async byName(name: string) {
 		return this.prisma.players.findUnique({
 			where: {

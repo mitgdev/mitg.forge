@@ -1,6 +1,7 @@
 export * from "./characters";
 export * from "./createCharacter";
 export * from "./details";
+export * from "./editCharacter";
 export * from "./findCharacter";
 export * from "./login";
 export * from "./logout";

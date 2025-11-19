@@ -4,11 +4,18 @@ import { cn } from "@/sdk/utils/cn";
 type ListItemProps = {
 	title: string;
 	children: React.ReactNode;
+	borderless?: boolean;
 	__index__?: number;
 	__zebra__?: boolean;
 };
 
-const ListItem = ({ title, children, __index__, __zebra__ }: ListItemProps) => {
+const ListItem = ({
+	title,
+	children,
+	borderless = false,
+	__index__,
+	__zebra__,
+}: ListItemProps) => {
 	const isOdd = __zebra__ ? (__index__ ?? 0) % 2 === 1 : false;
 
 	return (
@@ -21,7 +28,14 @@ const ListItem = ({ title, children, __index__, __zebra__ }: ListItemProps) => {
 		>
 			{/* grid com largura da coluna de título controlada por CSS var */}
 			<div className="grid grid-cols-[var(--label-col,minmax(90px,200px))_minmax(0,1fr)] items-center">
-				<div className="flex h-full items-center border-septenary border-r px-2">
+				<div
+					className={cn(
+						"flex h-full items-center border-septenary border-r px-2",
+						{
+							"border-r-0": borderless,
+						},
+					)}
+				>
 					<span className="font-bold font-verdana text-secondary text-sm">
 						{title}:
 					</span>

@@ -435,6 +435,42 @@ export class AccountsService {
 	}
 
 	@Catch()
+	async updateCharacterByName(
+		name: string,
+		data: {
+			isHidden?: boolean;
+			comment?: string;
+		},
+	) {
+		const session = this.metadata.session();
+
+		const character = await this.accountRepository.findCharacterByName(
+			name,
+			session.id,
+		);
+
+		if (!character) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Character not found",
+			});
+		}
+
+		const updatedCharacter = await this.playersRepository.editByName(name, {
+			ishidden: data.isHidden,
+			comment: data.comment,
+		});
+
+		const proficiencies = parseWeaponProficiencies(
+			updatedCharacter.weapon_proficiencies,
+		);
+
+		return {
+			...updatedCharacter,
+			proficiencies: proficiencies,
+		};
+	}
+
+	@Catch()
 	async findCharacterByName(name: string) {
 		const session = this.metadata.session();
 

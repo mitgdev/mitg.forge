@@ -45,6 +45,7 @@ export class UseCasesFactory {
 		const findCharacterByName = this.di.resolve(
 			TOKENS.AccountFindCharacterUseCase,
 		);
+		const editCharacter = this.di.resolve(TOKENS.AccountEditCharacterUseCase);
 
 		return {
 			login,
@@ -56,6 +57,7 @@ export class UseCasesFactory {
 			registrationKey,
 			createCharacter,
 			findCharacterByName,
+			editCharacter,
 		} as const;
 	}
 

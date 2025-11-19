@@ -117,7 +117,10 @@ export const AccountCharacters = () => {
 											<span className="text-secondary text-sm">
 												[
 												<Link
-													to="/"
+													to="/account/player/$name/edit"
+													params={{
+														name: character.name,
+													}}
 													className="font-bold text-blue-900 underline"
 												>
 													Edit
