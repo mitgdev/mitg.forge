@@ -95,7 +95,7 @@ export const AccountCoinsHistory = () => {
 										</span>
 									</td>
 									<td className="border border-septenary p-1 text-secondary">
-										{formatDate(history.time, {
+										{formatDate(history?.time ?? new Date(), {
 											year: "2-digit",
 											month: "2-digit",
 											day: "2-digit",

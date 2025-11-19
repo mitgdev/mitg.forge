@@ -9,7 +9,7 @@ import { InnerContainer } from "@/ui/Container/Inner";
 type Props = {
 	premium?: boolean;
 	premiumDays?: number;
-	premiumExpiresAt?: Date;
+	premiumExpiresAt?: Date | null;
 };
 
 export const AccountStatus = ({

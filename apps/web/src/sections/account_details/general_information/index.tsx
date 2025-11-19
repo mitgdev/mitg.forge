@@ -29,7 +29,7 @@ export const AccountDetailGeneralInformation = () => {
 					</List.Item>
 					<List.Item title="Created">
 						<span className="font-verdana text-secondary text-sm">
-							{formatDate(data.creation)}
+							{formatDate(data?.creation ?? new Date())}
 						</span>
 					</List.Item>
 					<List.Item title="Account Status">
