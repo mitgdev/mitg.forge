@@ -22,6 +22,15 @@ export const Route = createFileRoute("/_auth/account/player/$name/edit/")({
 			});
 		}
 
+		const hasDeletionScheduled = !!character.deletion;
+
+		if (hasDeletionScheduled) {
+			throw redirect({
+				to: "/account",
+				state: true,
+			});
+		}
+
 		return {
 			name: character.name,
 		};
