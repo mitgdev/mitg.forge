@@ -1,6 +1,6 @@
 import { createContext } from "@/infra/context";
 import { generateSwaggerDocument } from "@/infra/rpc/scalar_swagger";
-import { generateOpenAPISpec } from "./handlers/openapi";
+import { generateOpenAPISpec, openApiHandler } from "./handlers/openapi";
 import { rpcApiHandler } from "./handlers/rpc";
 
 const VERSION = "v1";
@@ -29,7 +29,7 @@ export function setupV1(app: ExtendedHono) {
 	app.use(`/${VERSION}/*`, async (c, next) => {
 		const context = await createContext({ context: c });
 
-		const { matched, response } = await rpcApiHandler.handle(c.req.raw, {
+		const { matched, response } = await openApiHandler.handle(c.req.raw, {
 			prefix: `/${VERSION}`,
 			context,
 		});

@@ -449,6 +449,15 @@ export class AccountsService {
 			session.id,
 		);
 
+		// verify if player has deletion time in column deletion with is a unix timestamp
+		const deletionTime = character?.deletion ?? BigInt(0);
+
+		if (deletionTime > BigInt(0)) {
+			throw new ORPCError("FORBIDDEN", {
+				message: "Character is marked for deletion and cannot be edited",
+			});
+		}
+
 		if (!character) {
 			throw new ORPCError("NOT_FOUND", {
 				message: "Character not found",

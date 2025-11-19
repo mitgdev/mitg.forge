@@ -6,7 +6,9 @@ import { PlayerIsOnline } from "@/components/Player/Online";
 import { PlayerRewardCollected } from "@/components/Player/RewardCollected";
 import { PlayerRole } from "@/components/Player/Role";
 import { PlayerVocation } from "@/components/Player/Vocation";
+import { useTimezone } from "@/sdk/hooks/useTimezone";
 import { api } from "@/sdk/lib/api/factory";
+import { cn } from "@/sdk/utils/cn";
 import { makeOutfit } from "@/sdk/utils/outfit";
 import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
@@ -21,6 +23,7 @@ import { InnerContainer } from "@/ui/Container/Inner";
  * a skeleton to simulate a loading state while data is been fetched.
  */
 export const AccountCharacters = () => {
+	const { formatDate } = useTimezone();
 	const { data } = useQuery(
 		api.query.miforge.accounts.characters.list.queryOptions({
 			input: {
@@ -58,6 +61,8 @@ export const AccountCharacters = () => {
 					</thead>
 					<tbody>
 						{characters.map((character, index) => {
+							const hasDeletionScheduled = !!character.deletion;
+
 							return (
 								<tr key={`${character.id}-${character.name}`}>
 									<td className="border border-septenary p-1 text-center">
@@ -89,10 +94,15 @@ export const AccountCharacters = () => {
 													</span>
 													{character.ismain && <PlayerMain />}
 												</div>
-
 												<span className="flex flex-row items-center gap-1 text-secondary text-xs">
 													Level {character.level} - on Ferumbra
 												</span>
+												{hasDeletionScheduled && character?.deletion && (
+													<span className="text-error text-xs">
+														Deletion scheduled on{" "}
+														{formatDate(character.deletion)}.
+													</span>
+												)}
 											</div>
 										</div>
 									</td>
@@ -117,11 +127,15 @@ export const AccountCharacters = () => {
 											<span className="text-secondary text-sm">
 												[
 												<Link
+													disabled={hasDeletionScheduled}
 													to="/account/player/$name/edit"
 													params={{
 														name: character.name,
 													}}
-													className="font-bold text-blue-900 underline"
+													className={cn("font-bold text-blue-900 underline", {
+														"pointer-events-none opacity-50":
+															hasDeletionScheduled,
+													})}
 												>
 													Edit
 												</Link>
@@ -131,7 +145,11 @@ export const AccountCharacters = () => {
 												[
 												<Link
 													to="/"
-													className="font-bold text-blue-900 underline"
+													disabled={hasDeletionScheduled}
+													className={cn("font-bold text-blue-900 underline", {
+														"pointer-events-none opacity-50":
+															hasDeletionScheduled,
+													})}
 												>
 													Delete
 												</Link>

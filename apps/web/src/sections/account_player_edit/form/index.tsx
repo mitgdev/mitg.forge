@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { List } from "@/components/List";
+import { useTimezone } from "@/sdk/hooks/useTimezone";
 import { api } from "@/sdk/lib/api/factory";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
 import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
@@ -31,6 +32,7 @@ type FormValues = z.infer<typeof FormSchema>;
 
 export const AccountPlayerEditForm = ({ name }: { name: string }) => {
 	const queryClient = useQueryClient();
+	const { formatDate } = useTimezone();
 	const { data: player } = useQuery(
 		api.query.miforge.accounts.characters.findByName.queryOptions({
 			input: {
@@ -38,6 +40,8 @@ export const AccountPlayerEditForm = ({ name }: { name: string }) => {
 			},
 		}),
 	);
+
+	const hasDeletionScheduled = !!player?.deletion;
 
 	const { mutateAsync } = useMutation(
 		api.query.miforge.accounts.characters.editByName.mutationOptions(),
@@ -58,6 +62,12 @@ export const AccountPlayerEditForm = ({ name }: { name: string }) => {
 	const handleSubmit = useCallback(
 		async (data: FormValues) => {
 			try {
+				if (hasDeletionScheduled) {
+					return toast.error(
+						"Cannot update character information while deletion is scheduled.",
+					);
+				}
+
 				await mutateAsync({
 					name: name,
 					isHidden: data.hideInformation,
@@ -81,11 +91,21 @@ export const AccountPlayerEditForm = ({ name }: { name: string }) => {
 				toast.error("An unexpected error occurred. Please try again.");
 			}
 		},
-		[mutateAsync, name, queryClient],
+		[mutateAsync, name, queryClient, hasDeletionScheduled],
 	);
 
 	return (
 		<Container title="Edit Character Information">
+			{hasDeletionScheduled && player?.deletion && (
+				<InnerContainer>
+					<span className="text-base text-secondary">
+						This character has a deletion scheduled on{" "}
+						{formatDate(player.deletion)}. You cannot edit information while
+						deletion is scheduled.
+					</span>
+				</InnerContainer>
+			)}
+
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(handleSubmit)}>
 					<InnerContainer className="p-0">
@@ -108,6 +128,7 @@ export const AccountPlayerEditForm = ({ name }: { name: string }) => {
 														>
 															<Checkbox
 																checked={value || false}
+																disabled={hasDeletionScheduled}
 																onCheckedChange={(checked) => onChange(checked)}
 																id="hideInformation"
 															/>
@@ -135,6 +156,7 @@ export const AccountPlayerEditForm = ({ name }: { name: string }) => {
 												<div className="flex w-full flex-col">
 													<FormControl>
 														<Textarea
+															disabled={hasDeletionScheduled}
 															{...field}
 															value={value}
 															onChange={(event) => {
@@ -160,7 +182,12 @@ export const AccountPlayerEditForm = ({ name }: { name: string }) => {
 							<ButtonImageLink variant="info" to="/account" hash="registration">
 								Back
 							</ButtonImageLink>
-							<ButtonImage variant="info" type="submit">
+
+							<ButtonImage
+								variant="info"
+								type="submit"
+								disabled={hasDeletionScheduled}
+							>
 								Update
 							</ButtonImage>
 						</div>

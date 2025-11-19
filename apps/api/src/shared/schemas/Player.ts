@@ -57,7 +57,7 @@ export const PlayerSchema = z.object({
 	blessings7: z.number(),
 	blessings8: z.number(),
 	onlinetime: z.number(), // in seconds
-	deletion: z.bigint(),
+	deletion: z.bigint().transform(unixTimestampToDate),
 	balance: z.bigint(),
 	offlinetraining_time: z.number(), // is in seconds
 	stamina: z.number(), // is in minutes
