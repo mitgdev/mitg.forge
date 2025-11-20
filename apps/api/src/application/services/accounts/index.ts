@@ -526,8 +526,27 @@ export class AccountsService {
 	}
 
 	@Catch()
-	async scheduleCharacterDeletionByName(name: string) {
+	async scheduleCharacterDeletionByName(name: string, password: string) {
 		const session = this.metadata.session();
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const isPasswordValid = this.hasherCrypto.compare(
+			password,
+			account.password,
+		);
+
+		if (!isPasswordValid) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid credentials",
+			});
+		}
 
 		const character = await this.accountRepository.findCharacterByName(
 			name,
