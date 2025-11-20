@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { api } from "@/sdk/lib/api/factory";
 
-export const Route = createFileRoute("/_auth/account/player/$name/edit/")({
+export const Route = createFileRoute("/_auth/account/player/$name/undelete/")({
 	loader: async ({ params, context }) => {
 		const characterName = params.name;
 
@@ -25,7 +25,8 @@ export const Route = createFileRoute("/_auth/account/player/$name/edit/")({
 
 		const hasDeletionScheduled = !!character.deletion;
 
-		if (hasDeletionScheduled) {
+		// If there is no deletion scheduled, redirect
+		if (!hasDeletionScheduled) {
 			throw redirect({
 				to: "/account",
 				state: true,

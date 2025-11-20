@@ -389,11 +389,7 @@ export const AccountPlayerCreateForm = () => {
 					</InnerContainer>
 					<InnerContainer>
 						<div className="flex flex-row flex-wrap items-end justify-end gap-2">
-							<ButtonImageLink
-								variant="info"
-								to="/account/details"
-								hash="registration"
-							>
+							<ButtonImageLink variant="info" to="/account/details">
 								Back
 							</ButtonImageLink>
 							<ButtonImage variant="info" type="submit">

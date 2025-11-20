@@ -515,11 +515,7 @@ export const AccountRegistrationForm = () => {
 					</InnerContainer>
 					<InnerContainer className="p-1">
 						<div className="flex flex-row flex-wrap items-end justify-end gap-2">
-							<ButtonImageLink
-								variant="info"
-								to="/account/details"
-								hash="registration"
-							>
+							<ButtonImageLink variant="info" to="/account/details">
 								Back
 							</ButtonImageLink>
 							<ButtonImage

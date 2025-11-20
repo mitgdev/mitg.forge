@@ -17,7 +17,9 @@ import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as AuthAccountIndexRouteImport } from './routes/_auth/account/index'
 import { Route as AuthAccountPlayerCreateIndexRouteImport } from './routes/_auth/account/player/create/index'
+import { Route as AuthAccountPlayerNameUndeleteIndexRouteImport } from './routes/_auth/account/player/$name/undelete/index'
 import { Route as AuthAccountPlayerNameEditIndexRouteImport } from './routes/_auth/account/player/$name/edit/index'
+import { Route as AuthAccountPlayerNameDeleteIndexRouteImport } from './routes/_auth/account/player/$name/delete/index'
 
 const PublicTermsIndexLazyRouteImport = createFileRoute('/_public/terms/')()
 const Not_authLoginIndexLazyRouteImport = createFileRoute('/_not_auth/login/')()
@@ -107,6 +109,16 @@ const AuthAccountPlayerCreateIndexRoute =
       (d) => d.Route,
     ),
   )
+const AuthAccountPlayerNameUndeleteIndexRoute =
+  AuthAccountPlayerNameUndeleteIndexRouteImport.update({
+    id: '/account/player/$name/undelete/',
+    path: '/account/player/$name/undelete/',
+    getParentRoute: () => AuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/account/player/$name/undelete/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const AuthAccountPlayerNameEditIndexRoute =
   AuthAccountPlayerNameEditIndexRouteImport.update({
     id: '/account/player/$name/edit/',
@@ -114,6 +126,16 @@ const AuthAccountPlayerNameEditIndexRoute =
     getParentRoute: () => AuthRouteRoute,
   } as any).lazy(() =>
     import('./routes/_auth/account/player/$name/edit/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthAccountPlayerNameDeleteIndexRoute =
+  AuthAccountPlayerNameDeleteIndexRouteImport.update({
+    id: '/account/player/$name/delete/',
+    path: '/account/player/$name/delete/',
+    getParentRoute: () => AuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/account/player/$name/delete/index.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -127,7 +149,9 @@ export interface FileRoutesByFullPath {
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
   '/account/player/create': typeof AuthAccountPlayerCreateIndexRoute
+  '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/account/player/$name/edit': typeof AuthAccountPlayerNameEditIndexRoute
+  '/account/player/$name/undelete': typeof AuthAccountPlayerNameUndeleteIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -138,7 +162,9 @@ export interface FileRoutesByTo {
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
   '/account/player/create': typeof AuthAccountPlayerCreateIndexRoute
+  '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/account/player/$name/edit': typeof AuthAccountPlayerNameEditIndexRoute
+  '/account/player/$name/undelete': typeof AuthAccountPlayerNameUndeleteIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -153,7 +179,9 @@ export interface FileRoutesById {
   '/_auth/account/details/': typeof AuthAccountDetailsIndexLazyRoute
   '/_auth/account/registration/': typeof AuthAccountRegistrationIndexLazyRoute
   '/_auth/account/player/create/': typeof AuthAccountPlayerCreateIndexRoute
+  '/_auth/account/player/$name/delete/': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/_auth/account/player/$name/edit/': typeof AuthAccountPlayerNameEditIndexRoute
+  '/_auth/account/player/$name/undelete/': typeof AuthAccountPlayerNameUndeleteIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -166,7 +194,9 @@ export interface FileRouteTypes {
     | '/account/details'
     | '/account/registration'
     | '/account/player/create'
+    | '/account/player/$name/delete'
     | '/account/player/$name/edit'
+    | '/account/player/$name/undelete'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -177,7 +207,9 @@ export interface FileRouteTypes {
     | '/account/details'
     | '/account/registration'
     | '/account/player/create'
+    | '/account/player/$name/delete'
     | '/account/player/$name/edit'
+    | '/account/player/$name/undelete'
   id:
     | '__root__'
     | '/_auth'
@@ -191,7 +223,9 @@ export interface FileRouteTypes {
     | '/_auth/account/details/'
     | '/_auth/account/registration/'
     | '/_auth/account/player/create/'
+    | '/_auth/account/player/$name/delete/'
     | '/_auth/account/player/$name/edit/'
+    | '/_auth/account/player/$name/undelete/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -279,11 +313,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAccountPlayerCreateIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/account/player/$name/undelete/': {
+      id: '/_auth/account/player/$name/undelete/'
+      path: '/account/player/$name/undelete'
+      fullPath: '/account/player/$name/undelete'
+      preLoaderRoute: typeof AuthAccountPlayerNameUndeleteIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/account/player/$name/edit/': {
       id: '/_auth/account/player/$name/edit/'
       path: '/account/player/$name/edit'
       fullPath: '/account/player/$name/edit'
       preLoaderRoute: typeof AuthAccountPlayerNameEditIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/account/player/$name/delete/': {
+      id: '/_auth/account/player/$name/delete/'
+      path: '/account/player/$name/delete'
+      fullPath: '/account/player/$name/delete'
+      preLoaderRoute: typeof AuthAccountPlayerNameDeleteIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
   }
@@ -295,7 +343,9 @@ interface AuthRouteRouteChildren {
   AuthAccountDetailsIndexLazyRoute: typeof AuthAccountDetailsIndexLazyRoute
   AuthAccountRegistrationIndexLazyRoute: typeof AuthAccountRegistrationIndexLazyRoute
   AuthAccountPlayerCreateIndexRoute: typeof AuthAccountPlayerCreateIndexRoute
+  AuthAccountPlayerNameDeleteIndexRoute: typeof AuthAccountPlayerNameDeleteIndexRoute
   AuthAccountPlayerNameEditIndexRoute: typeof AuthAccountPlayerNameEditIndexRoute
+  AuthAccountPlayerNameUndeleteIndexRoute: typeof AuthAccountPlayerNameUndeleteIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -305,7 +355,10 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccountDetailsIndexLazyRoute: AuthAccountDetailsIndexLazyRoute,
   AuthAccountRegistrationIndexLazyRoute: AuthAccountRegistrationIndexLazyRoute,
   AuthAccountPlayerCreateIndexRoute: AuthAccountPlayerCreateIndexRoute,
+  AuthAccountPlayerNameDeleteIndexRoute: AuthAccountPlayerNameDeleteIndexRoute,
   AuthAccountPlayerNameEditIndexRoute: AuthAccountPlayerNameEditIndexRoute,
+  AuthAccountPlayerNameUndeleteIndexRoute:
+    AuthAccountPlayerNameUndeleteIndexRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(

@@ -23,7 +23,7 @@ export class AccountDeleteCharacterUseCase
 	async execute(
 		input: AccountDeleteCharacterContractInput,
 	): Promise<AccountDeleteCharacterContractOutput> {
-		await this.accountsService.scheduleCharacterDeletionByName(
+		return await this.accountsService.scheduleCharacterDeletionByName(
 			input.name,
 			input.password,
 		);

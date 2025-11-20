@@ -2,10 +2,12 @@ import z from "zod";
 
 export const AccountDeleteCharacterContractSchema = {
 	input: z.object({
-		name: z.string().min(4).max(21),
+		name: z.string().min(1).max(21),
 		password: z.string(),
 	}),
-	output: z.void(),
+	output: z.object({
+		scheduleDate: z.date(),
+	}),
 };
 
 export type AccountDeleteCharacterContractInput = z.infer<

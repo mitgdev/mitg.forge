@@ -6,7 +6,7 @@ export const deleteCharacterRoute = isAuthenticatedProcedure
 		method: "DELETE",
 		path: "/character/{name}",
 		summary: "Delete character",
-		successStatus: 204,
+		successStatus: 200,
 		description:
 			"Delete a character by name associated with the authenticated user's account.",
 	})

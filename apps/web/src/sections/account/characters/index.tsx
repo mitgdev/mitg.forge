@@ -142,18 +142,44 @@ export const AccountCharacters = () => {
 												]
 											</span>
 											<span className="text-secondary text-sm">
-												[
-												<Link
-													to="/"
-													disabled={hasDeletionScheduled}
-													className={cn("font-bold text-blue-900 underline", {
-														"pointer-events-none opacity-50":
-															hasDeletionScheduled,
-													})}
-												>
-													Delete
-												</Link>
-												]
+												{hasDeletionScheduled ? (
+													<>
+														[
+														<Link
+															to="/account/player/$name/undelete"
+															params={{
+																name: character.name,
+															}}
+															className={cn(
+																"font-bold text-blue-900 underline",
+															)}
+														>
+															Undelete
+														</Link>
+														]
+													</>
+												) : (
+													<>
+														[
+														<Link
+															to="/account/player/$name/delete"
+															params={{
+																name: character.name,
+															}}
+															disabled={hasDeletionScheduled}
+															className={cn(
+																"font-bold text-blue-900 underline",
+																{
+																	"pointer-events-none opacity-50":
+																		hasDeletionScheduled,
+																},
+															)}
+														>
+															Delete
+														</Link>
+														]
+													</>
+												)}
 											</span>
 										</div>
 									</td>

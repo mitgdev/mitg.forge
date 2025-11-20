@@ -559,6 +559,14 @@ export class AccountsService {
 			});
 		}
 
+		const alreadyScheduled = character.deletion > BigInt(0);
+
+		if (alreadyScheduled) {
+			throw new ORPCError("FORBIDDEN", {
+				message: "Character deletion is already scheduled",
+			});
+		}
+
 		const deletionDate = new Date();
 		/**
 		 * TODO: Make the deletion period configurable. In database with miforge_config
@@ -570,5 +578,9 @@ export class AccountsService {
 			character.name,
 			deletionDate,
 		);
+
+		return {
+			scheduleDate: deletionDate,
+		};
 	}
 }
