@@ -8,7 +8,7 @@
 		"build": "tsdown && pnpm run build:types && pnpm run build:bun",
 		"build:types": "tsc --emitDeclarationOnly",
 		"build:bun": "bun build --compile --minify --sourcemap ./src/index.ts --outfile dist/server",
-		"dev": "bun run --tsconfig-override ./tsconfig.dev.json --inspect=localhost:6499/ --hot src/index.ts",
+		"dev": "bun run --inspect=localhost:6499/ --hot src/index.ts",
 		"db:generate": "prisma generate --no-hints",
 		"db:migrate": "prisma migrate deploy",
 		"db:migrate:dev": "prisma migrate dev",
