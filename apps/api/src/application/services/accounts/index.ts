@@ -519,10 +519,11 @@ export class AccountsService {
 			});
 		}
 
-		await this.playersRepository.scheduleToDeleteByName(
-			character.name,
-			undefined,
-		);
+		/**
+		 * Don't send deleteAt in this case to set deletion to 0 (no deletion)
+		 * and cancel any scheduled deletion.
+		 */
+		await this.playersRepository.scheduleToDeleteByName(character.name);
 	}
 
 	@Catch()

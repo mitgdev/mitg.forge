@@ -35,6 +35,15 @@ services:
     volumes:
       - keydb_data:/data
 
+  api:
+    build:
+      context: ./
+      dockerfile: apps/api/Dockerfile
+    container_name: miforge-api
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+
 networks:
   devnet:
     external: true

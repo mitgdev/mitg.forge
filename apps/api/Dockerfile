@@ -13,6 +13,7 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 RUN pnpm fetch
 
 COPY apps/api apps/api
+COPY packages packages
 
 RUN pnpm install -r --prefer-offline
 
