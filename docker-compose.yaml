@@ -44,6 +44,15 @@ services:
     ports:
       - "4000:4000"
 
+  web:
+    build:
+      context: ./
+      dockerfile: apps/web/Dockerfile
+    container_name: miforge-web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+
 networks:
   devnet:
     external: true
