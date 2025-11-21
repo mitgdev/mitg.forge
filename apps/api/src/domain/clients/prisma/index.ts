@@ -6,15 +6,7 @@ import { env } from "@/infra/env";
 export type Prisma = PrismaClient;
 
 export function makePrisma(rootLogger?: Logger) {
-	const adapter = new PrismaMariaDb({
-		host: env.DATABASE_HOST,
-		user: env.DATABASE_USER,
-		password: env.DATABASE_PASSWORD,
-		database: env.DATABASE_NAME,
-		connectionLimit: 10,
-		acquireTimeout: 10000,
-		idleTimeout: 60000,
-	});
+	const adapter = new PrismaMariaDb(env.DATABASE_URL);
 	const prisma = new PrismaClient({
 		adapter,
 		log: [

@@ -20,12 +20,7 @@ const server_configs: Array<{
   value: "0"
 }]
 
-const adapter = new PrismaMariaDb({
-  host: env.DATABASE_HOST,
-  user: env.DATABASE_USER,
-  password: env.DATABASE_PASSWORD,
-  database: env.DATABASE_NAME,
-})
+const adapter = new PrismaMariaDb(env.DATABASE_URL)
 
 const prisma = new PrismaClient({
 				adapter,

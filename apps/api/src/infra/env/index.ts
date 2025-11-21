@@ -30,17 +30,8 @@ const SERVER_CONFIG = {
 };
 
 const DATABASE_CONFIG = {
-	DATABASE_HOST: str({
-		desc: "Database host",
-	}),
-	DATABASE_USER: str({
-		desc: "Database user",
-	}),
-	DATABASE_PASSWORD: str({
-		desc: "Database password",
-	}),
-	DATABASE_NAME: str({
-		desc: "Database name",
+	DATABASE_URL: str({
+		desc: "The database connection URL",
 	}),
 };
 
