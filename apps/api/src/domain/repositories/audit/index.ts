@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { Prisma } from "@/domain/clients";
-import type { Logger, Metadata } from "@/domain/modules";
+import type { Metadata } from "@/domain/modules";
 import { TOKENS } from "@/infra/di/tokens";
 import { safeStringify } from "@/shared/utils/json";
 import type { PaginationInput } from "@/shared/utils/paginate";
@@ -8,7 +8,6 @@ import type { PaginationInput } from "@/shared/utils/paginate";
 @injectable()
 export class AuditRepository {
 	constructor(
-		@inject(TOKENS.Logger) private readonly logger: Logger,
 		@inject(TOKENS.Prisma) private readonly database: Prisma,
 		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
 	) {}
@@ -72,6 +71,7 @@ export class AuditRepository {
 }
 
 const AuditAction = {
+	UPDATED_CONFIG: "UPDATED_CONFIG",
 	DELETED_CHARACTER: "DELETED_CHARACTER",
 	UNDELETE_CHARACTER: "UNDELETE_CHARACTER",
 	UPDATED_CHARACTER: "UPDATED_CHARACTER",

@@ -14,6 +14,8 @@ import {
 	AccountRegistrationUseCase,
 	AccountStoreHistoryUseCase,
 	AuditAccountUseCase,
+	ConfigInfoUseCase,
+	ConfigUpdateUseCase,
 	SessionAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
@@ -113,6 +115,18 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.WorldsListUseCase,
 		{ useClass: WorldsListUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.ConfigInfoUseCase,
+		{ useClass: ConfigInfoUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.ConfigUpdateUseCase,
+		{ useClass: ConfigUpdateUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

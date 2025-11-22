@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 import type { RouterContext } from "@/router";
+import { ConfigProvider } from "@/sdk/contexts/config";
 import { SessionProvider } from "@/sdk/contexts/session";
 import { env } from "@/sdk/env";
 import { api } from "@/sdk/lib/api/factory";
@@ -37,22 +38,28 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 		await context.clients.query.ensureQueryData(
 			api.query.miforge.session.info.queryOptions(),
 		);
+
+		await context.clients.query.ensureQueryData(
+			api.query.miforge.config.info.queryOptions(),
+		);
 	},
 	component: () => {
 		return (
-			<SessionProvider>
-				<HeadContent />
-				<Outlet />
-				{env.VITE_SHOW_DEVTOOLS && (
-					<Suspense fallback={null}>
-						<TanStackRouterDevtools
-							position="bottom-left"
-							initialIsOpen={false}
-						/>
-						<ReactQueryDevtools position="bottom" initialIsOpen={false} />
-					</Suspense>
-				)}
-			</SessionProvider>
+			<ConfigProvider>
+				<SessionProvider>
+					<HeadContent />
+					<Outlet />
+					{env.VITE_SHOW_DEVTOOLS && (
+						<Suspense fallback={null}>
+							<TanStackRouterDevtools
+								position="bottom-left"
+								initialIsOpen={false}
+							/>
+							<ReactQueryDevtools position="bottom" initialIsOpen={false} />
+						</Suspense>
+					)}
+				</SessionProvider>
+			</ConfigProvider>
 		);
 	},
 });

@@ -22,6 +22,7 @@ catalogs:
     "@orpc/server": ^1.11.3
     "@orpc/zod": ^1.11.3
     "@orpc/tanstack-query": ^1.11.3
+    "@orpc/experimental-publisher": ^1.11.3
 
 overrides:
   "@types/react": catalog:react

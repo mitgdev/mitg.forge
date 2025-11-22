@@ -1,5 +1,6 @@
 import { ORPCError } from "@orpc/client";
 import { getConnInfo } from "hono/bun";
+import type { ConnInfo } from "hono/conninfo";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
@@ -13,7 +14,19 @@ export class Metadata {
 	) {}
 
 	public ip(): string | null {
-		const info = getConnInfo(this.context);
+		/**
+		 * TODO: For some fucking reason, getConnInfo throw a TypeError
+		 * TypeError: null is not an object (evaluating 'info.address')
+		 * This error happens when calling route using postman or curl.
+		 */
+		let info: ConnInfo | null = null;
+
+		try {
+			info = getConnInfo(this.context);
+		} catch {
+			info = null;
+		}
+
 		const possibleIpHeaders = [
 			"remoteAddress",
 			"x-forwarded-for",
@@ -24,7 +37,7 @@ export class Metadata {
 			"x-client-ip",
 		];
 
-		if (info.remote.address) {
+		if (info?.remote.address) {
 			return info.remote.address;
 		}
 

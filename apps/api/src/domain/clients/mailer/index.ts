@@ -4,6 +4,13 @@ import type { Logger } from "@/domain/modules";
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
 
+/**
+ * TODO: Find way to remove property enabled, to rely only on config presence.
+ * And if no config, we don't send emails.
+ * In this time we already have a live config. Than we can control
+ * mailer enable state only if config is present previously.
+ */
+
 type MailerConfigSMTP = {
 	host: string;
 	port: number;

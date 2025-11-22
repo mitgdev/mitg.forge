@@ -2,6 +2,7 @@ import type { InjectionToken } from "tsyringe";
 import type {
 	AccountsService,
 	AuditService,
+	ConfigService,
 	PlayersService,
 	SessionService,
 	TibiaClientService,
@@ -22,6 +23,8 @@ import type {
 	AccountRegistrationUseCase,
 	AccountStoreHistoryUseCase,
 	AuditAccountUseCase,
+	ConfigInfoUseCase,
+	ConfigUpdateUseCase,
 	SessionAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
@@ -29,6 +32,7 @@ import type {
 	WorldsListUseCase,
 } from "@/application/usecases";
 import type { Mailer, Prisma, Redis } from "@/domain/clients";
+import type { AppLivePublisher } from "@/domain/clients/live/types";
 import type {
 	Cache,
 	CacheKeys,
@@ -46,6 +50,8 @@ import type {
 import type {
 	AccountRepository,
 	AuditRepository,
+	ConfigLiveRepository,
+	ConfigRepository,
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
@@ -69,6 +75,9 @@ export const TOKENS = {
 	Mailer: token<Mailer>("Mailer"),
 	Redis: token<Redis>("Redis"),
 	BullConnection: token<Redis>("BullConnection"),
+	EventCommander: token<Redis>("EventCommander"),
+	EventSubscriber: token<Redis>("EventSubscriber"),
+	AppLivePublisher: token<AppLivePublisher>("AppLivePublisher"),
 
 	// Queues
 	EmailQueue: token<EmailQueue>("EmailQueue"),
@@ -99,6 +108,8 @@ export const TOKENS = {
 	SessionRepository: token<SessionRepository>("SessionRepository"),
 	WorldsRepository: token<WorldsRepository>("WorldsRepository"),
 	AuditRepository: token<AuditRepository>("AuditRepository"),
+	ConfigLiveRepository: token<ConfigLiveRepository>("ConfigLiveRepository"),
+	ConfigRepository: token<ConfigRepository>("ConfigRepository"),
 
 	// Services
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),
@@ -107,6 +118,7 @@ export const TOKENS = {
 	WorldsService: token<WorldsService>("WorldsService"),
 	PlayersService: token<PlayersService>("PlayersService"),
 	AuditService: token<AuditService>("AuditService"),
+	ConfigService: token<ConfigService>("ConfigService"),
 
 	// UseCases
 	AccountLoginUseCase: token<AccountLoginUseCase>("LoginUseCase"),
@@ -146,6 +158,9 @@ export const TOKENS = {
 	AccountCreateUseCase: token<AccountCreateUseCase>("AccountCreateUseCase"),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),
+
+	ConfigInfoUseCase: token<ConfigInfoUseCase>("ConfigInfoUseCase"),
+	ConfigUpdateUseCase: token<ConfigUpdateUseCase>("ConfigUpdateUseCase"),
 
 	SessionInfoUseCase: token<SessionInfoUseCase>("SessionInfoUseCase"),
 	SessionAuthenticatedUseCase: token<SessionAuthenticatedUseCase>(

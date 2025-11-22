@@ -2,6 +2,7 @@ import { env } from '@/infra/env'
 import {PrismaClient} from 'generated/client'
 import {PrismaMariaDb} from "@prisma/adapter-mariadb"
 import crypto from "node:crypto";
+import { MiforgeConfigSchema } from '@/shared/schemas/Config';
 
 const server_configs: Array<{
   key: string,
@@ -27,7 +28,31 @@ const prisma = new PrismaClient({
 				log: ["info", "warn", "error"],
 			});
 
+const miforgeConfig = MiforgeConfigSchema.decode({
+  maintenance: {
+    enabled: false,
+    message: "We'll be back soon."
+  },
+  notifications: {
+    emailEnabled: env.MAILER_ENABLED
+  }
+})
+
 async function main() {
+  console.log("[seed] Seeding miforge_configs")
+  await prisma.miforge_config.upsert({
+    where: {
+      id: 1
+    },
+    create: {
+      id: 1,
+      data: JSON.stringify(miforgeConfig)
+    },
+    update: {
+      data: JSON.stringify(miforgeConfig)
+    }
+  })
+
   for (const config of server_configs) {
     const existing = await prisma.server_config.findUnique({
       where: {

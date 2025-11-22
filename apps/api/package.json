@@ -23,6 +23,7 @@
 		"@miforge/core": "workspace:*",
 		"@miforge/email": "workspace:*",
 		"@orpc/client": "catalog:orpc",
+		"@orpc/experimental-publisher": "catalog:orpc",
 		"@orpc/json-schema": "catalog:orpc",
 		"@orpc/openapi": "catalog:orpc",
 		"@orpc/server": "catalog:orpc",

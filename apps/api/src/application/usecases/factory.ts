@@ -104,4 +104,14 @@ export class UseCasesFactory {
 			notAuthenticated,
 		} as const;
 	}
+
+	get config() {
+		const info = this.di.resolve(TOKENS.ConfigInfoUseCase);
+		const update = this.di.resolve(TOKENS.ConfigUpdateUseCase);
+
+		return {
+			info,
+			update,
+		} as const;
+	}
 }

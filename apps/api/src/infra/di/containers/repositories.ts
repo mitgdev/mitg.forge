@@ -2,6 +2,8 @@ import { container, Lifecycle } from "tsyringe";
 import {
 	AccountRepository,
 	AuditRepository,
+	ConfigLiveRepository,
+	ConfigRepository,
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
@@ -10,6 +12,7 @@ import { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "../tokens";
 
 export function registerRepositories() {
+	// Repositories with resolution scoped lifecycle
 	container.register(
 		TOKENS.AccountRepository,
 		{ useClass: AccountRepository },
@@ -39,5 +42,18 @@ export function registerRepositories() {
 		TOKENS.AuditRepository,
 		{ useClass: AuditRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.ConfigRepository,
+		{ useClass: ConfigRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	// Repositories with singleton lifecycle
+	container.register(
+		TOKENS.ConfigLiveRepository,
+		{ useClass: ConfigLiveRepository },
+		{ lifecycle: Lifecycle.Singleton },
 	);
 }

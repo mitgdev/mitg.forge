@@ -2,6 +2,7 @@ import { container, Lifecycle } from "tsyringe";
 import {
 	AccountsService,
 	AuditService,
+	ConfigService,
 	PlayersService,
 	SessionService,
 	TibiaClientService,
@@ -38,6 +39,11 @@ export function registerServices() {
 	container.register(
 		TOKENS.AuditService,
 		{ useClass: AuditService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ConfigService,
+		{ useClass: ConfigService },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 }

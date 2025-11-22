@@ -19,6 +19,9 @@ catalogs:
     '@orpc/client':
       specifier: ^1.11.3
       version: 1.11.3
+    '@orpc/experimental-publisher':
+      specifier: ^1.11.3
+      version: 1.11.3
     '@orpc/json-schema':
       specifier: ^1.11.3
       version: 1.11.3
@@ -97,6 +100,9 @@ importers:
       '@orpc/client':
         specifier: catalog:orpc
         version: 1.11.3
+      '@orpc/experimental-publisher':
+        specifier: catalog:orpc
+        version: 1.11.3(ioredis@5.8.2)
       '@orpc/json-schema':
         specifier: catalog:orpc
         version: 1.11.3
@@ -1441,6 +1447,17 @@ packages:
 
   '@orpc/contract@1.11.3':
     resolution: {integrity: sha512-tEZ2jGVCtSHd6gijl/ASA9RhJOUAtaDtsDtkwARCxeA9gshxcaAHXTcG1l1Vvy4fezcj1xZ1fzS8uYWlcrVF7A==}
+
+  '@orpc/experimental-publisher@1.11.3':
+    resolution: {integrity: sha512-ijqDjTsld9KY0JU5Fozi3ylBdtieZX14TuAboIKd+S9mUKlED1jUe+lir8fWP293rOoIlaRqchA84e3y3c0YIg==}
+    peerDependencies:
+      '@upstash/redis': '>=1.35.6'
+      ioredis: '>=5.8.1'
+    peerDependenciesMeta:
+      '@upstash/redis':
+        optional: true
+      ioredis:
+        optional: true
 
   '@orpc/interop@1.11.3':
     resolution: {integrity: sha512-NOTXLsp1jkFyHGzZM0qST9LtCrBUr5qN7OEDpslPXm2xV6I1IFok15QoVtxg033vEBXD5AbtTVCkzmaLb5JJ1w==}
@@ -7319,6 +7336,16 @@ snapshots:
       '@orpc/shared': 1.11.3
       '@standard-schema/spec': 1.0.0
       openapi-types: 12.1.3
+    transitivePeerDependencies:
+      - '@opentelemetry/api'
+
+  '@orpc/experimental-publisher@1.11.3(ioredis@5.8.2)':
+    dependencies:
+      '@orpc/client': 1.11.3
+      '@orpc/shared': 1.11.3
+      '@orpc/standard-server': 1.11.3
+    optionalDependencies:
+      ioredis: 5.8.2
     transitivePeerDependencies:
       - '@opentelemetry/api'
 

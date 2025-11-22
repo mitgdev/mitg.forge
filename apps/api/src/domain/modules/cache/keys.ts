@@ -19,7 +19,15 @@ export class CacheKeys {
 		build: (...parts: KeyPart[]) => this.buildKey(this.appPrefix, ...parts),
 	};
 
-	readonly keys = {
-		test: (id: string) => this.namespace.build("test", id),
+	readonly keys: Record<
+		"config",
+		(...parts: KeyPart[]) => { key: string; ttl: number }
+	> = {
+		config: () => {
+			return {
+				key: this.namespace.build("config"),
+				ttl: 24 * 60 * 60, // 24 hours
+			};
+		},
 	};
 }

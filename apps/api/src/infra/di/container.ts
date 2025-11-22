@@ -17,6 +17,7 @@ import { TOKENS } from "./tokens";
 
 declare global {
 	var __REDIS__: Redis | undefined;
+	var __REDIS_SUB__: Redis | undefined;
 	var __PRISMA__: Prisma | undefined;
 	var __BOOTSTRAPPED__: boolean | undefined;
 }

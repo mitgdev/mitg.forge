@@ -1,7 +1,10 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
 import type { HasherCrypto } from "@/domain/modules";
-import type { AccountRepository } from "@/domain/repositories";
+import type {
+	AccountRepository,
+	ConfigRepository,
+} from "@/domain/repositories";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "@/infra/di/tokens";
 import type { TibiaClientCharacter } from "@/shared/schemas/ClientCharacters";
@@ -20,6 +23,8 @@ export class TibiaClientService {
 		private readonly accountRepository: AccountRepository,
 		@inject(TOKENS.WorldsRepository)
 		private readonly worldsRepository: WorldsRepository,
+		@inject(TOKENS.ConfigRepository)
+		private readonly configRepository: ConfigRepository,
 	) {}
 
 	async login(
@@ -36,7 +41,15 @@ export class TibiaClientService {
 		  }
 	> {
 		try {
+			const config = await this.configRepository.findConfig();
 			const account = await this.accountRepository.findByEmail(email);
+
+			if (config.maintenance.enabled) {
+				return {
+					errorCode: 3,
+					errorMessage: config.maintenance.message,
+				};
+			}
 
 			// 3 error common
 			// 6 Two-factor by app/token

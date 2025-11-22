@@ -1,3 +1,4 @@
+import type { DependencyContainer } from "tsyringe";
 import { UseCasesFactory } from "@/application/usecases/factory";
 import { createRequestContainer } from "@/infra/di/container";
 
@@ -7,6 +8,7 @@ export type CreateContextOptions = {
 
 export type CreateContext = {
 	usecases: UseCasesFactory;
+	di: DependencyContainer;
 };
 
 export async function createContext({
@@ -17,6 +19,7 @@ export async function createContext({
 
 	return {
 		usecases,
+		di,
 	};
 }
 

@@ -1,0 +1,10 @@
+model miforge_config {
+  id Int @id @default(autoincrement())
+
+  data Json
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@map("miforge_config")
+}

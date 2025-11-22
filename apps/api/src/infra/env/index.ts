@@ -101,11 +101,22 @@ const AUTHENTICATION_CONFIG = {
 	}),
 };
 
+const REDIS_CONFIG = {
+	REDIS_URL: str({
+		desc: "The Redis connection URL",
+	}),
+	REDIS_PUBLISHER_LIVE_PREFIX: str({
+		default: "miforge:live:",
+		desc: "The prefix for live event publisher keys in Redis",
+	}),
+};
+
 export const env = cleanEnv(process.env, {
 	...SERVER_CONFIG,
 	...DATABASE_CONFIG,
 	...MAILER_CONFIG,
 	...AUTHENTICATION_CONFIG,
+	...REDIS_CONFIG,
 	LOG_LEVEL: str({
 		choices: ["debug", "info", "warn", "error"],
 		default: "info",
@@ -118,8 +129,5 @@ export const env = cleanEnv(process.env, {
 	PORT: str({
 		default: "4000",
 		desc: "The port the server will listen on",
-	}),
-	REDIS_URL: str({
-		desc: "The Redis connection URL",
 	}),
 });
