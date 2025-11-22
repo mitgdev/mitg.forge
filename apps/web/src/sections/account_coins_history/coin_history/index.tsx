@@ -1,5 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { TibiaCoins } from "@/components/Coins";
+import { PaginationControls } from "@/components/Pagination";
 import {
 	usePagination,
 	usePaginationControls,
@@ -90,11 +91,11 @@ export const AccountCoinsHistory = () => {
 									className="bg-tibia-900 even:bg-tibia-600"
 								>
 									<td className="border border-septenary p-1 text-center">
-										<span className="font-bold text-secondary">
+										<span className="font-bold text-secondary text-sm">
 											{index + 1}.
 										</span>
 									</td>
-									<td className="border border-septenary p-1 text-secondary">
+									<td className="border border-septenary p-1 text-secondary text-sm">
 										{formatDate(history?.time ?? new Date(), {
 											year: "2-digit",
 											month: "2-digit",
@@ -104,10 +105,10 @@ export const AccountCoinsHistory = () => {
 											second: "2-digit",
 										})}
 									</td>
-									<td className="border border-septenary p-1 text-secondary">
+									<td className="border border-septenary p-1 text-secondary text-sm">
 										{history.description}
 									</td>
-									<td className="border border-septenary p-1 text-secondary">
+									<td className="border border-septenary p-1 text-secondary text-sm">
 										<TibiaCoins
 											amount={history.coin_amount}
 											type={history.coin_type}
@@ -120,43 +121,16 @@ export const AccountCoinsHistory = () => {
 				</table>
 			</InnerContainer>
 			<InnerContainer>
-				<div className="flex flex-row justify-end gap-3">
-					<Tooltip content="Previous Page">
-						<button
-							type="button"
-							className={cn(
-								"cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
-							)}
-							disabled={!canGoToPreviousPage}
-							onClick={() => goToPreviousPage()}
-						>
-							<img
-								alt="Previous Page"
-								src="/assets/icons/global/back-to-top.gif"
-								className="rotate-270 scale-x-[-1]"
-							/>
-						</button>
-					</Tooltip>
-					<span className="font-verdana text-secondary text-sm">
-						Page {pagination.page} of {data?.meta?.totalPages ?? 1}
-					</span>
-					<Tooltip content="Next Page">
-						<button
-							type="button"
-							className={cn(
-								"cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
-							)}
-							disabled={!canGoToNextPage}
-							onClick={() => goToNextPage()}
-						>
-							<img
-								alt="Next Page"
-								src="/assets/icons/global/back-to-top.gif"
-								className="rotate-90"
-							/>
-						</button>
-					</Tooltip>
-				</div>
+				<PaginationControls
+					canGoToNextPage={canGoToNextPage}
+					canGoToPreviousPage={canGoToPreviousPage}
+					goToNextPage={goToNextPage}
+					goToPreviousPage={goToPreviousPage}
+					pagination={{
+						...pagination,
+						total: data?.meta?.totalPages,
+					}}
+				/>
 			</InnerContainer>
 		</Container>
 	);

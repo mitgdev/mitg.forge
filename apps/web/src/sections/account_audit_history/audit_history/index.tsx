@@ -1,4 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { PaginationControls } from "@/components/Pagination";
 import {
 	usePagination,
 	usePaginationControls,
@@ -123,43 +124,16 @@ export const AccountAuditHistory = () => {
 				</table>
 			</InnerContainer>
 			<InnerContainer>
-				<div className="flex flex-row justify-end gap-3">
-					<Tooltip content="Previous Page">
-						<button
-							type="button"
-							className={cn(
-								"cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
-							)}
-							disabled={!canGoToPreviousPage}
-							onClick={() => goToPreviousPage()}
-						>
-							<img
-								alt="Previous Page"
-								src="/assets/icons/global/back-to-top.gif"
-								className="rotate-270 scale-x-[-1]"
-							/>
-						</button>
-					</Tooltip>
-					<span className="font-verdana text-secondary text-sm">
-						Page {pagination.page} of {data?.meta?.totalPages ?? 1}
-					</span>
-					<Tooltip content="Next Page">
-						<button
-							type="button"
-							className={cn(
-								"cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
-							)}
-							disabled={!canGoToNextPage}
-							onClick={() => goToNextPage()}
-						>
-							<img
-								alt="Next Page"
-								src="/assets/icons/global/back-to-top.gif"
-								className="rotate-90"
-							/>
-						</button>
-					</Tooltip>
-				</div>
+				<PaginationControls
+					canGoToNextPage={canGoToNextPage}
+					canGoToPreviousPage={canGoToPreviousPage}
+					goToNextPage={goToNextPage}
+					goToPreviousPage={goToPreviousPage}
+					pagination={{
+						...pagination,
+						total: data?.meta?.totalPages,
+					}}
+				/>
 			</InnerContainer>
 		</Container>
 	);
