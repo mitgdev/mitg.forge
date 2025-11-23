@@ -49,7 +49,7 @@ export function Catch() {
 
 				throw new ORPCError("INTERNAL_SERVER_ERROR", {
 					message: "An unexpected error occurred",
-					...(env.isDevelopment && {
+					...(env.isDev && {
 						data: {
 							operation: opName,
 							stack: stack,

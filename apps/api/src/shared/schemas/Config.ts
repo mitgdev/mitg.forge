@@ -5,8 +5,8 @@ export const MiforgeConfigSchema = z.object({
 		enabled: z.boolean().default(false),
 		message: z.string().default("We'll be back soon."),
 	}),
-	notifications: z.object({
-		emailEnabled: z.boolean().default(false),
+	account: z.object({
+		emailConfirmationRequired: z.boolean().default(false),
 	}),
 });
 

@@ -1,133 +1,118 @@
-import { bool, cleanEnv, makeValidator, num, str } from "envalid";
+import z from "zod";
 
-const arrayFromString = makeValidator<string[]>((input) => {
-	return input.split(",").map((item) => item.trim());
+const SERVER_CONFIG_SCHEMA = z.object({
+	SERVER_HOST: z.string(),
+	SERVER_NAME: z.string(),
+	SERVER_GAME_PROTOCOL_PORT: z.coerce.number().default(7172),
+	SERVER_STATUS_PROTOCOL_PORT: z.coerce.number().default(7171),
+	SERVER_LOCATION: z.enum([
+		"SOUTH_AMERICA",
+		"NORTH_AMERICA",
+		"EUROPE",
+		"OCEANIA",
+	]),
+	SERVER_PVP_TYPE: z.enum([
+		"NO_PVP",
+		"PVP",
+		"RETRO_PVP",
+		"PVP_ENFORCED",
+		"RETRO_HARDCORE",
+	]),
 });
 
-const SERVER_CONFIG = {
-	SERVER_HOST: str({
-		desc: "The IP address or hostname of the game server",
-	}),
-	SERVER_NAME: str({
-		desc: "The name of the game server",
-	}),
-	SERVER_GAME_PROTOCOL_PORT: num({
-		desc: "The port number for the game protocol",
-		default: 7172,
-	}),
-	SERVER_STATUS_PROTOCOL_PORT: num({
-		desc: "The port number for the status protocol",
-		default: 7171,
-	}),
-	SERVER_LOCATION: str({
-		choices: ["SOUTH_AMERICA", "NORTH_AMERICA", "EUROPE", "OCEANIA"],
-		desc: "The location of the server",
-	}),
-	SERVER_PVP_TYPE: str({
-		choices: ["NO_PVP", "PVP", "RETRO_PVP", "PVP_ENFORCED", "RETRO_HARDCORE"],
-		desc: "The PvP type of the server",
-	}),
-};
-
-const DATABASE_CONFIG = {
-	DATABASE_URL: str({
-		desc: "The database connection URL",
-	}),
-};
-
-const MAILER_CONFIG = {
-	MAILER_ENABLED: bool({
-		default: false,
-		desc: "Whether the mailer is enabled",
-	}),
-	MAILER_FROM_NAME: str({
-		default: "Mitg Suporte",
-		desc: "The name displayed in the 'from' field of sent emails",
-	}),
-	MAILER_SMTP_HOST: str({
-		default: "smtp.host.com",
-		desc: "The SMTP host for sending emails",
-	}),
-	MAILER_SMTP_PORT: num({
-		default: 465,
-		choices: [465, 587],
-		desc: "The SMTP port for sending emails",
-	}),
-	MAILER_SMTP_SECURE: bool({
-		default: true,
-		desc: "Whether to use a secure connection for SMTP",
-	}),
-	MAILER_SMTP_USER: str({
-		default: "suporte@mitg.gg",
-		desc: "The SMTP user for sending emails",
-	}),
-	MAILER_SMTP_PASS: str({
-		default: "",
-		desc: "The SMTP password for sending emails",
-	}),
-	MAILER_GOOGLE_TYPE: str({
-		default: "OAuth2",
-		choices: ["OAuth2"],
-		desc: "The Google OAuth2 type for sending emails",
-	}),
-	MAILER_GOOGLE_USER: str({
-		default: "",
-		desc: "The Google OAuth2 user email for sending emails",
-	}),
-	MAILER_GOOGLE_CLIENT_ID: str({
-		default: "",
-		desc: "The Google OAuth2 client ID for sending emails",
-	}),
-	MAILER_GOOGLE_CLIENT_SECRET: str({
-		default: "",
-		desc: "The Google OAuth2 client secret for sending emails",
-	}),
-	MAILER_GOOGLE_REFRESH_TOKEN: str({
-		default: "",
-		desc: "The Google OAuth2 refresh token for sending emails",
-	}),
-};
-
-const AUTHENTICATION_CONFIG = {
-	SESSION_TOKEN_NAME: str({
-		default: "token",
-		desc: "The name of the session token cookie",
-	}),
-	ALLOWED_ORIGINS: arrayFromString({
-		desc: "A comma-separated list of allowed origins for CORS",
-	}),
-	JWT_SECRET: str({
-		desc: "The secret key used to sign JWT tokens",
-	}),
-};
-
-const REDIS_CONFIG = {
-	REDIS_URL: str({
-		desc: "The Redis connection URL",
-	}),
-	REDIS_PUBLISHER_LIVE_PREFIX: str({
-		default: "miforge:live:",
-		desc: "The prefix for live event publisher keys in Redis",
-	}),
-};
-
-export const env = cleanEnv(process.env, {
-	...SERVER_CONFIG,
-	...DATABASE_CONFIG,
-	...MAILER_CONFIG,
-	...AUTHENTICATION_CONFIG,
-	...REDIS_CONFIG,
-	LOG_LEVEL: str({
-		choices: ["debug", "info", "warn", "error"],
-		default: "info",
-		desc: "The logging level",
-	}),
-	SERVICE_NAME: str({
-		default: "miforge-api",
-		desc: "The name of this server",
-	}),
-	PORT: str({
-		default: "4000",
-		desc: "The port the server will listen on",
-	}),
+const AUTHENTICATION_CONFIG_SCHEMA = z.object({
+	SESSION_TOKEN_NAME: z.string().default("token"),
+	ALLOWED_ORIGINS: z
+		.string()
+		.transform((val) => val.split(",").map((item) => item.trim())),
+	JWT_SECRET: z.string(),
 });
+
+const REDIS_CONFIG_SCHEMA = z.object({
+	REDIS_URL: z.string(),
+	REDIS_PUBLISHER_LIVE_PREFIX: z.string().default("miforge:live:"),
+});
+
+const DATABASE_CONFIG_SCHEMA = z.object({
+	DATABASE_URL: z.string(),
+});
+
+const MAILER_CONFIG_SCHEMA = z.object({
+	// Mailer Config
+	MAILER_PROVIDER: z.enum(["SMTP", "GOOGLE"]).optional(),
+
+	// SMTP Config
+	MAILER_FROM_NAME: z.string().default("Mitg Suporte"),
+	MAILER_SMTP_HOST: z.string().optional(),
+	MAILER_SMTP_PORT: z.coerce.number().optional(),
+	MAILER_SMTP_SECURE: z.coerce.boolean().optional(),
+	MAILER_SMTP_USER: z.string().optional(),
+	MAILER_SMTP_PASS: z.string().optional(),
+
+	// Google
+	MAILER_GOOGLE_TYPE: z.string().default("OAuth2"),
+	MAILER_GOOGLE_USER: z.string().optional(),
+	MAILER_GOOGLE_CLIENT_ID: z.string().optional(),
+	MAILER_GOOGLE_CLIENT_SECRET: z.string().optional(),
+	MAILER_GOOGLE_REFRESH_TOKEN: z.string().optional(),
+});
+
+const envSchema = z.object({
+	...SERVER_CONFIG_SCHEMA.shape,
+	...DATABASE_CONFIG_SCHEMA.shape,
+	...AUTHENTICATION_CONFIG_SCHEMA.shape,
+	...REDIS_CONFIG_SCHEMA.shape,
+	...MAILER_CONFIG_SCHEMA.shape,
+	LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
+	SERVICE_NAME: z.string().default("miforge-api"),
+	PORT: z.coerce.number().default(4000),
+	NODE_ENV: z
+		.enum(["development", "production", "test"])
+		.default("development"),
+	isDev: z.boolean().default(process.env.NODE_ENV !== "production"),
+	isProd: z.boolean().default(process.env.NODE_ENV === "production"),
+});
+
+export const env = envSchema
+	.superRefine((env, ctx) => {
+		if (!env.MAILER_PROVIDER) return;
+
+		if (env.MAILER_PROVIDER === "SMTP") {
+			const requiredFields: (keyof typeof env)[] = [
+				"MAILER_SMTP_HOST",
+				"MAILER_SMTP_PORT",
+				"MAILER_SMTP_USER",
+				"MAILER_SMTP_PASS",
+			];
+
+			for (const field of requiredFields) {
+				if (!env[field]) {
+					ctx.addIssue({
+						code: "custom",
+						message: `${field} is required when MAILER_PROVIDER is SMTP`,
+						path: [field],
+					});
+				}
+			}
+		}
+
+		if (env.MAILER_PROVIDER === "GOOGLE") {
+			const requiredFields: (keyof typeof env)[] = [
+				"MAILER_GOOGLE_USER",
+				"MAILER_GOOGLE_CLIENT_ID",
+				"MAILER_GOOGLE_CLIENT_SECRET",
+				"MAILER_GOOGLE_REFRESH_TOKEN",
+			];
+
+			for (const field of requiredFields) {
+				if (!env[field]) {
+					ctx.addIssue({
+						code: "custom",
+						message: `${field} is required when MAILER_PROVIDER is GOOGLE`,
+						path: [field],
+					});
+				}
+			}
+		}
+	})
+	.parse(process.env);

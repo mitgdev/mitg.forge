@@ -127,9 +127,6 @@ importers:
       dotenv-flow:
         specifier: ^4.1.0
         version: 4.1.0
-      envalid:
-        specifier: ^8.1.1
-        version: 8.1.1
       hono:
         specifier: ^4.10.6
         version: 4.10.6

@@ -19,7 +19,7 @@ export class EmailWorker implements WorkerImplementation<QueueName.Email> {
 	) {}
 
 	start() {
-		if (!env.MAILER_ENABLED) {
+		if (!env.MAILER_PROVIDER) {
 			this.logger.info(
 				`[Worker:${this.name}]: Mailer is disabled, not starting email worker.`,
 			);
