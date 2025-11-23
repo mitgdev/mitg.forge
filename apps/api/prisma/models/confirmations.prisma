@@ -1,0 +1,34 @@
+enum MiforgeAccountConfirmationType {
+  EMAIL_VERIFICATION
+}
+
+enum MiforgeAccountConfirmationChannel {
+  LINK
+  CODE
+}
+
+model miforge_account_confirmations {
+  id Int @id @default(autoincrement())
+
+  type    MiforgeAccountConfirmationType
+  channel MiforgeAccountConfirmationChannel
+
+  token String  @db.VarChar(512)
+  value String? @db.VarChar(255) // Value to be confirmed (e.g., email address)
+
+  expires_at   DateTime
+  confirmed_at DateTime?
+  cancelled_at DateTime?
+
+  attempts        Int       @default(0)
+  max_attempts    Int       @default(5) @map("max_attempts")
+  last_attempt_at DateTime? @map("last_attempt_at")
+
+  accountId Int      @map("account_id") @db.UnsignedInt
+  account   accounts @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@index([accountId, type, channel, expires_at], name: "idx_account_type_expires")
+}

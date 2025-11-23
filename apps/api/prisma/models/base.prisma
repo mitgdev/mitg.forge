@@ -74,6 +74,7 @@ model accounts {
   name                String?               @db.VarChar(32)
   password            String                @db.Text
   email               String                @unique(map: "accounts_email_unique") @db.VarChar(255)
+  email_confirmed     Boolean               @default(false)
   premdays            Int                   @default(0)
   premdays_purchased  Int                   @default(0)
   lastday             Int                   @default(0) @db.UnsignedInt
@@ -98,6 +99,7 @@ model accounts {
   sessions      miforge_account_sessions[]
   registrations miforge_account_registration?
   audits        miforge_account_audit[]
+  confirmations miforge_account_confirmations[]
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt

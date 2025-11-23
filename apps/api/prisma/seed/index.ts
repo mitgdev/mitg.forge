@@ -33,8 +33,8 @@ const miforgeConfig = MiforgeConfigSchema.decode({
     enabled: false,
     message: "We'll be back soon."
   },
-  notifications: {
-    emailEnabled: env.MAILER_ENABLED
+  account: {
+    emailConfirmationRequired: false
   }
 })
 
