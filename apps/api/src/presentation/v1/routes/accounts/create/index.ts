@@ -6,10 +6,11 @@ export const createAccountRoute = isNotAuthenticatedProcedure
 		method: "POST",
 		path: "/create",
 		summary: "Create Account",
+		successStatus: 201,
 		description: "Create a new user account.",
 	})
 	.input(AccountCreateContractSchema.input)
 	.output(AccountCreateContractSchema.output)
 	.handler(async ({ context, input }) => {
-		return context.usecases.account.create.execute(input);
+		await context.usecases.account.create.execute(input);
 	});

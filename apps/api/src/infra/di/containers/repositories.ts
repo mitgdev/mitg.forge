@@ -1,5 +1,6 @@
 import { container, Lifecycle } from "tsyringe";
 import {
+	AccountConfirmationsRepository,
 	AccountRepository,
 	AuditRepository,
 	ConfigLiveRepository,
@@ -21,6 +22,11 @@ export function registerRepositories() {
 	container.register(
 		TOKENS.AccountRegistrationRepository,
 		{ useClass: AccountRegistrationRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountConfirmationsRepository,
+		{ useClass: AccountConfirmationsRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 	container.register(

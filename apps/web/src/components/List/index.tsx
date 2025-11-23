@@ -27,7 +27,7 @@ const ListItem = ({
 			})}
 		>
 			{/* grid com largura da coluna de título controlada por CSS var */}
-			<div className="grid grid-cols-[var(--label-col,minmax(90px,200px))_minmax(0,1fr)] items-center">
+			<div className="grid grid-cols-2 items-center md:grid-cols-[var(--label-col,minmax(90px,200px))_minmax(0,1fr)]">
 				<div
 					className={cn(
 						"flex h-full items-center border-septenary border-r px-2",
@@ -59,16 +59,22 @@ export const List: React.FC<ListProps> & { Item: typeof ListItem } = ({
 	className,
 	children,
 }) => {
-	const mapped = React.Children.map(children, (child, index) => {
+	let itemIndex = 0;
+
+	const mapped = React.Children.map(children, (child) => {
 		if (!React.isValidElement(child)) return child;
 
 		// biome-ignore lint/suspicious/noExplicitAny: <cancel>
 		if ((child.type as any) !== ListItem) return child;
 
-		return cloneElement(child as React.ReactElement<ListItemProps>, {
-			__index__: index,
+		const cloned = cloneElement(child as React.ReactElement<ListItemProps>, {
+			__index__: itemIndex,
 			__zebra__: zebra,
 		});
+
+		itemIndex++;
+
+		return cloned;
 	});
 
 	const style =

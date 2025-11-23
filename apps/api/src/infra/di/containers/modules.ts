@@ -9,6 +9,7 @@ import {
 	Metadata,
 	Pagination,
 	PlayerNameDetection,
+	RandomCode,
 	RecoveryKey,
 } from "@/domain/modules";
 import { TOKENS } from "../tokens";
@@ -63,6 +64,11 @@ export function registerModules() {
 	container.register(
 		TOKENS.CacheKeys,
 		{ useClass: CacheKeys },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.RandomCode,
+		{ useClass: RandomCode },
 		{ lifecycle: Lifecycle.Singleton },
 	);
 }

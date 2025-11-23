@@ -1,3 +1,4 @@
+export * from "./accountConfirmations";
 export * from "./accounts";
 export * from "./audit";
 export * from "./config";

@@ -26,9 +26,7 @@ export const AccountCreateContractSchema = {
 				path: ["confirmPassword"],
 			});
 		}),
-	output: z.object({
-		token: z.string(),
-	}),
+	output: z.void(),
 };
 
 export type AccountCreateContractInput = z.infer<

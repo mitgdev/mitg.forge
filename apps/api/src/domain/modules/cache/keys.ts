@@ -26,7 +26,7 @@ export class CacheKeys {
 		config: () => {
 			return {
 				key: this.namespace.build("config"),
-				ttl: 24 * 60 * 60, // 24 hours
+				ttl: 30 * 24 * 60 * 60, // 30 Days
 			};
 		},
 	};

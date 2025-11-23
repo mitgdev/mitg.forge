@@ -6,6 +6,7 @@ export const AccountSchema = z.object({
 	name: z.string().nullable(),
 	password: z.string(),
 	email: z.email(),
+	email_confirmed: z.boolean(),
 	premdays: z.number(),
 	premdays_purchased: z.number(),
 	lastday: z.number().transform(unixTimestampToDate),

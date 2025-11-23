@@ -1,6 +1,7 @@
 export * from "./audit";
 export * from "./cancelDeleteCharacter";
 export * from "./characters";
+export * from "./confirmEmail";
 export * from "./create";
 export * from "./createCharacter";
 export * from "./deleteCharacter";

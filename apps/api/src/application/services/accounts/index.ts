@@ -9,10 +9,13 @@ import type {
 	JwtCrypto,
 	Metadata,
 	PlayerNameDetection,
+	RandomCode,
 	RecoveryKey,
 } from "@/domain/modules";
 import type {
+	AccountConfirmationsRepository,
 	AccountRepository,
+	ConfigRepository,
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
@@ -27,6 +30,7 @@ import type { PaginationInput } from "@/shared/utils/paginate";
 import { getVocationId, type Vocation } from "@/shared/utils/player";
 import { type Gender, getPlayerGenderId } from "@/shared/utils/player/gender";
 import { getSampleName } from "@/shared/utils/player/sample";
+import type { AccountConfirmationsService } from "../accountConfirmations";
 import type { SessionService } from "../session";
 
 @injectable()
@@ -56,10 +60,52 @@ export class AccountsService {
 		private readonly worldsRepository: WorldsRepository,
 		@inject(TOKENS.PlayerNameDetection)
 		private readonly playerNameDetection: PlayerNameDetection,
+		@inject(TOKENS.ConfigRepository)
+		private readonly configRepository: ConfigRepository,
+		@inject(TOKENS.AccountConfirmationsRepository)
+		private readonly accountConfirmationsRepository: AccountConfirmationsRepository,
+		@inject(TOKENS.RandomCode) private readonly randomCode: RandomCode,
+		@inject(TOKENS.AccountConfirmationsService)
+		private readonly accountConfirmationsService: AccountConfirmationsService,
 	) {}
 
 	@Catch()
+	async verifyEmail(email: string, token: string) {
+		const account = await this.accountRepository.findByEmail(email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const confirmation =
+			await this.accountConfirmationsRepository.findByAccountAndType(
+				account.id,
+				"EMAIL_VERIFICATION",
+			);
+
+		await this.accountConfirmationsService.verifyConfirmation(
+			confirmation,
+			token,
+		);
+
+		await this.accountRepository.confirmEmail(email);
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			to: account.email,
+			props: {
+				email: account.email,
+			},
+			subject: "Welcome to Miforge!",
+			template: "AccountCreated",
+		});
+	}
+
+	@Catch()
 	async create(data: { name?: string; password: string; email: string }) {
+		const config = await this.configRepository.findConfig();
 		const existingAccount = await this.accountRepository.findByEmail(
 			data.email,
 		);
@@ -78,14 +124,50 @@ export class AccountsService {
 			email: data.email,
 		});
 
+		/**
+		 * When email confirmation is not required, we can return the new account directly.
+		 * And the frontend can redirect the user to login or call route /login directly.
+		 * If email confirmation is required, we need to send a confirmation email
+		 * and wait for the user to confirm the email before allowing login.
+		 */
+		if (!config.account.emailConfirmationRequired) {
+			this.emailQueue.add({
+				kind: "EmailJob",
+				to: newAccount.email,
+				props: {
+					email: newAccount.email,
+				},
+				subject: "Welcome to Miforge!",
+				template: "AccountCreated",
+			});
+
+			return newAccount;
+		}
+
+		/**
+		 * Generate a confirmation code and send to email and sabe this code in miforge_confirmations
+		 * with expiration date of 24 hours.
+		 */
+		const confirmationToken = this.randomCode.generate(24, "HASH");
+
+		const expiresAt = new Date();
+		expiresAt.setHours(expiresAt.getHours() + 24);
+
+		await this.accountConfirmationsRepository.create(newAccount.id, {
+			channel: "CODE",
+			expiresAt,
+			token: confirmationToken,
+			type: "EMAIL_VERIFICATION",
+		});
+
 		this.emailQueue.add({
 			kind: "EmailJob",
-			to: newAccount.email,
+			template: "AccountConfirmationEmail",
 			props: {
-				email: newAccount.email,
+				token: confirmationToken,
 			},
-			subject: "Welcome to Miforge!",
-			template: "AccountCreated",
+			subject: "Confirm your email address",
+			to: newAccount.email,
 		});
 
 		return newAccount;
@@ -98,6 +180,7 @@ export class AccountsService {
 		 * returning an appropriate error message.
 		 */
 		const account = await this.accountRepository.findByEmail(email);
+		const config = await this.configRepository.findConfig();
 
 		if (!account) {
 			this.logger.warn(`Login failed for email: ${email} - account not found.`);
@@ -115,6 +198,19 @@ export class AccountsService {
 			this.logger.warn(`Login failed for email: ${email} - invalid password.`);
 			throw new ORPCError("UNAUTHORIZED", {
 				message: "Invalid credentials",
+			});
+		}
+
+		/**
+		 * This config is a live config from database, so changes
+		 * will be reflected without server restarts.
+		 */
+		if (!account.email_confirmed && config.account.emailConfirmationRequired) {
+			this.logger.warn(
+				`Login attempt for email: ${email} - email not confirmed.`,
+			);
+			throw new ORPCError("FORBIDDEN", {
+				message: "Email address not confirmed",
 			});
 		}
 

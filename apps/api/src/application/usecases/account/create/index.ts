@@ -20,21 +20,12 @@ export class AccountCreateUseCase
 		input: AccountCreateContractInput,
 	): Promise<AccountCreateContractOutput> {
 		/**
-		 * TODO: Maybe latter we can add email verification here
-		 * to send a confirmation email after account creation.
-		 * And allow login only after email is verified.
-		 * For now, we will keep it simple.
 		 * TODO: Also, we might want to handle suspicious account creation patterns,
 		 * like rate limiting or checking against known disposable email providers.
 		 */
-		const newAccount = await this.accountService.create({
+		await this.accountService.create({
 			email: input.email,
 			name: input.name,
-			password: input.password,
-		});
-
-		return this.accountService.login({
-			email: newAccount.email,
 			password: input.password,
 		});
 	}

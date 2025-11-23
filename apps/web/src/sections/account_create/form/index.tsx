@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { useConfig } from "@/sdk/contexts/config";
 import { api } from "@/sdk/lib/api/factory";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
 import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
@@ -52,9 +53,13 @@ const FormSchema = z
 type FormValues = z.infer<typeof FormSchema>;
 
 export const AccountCreateForm = () => {
+	const { config } = useConfig();
 	const router = useRouter();
 	const navigate = useNavigate();
-	const { mutateAsync } = useMutation(
+	const { mutateAsync: login } = useMutation(
+		api.query.miforge.accounts.login.mutationOptions(),
+	);
+	const { mutateAsync: register } = useMutation(
 		api.query.miforge.accounts.create.mutationOptions(),
 	);
 	const form = useForm<FormValues>({
@@ -72,12 +77,31 @@ export const AccountCreateForm = () => {
 	const handleSubmit = useCallback(
 		async (data: FormValues) => {
 			try {
-				await mutateAsync({
+				await register({
 					email: data.email,
 					password: data.password,
 					confirmPassword: data.confirmPassword,
-				}).finally(() => {
-					toast.success("Account created successfully!");
+				});
+
+				if (config.account.emailConfirmationRequired) {
+					toast.success(
+						"Account created successfully! Please check your email to confirm your account.",
+					);
+
+					navigate({
+						to: "/account/$email/confirm",
+						params: { email: data.email },
+						// To prevent going back to the form after confirmation
+						replace: true,
+					});
+					return;
+				}
+
+				toast.success("Account created successfully! Logging you in...");
+
+				await login({
+					email: data.email,
+					password: data.password,
 				});
 
 				router.invalidate().finally(() => {
@@ -94,7 +118,7 @@ export const AccountCreateForm = () => {
 				toast.error("An unexpected error occurred. Please try again.");
 			}
 		},
-		[mutateAsync, router, navigate],
+		[register, router, navigate, config, login],
 	);
 
 	return (

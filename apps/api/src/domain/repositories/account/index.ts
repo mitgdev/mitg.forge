@@ -13,6 +13,17 @@ export class AccountRepository {
 		private readonly auditRepository: AuditRepository,
 	) {}
 
+	confirmEmail(email: string) {
+		return this.prisma.accounts.update({
+			where: {
+				email,
+			},
+			data: {
+				email_confirmed: true,
+			},
+		});
+	}
+
 	create(data: { name?: string; password: string; email: string }) {
 		this.auditRepository.createAudit("CREATED_ACCOUNT", {
 			details: `Account created for email: ${data.email}`,

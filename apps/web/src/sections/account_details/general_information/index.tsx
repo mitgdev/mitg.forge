@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { List } from "@/components/List";
+import { useConfig } from "@/sdk/contexts/config";
 import { useTimezone } from "@/sdk/hooks/useTimezone";
 import { api } from "@/sdk/lib/api/factory";
 import { cn } from "@/sdk/utils/cn";
@@ -9,6 +10,7 @@ import { InnerContainer } from "@/ui/Container/Inner";
 import { Tooltip } from "@/ui/Tooltip";
 
 export const AccountDetailGeneralInformation = () => {
+	const { config } = useConfig();
 	const { data } = useQuery(api.query.miforge.accounts.details.queryOptions());
 	const { formatDate } = useTimezone();
 
@@ -16,6 +18,8 @@ export const AccountDetailGeneralInformation = () => {
 		return null;
 	}
 
+	const confirmationIsRequired = config.account.emailConfirmationRequired;
+	const hasConfirmedEmail = data?.email_confirmed;
 	const isPremium = data?.premdays > 0;
 
 	return (
@@ -27,6 +31,18 @@ export const AccountDetailGeneralInformation = () => {
 							{data?.email}
 						</span>
 					</List.Item>
+					{confirmationIsRequired && (
+						<List.Item title="Email Status">
+							<span
+								className={cn("font-bold font-verdana text-sm", {
+									"text-success": hasConfirmedEmail,
+									"text-error": !hasConfirmedEmail,
+								})}
+							>
+								{hasConfirmedEmail ? "Confirmed" : "Unconfirmed"}
+							</span>
+						</List.Item>
+					)}
 					<List.Item title="Created">
 						<span className="font-verdana text-secondary text-sm">
 							{formatDate(data?.creation ?? new Date())}

@@ -1,5 +1,6 @@
 import type { InjectionToken } from "tsyringe";
 import type {
+	AccountConfirmationsService,
 	AccountsService,
 	AuditService,
 	ConfigService,
@@ -11,6 +12,7 @@ import type {
 import type {
 	AccountCancelDeleteCharacterUseCase,
 	AccountCharactersBySessionUseCase,
+	AccountConfirmEmailUseCase,
 	AccountCreateCharacterUseCase,
 	AccountCreateUseCase,
 	AccountDeleteCharacterUseCase,
@@ -44,10 +46,12 @@ import type {
 	Metadata,
 	Pagination,
 	PlayerNameDetection,
+	RandomCode,
 	RecoveryKey,
 	RootLogger,
 } from "@/domain/modules";
 import type {
+	AccountConfirmationsRepository,
 	AccountRepository,
 	AuditRepository,
 	ConfigLiveRepository,
@@ -93,6 +97,7 @@ export const TOKENS = {
 	PlayerNameDetection: token<PlayerNameDetection>("PlayerNameDetection"),
 	Cache: token<Cache>("Cache"),
 	CacheKeys: token<CacheKeys>("CacheKeys"),
+	RandomCode: token<RandomCode>("RandomCode"),
 
 	// Crypto
 	HasherCrypto: token<HasherCrypto>("HasherCrypto"),
@@ -104,6 +109,9 @@ export const TOKENS = {
 	AccountRegistrationRepository: token<AccountRegistrationRepository>(
 		"AccountRegistrationRepository",
 	),
+	AccountConfirmationsRepository: token<AccountConfirmationsRepository>(
+		"AccountConfirmationsRepository",
+	),
 	PlayersRepository: token<PlayersRepository>("PlayersRepository"),
 	SessionRepository: token<SessionRepository>("SessionRepository"),
 	WorldsRepository: token<WorldsRepository>("WorldsRepository"),
@@ -114,6 +122,9 @@ export const TOKENS = {
 	// Services
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),
 	AccountsService: token<AccountsService>("AccountsService"),
+	AccountConfirmationsService: token<AccountConfirmationsService>(
+		"AccountConfirmationsService",
+	),
 	SessionService: token<SessionService>("SessionService"),
 	WorldsService: token<WorldsService>("WorldsService"),
 	PlayersService: token<PlayersService>("PlayersService"),
@@ -156,6 +167,9 @@ export const TOKENS = {
 		),
 	AccountAuditUseCase: token<AuditAccountUseCase>("AuditAccountUseCase"),
 	AccountCreateUseCase: token<AccountCreateUseCase>("AccountCreateUseCase"),
+	AccountConfirmEmailUseCase: token<AccountConfirmEmailUseCase>(
+		"AccountConfirmEmailUseCase",
+	),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),
 

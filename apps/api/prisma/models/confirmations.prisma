@@ -30,5 +30,6 @@ model miforge_account_confirmations {
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
+  @@unique([token, accountId], name: "uq_token_account")
   @@index([accountId, type, channel, expires_at], name: "idx_account_type_expires")
 }

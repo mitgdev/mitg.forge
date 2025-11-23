@@ -1,11 +1,16 @@
 import { render as renderToHtml } from "@react-email/render";
 import { type Attributes, createElement, type FunctionComponent } from "react";
 
-export type TemplateName = "RecoveryKey" | "AccountCreated";
+export type TemplateName =
+	| "RecoveryKey"
+	| "AccountCreated"
+	| "AccountConfirmationEmail";
 
 const templates = {
 	RecoveryKey: () => import("./templates/RecoveryKey"),
 	AccountCreated: () => import("./templates/AccountCreated"),
+	AccountConfirmationEmail: () =>
+		import("./templates/AccountConfirmationEmail"),
 	// biome-ignore lint/suspicious/noExplicitAny: <no way to avoid using any here>
 } satisfies Record<TemplateName, () => Promise<any>>;
 

@@ -67,6 +67,16 @@ export class TibiaClientService {
 				};
 			}
 
+			if (
+				!account.email_confirmed &&
+				config.account.emailConfirmationRequired
+			) {
+				return {
+					errorCode: 3,
+					errorMessage: "Email address not confirmed",
+				};
+			}
+
 			const isPasswordValid = this.hasherCrypto.compare(
 				password,
 				account.password,
