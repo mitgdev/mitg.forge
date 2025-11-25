@@ -9,6 +9,7 @@ export * from "./deleteCharacter";
 export * from "./details";
 export * from "./editCharacter";
 export * from "./findCharacter";
+export * from "./generatePasswordReset";
 export * from "./login";
 export * from "./logout";
 export * from "./permissioned";

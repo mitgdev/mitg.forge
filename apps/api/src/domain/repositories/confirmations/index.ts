@@ -18,6 +18,11 @@ export class AccountConfirmationsRepository {
 			where: {
 				accountId,
 				type,
+				expires_at: {
+					gte: new Date(),
+				},
+				confirmed_at: null,
+				cancelled_at: null,
 			},
 		});
 	}

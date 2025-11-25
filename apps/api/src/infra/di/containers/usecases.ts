@@ -9,6 +9,7 @@ import {
 	AccountDetailsBySessionUseCase,
 	AccountEditCharacterUseCase,
 	AccountFindCharacterUseCase,
+	AccountGeneratePasswordResetUseCase,
 	AccountLoginUseCase,
 	AccountLogoutUseCase,
 	AccountPermissionedUseCase,
@@ -100,6 +101,11 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.AccountChangePasswordWithOldUseCase,
 		{ useClass: ChangePasswordWithOldUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountGeneratePasswordResetUseCase,
+		{ useClass: AccountGeneratePasswordResetUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

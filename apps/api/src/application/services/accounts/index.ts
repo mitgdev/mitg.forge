@@ -764,11 +764,71 @@ export class AccountsService {
 			success: true,
 		});
 
-		await this.emailQueue.add({
+		this.emailQueue.add({
 			kind: "EmailJob",
 			template: "AccountChangePasswordWithOld",
 			props: {},
 			subject: "Your password has been changed",
+			to: account.email,
+		});
+	}
+
+	@Catch()
+	async generatePasswordReset() {
+		const config = await this.configRepository.findConfig();
+
+		if (!config.account.passwordResetConfirmationRequired) {
+			throw new ORPCError("FORBIDDEN", {
+				message:
+					"Password reset confirmation is disabled. Please use the change password with old password flow.",
+			});
+		}
+
+		const session = this.metadata.session();
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const resetToken = this.randomCode.generate(24, "HASH");
+
+		const expiresAt = new Date();
+		expiresAt.setMinutes(expiresAt.getMinutes() + 30);
+
+		/**
+		 * This check already considers unexpired confirmations only.
+		 */
+		const alreadyHasResetActive =
+			await this.accountConfirmationsRepository.findByAccountAndType(
+				account.id,
+				"PASSWORD_RESET",
+			);
+
+		if (alreadyHasResetActive) {
+			throw new ORPCError("CONFLICT", {
+				message:
+					"A password reset is already active for this account. Please check your email or wait until it expires.",
+			});
+		}
+
+		await this.accountConfirmationsRepository.create(account.id, {
+			channel: "CODE",
+			expiresAt,
+			token: resetToken,
+			type: "PASSWORD_RESET",
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountChangePasswordCode",
+			props: {
+				token: resetToken,
+			},
+			subject: "Password Reset Request",
 			to: account.email,
 		});
 	}
