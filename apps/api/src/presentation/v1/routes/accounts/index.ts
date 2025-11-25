@@ -6,6 +6,7 @@ import { createAccountRoute } from "./create";
 import { detailsRoute } from "./details";
 import { loginRoute } from "./login";
 import { logoutRoute } from "./logout";
+import { accountPasswordRoutes } from "./password";
 import { accountRegistrationKey } from "./registrationKey";
 import { accountsStoreRoutes } from "./store";
 
@@ -19,4 +20,5 @@ export const accountsRouter = base.prefix("/accounts").tag("Accounts").router({
 	registrationKey: accountRegistrationKey,
 	audit: auditHistoryRoute,
 	confirmEmail: confirmEmailAccountRoute,
+	password: accountPasswordRoutes,
 });

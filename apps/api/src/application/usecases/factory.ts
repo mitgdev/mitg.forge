@@ -55,6 +55,9 @@ export class UseCasesFactory {
 		);
 		const auditHistory = this.di.resolve(TOKENS.AccountAuditUseCase);
 		const confirmEmail = this.di.resolve(TOKENS.AccountConfirmEmailUseCase);
+		const changePasswordWithOld = this.di.resolve(
+			TOKENS.AccountChangePasswordWithOldUseCase,
+		);
 
 		return {
 			create,
@@ -72,6 +75,7 @@ export class UseCasesFactory {
 			cancelDeleteCharacter,
 			auditHistory,
 			confirmEmail,
+			changePasswordWithOld,
 		} as const;
 	}
 

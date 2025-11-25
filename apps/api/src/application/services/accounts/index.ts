@@ -15,6 +15,7 @@ import type {
 import type {
 	AccountConfirmationsRepository,
 	AccountRepository,
+	AuditRepository,
 	ConfigRepository,
 	PlayersRepository,
 	SessionRepository,
@@ -67,6 +68,8 @@ export class AccountsService {
 		@inject(TOKENS.RandomCode) private readonly randomCode: RandomCode,
 		@inject(TOKENS.AccountConfirmationsService)
 		private readonly accountConfirmationsService: AccountConfirmationsService,
+		@inject(TOKENS.AuditRepository)
+		private readonly auditRepository: AuditRepository,
 	) {}
 
 	@Catch()
@@ -712,5 +715,61 @@ export class AccountsService {
 		return {
 			scheduleDate: deletionDate,
 		};
+	}
+
+	@Catch()
+	async changePasswordWithOld({
+		oldPassword,
+		newPassword,
+	}: {
+		oldPassword: string;
+		newPassword: string;
+	}) {
+		const config = await this.configRepository.findConfig();
+
+		if (config.account.passwordResetConfirmationRequired) {
+			throw new ORPCError("FORBIDDEN", {
+				message:
+					"Changing password with old password is disabled when password reset confirmation is required. Please use the password reset flow.",
+			});
+		}
+
+		const session = this.metadata.session();
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const isOldPasswordValid = this.hasherCrypto.compare(
+			oldPassword,
+			account.password,
+		);
+
+		if (!isOldPasswordValid) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid credentials",
+			});
+		}
+
+		const hashedNewPassword = this.hasherCrypto.hash(newPassword);
+
+		await this.accountRepository.updatePassword(account.id, hashedNewPassword);
+
+		await this.auditRepository.createAudit("CHANGED_PASSWORD_WITH_OLD", {
+			details: "Password changed using old password for account",
+			success: true,
+		});
+
+		await this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountChangePasswordWithOld",
+			props: {},
+			subject: "Your password has been changed",
+			to: account.email,
+		});
 	}
 }

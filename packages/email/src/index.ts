@@ -4,13 +4,21 @@ import { type Attributes, createElement, type FunctionComponent } from "react";
 export type TemplateName =
 	| "RecoveryKey"
 	| "AccountCreated"
-	| "AccountConfirmationEmail";
+	| "AccountConfirmationEmail"
+	| "AccountChangePasswordWithOld"
+	| "AccountChangePasswordCode"
+	| "AccountPasswordChanged";
 
 const templates = {
 	RecoveryKey: () => import("./templates/RecoveryKey"),
 	AccountCreated: () => import("./templates/AccountCreated"),
 	AccountConfirmationEmail: () =>
 		import("./templates/AccountConfirmationEmail"),
+	AccountChangePasswordWithOld: () =>
+		import("./templates/AccountChangePasswordWithOld"),
+	AccountChangePasswordCode: () =>
+		import("./templates/AccountChangePasswordCode"),
+	AccountPasswordChanged: () => import("./templates/AccountPasswordChanged"),
 	// biome-ignore lint/suspicious/noExplicitAny: <no way to avoid using any here>
 } satisfies Record<TemplateName, () => Promise<any>>;
 
