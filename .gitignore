@@ -59,7 +59,6 @@ coverage/**
 /.prisma/
 
 # Editor / IDE
-.vscode/
 .idea/
 *.suo
 *.ntvs_analysis.dat
