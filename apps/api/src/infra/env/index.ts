@@ -57,7 +57,12 @@ const MAILER_CONFIG_SCHEMA = z.object({
 	MAILER_GOOGLE_REFRESH_TOKEN: z.string().optional(),
 });
 
+const FRONTEND_CONFIG_SCHEMA = z.object({
+	FRONTEND_URL: z.url(),
+});
+
 const envSchema = z.object({
+	...FRONTEND_CONFIG_SCHEMA.shape,
 	...SERVER_CONFIG_SCHEMA.shape,
 	...DATABASE_CONFIG_SCHEMA.shape,
 	...AUTHENTICATION_CONFIG_SCHEMA.shape,

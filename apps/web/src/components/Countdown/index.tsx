@@ -10,9 +10,12 @@ export const Countdown: React.FC<Props> = ({ targetDate }) => {
 
 	const pad = (n: number) => String(n).padStart(2, "0");
 
+	const showDays = days > 0;
+
 	return (
 		<span className="text-secondary">
-			{days}d {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+			{showDays && `${days}d `}
+			{pad(hours)}:{pad(minutes)}:{pad(seconds)}
 		</span>
 	);
 };

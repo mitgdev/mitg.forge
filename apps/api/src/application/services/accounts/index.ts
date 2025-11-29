@@ -1067,8 +1067,7 @@ export class AccountsService {
 			kind: "EmailJob",
 			template: "AccountConfirmationNewEmail",
 			props: {
-				// TODO: Move to env or config
-				link: `http://localhost:3000/account/email/change/${token}/preview`,
+				link: `${env.FRONTEND_URL}/account/email/change/${token}/preview`,
 			},
 			subject: "Confirm your new email address",
 			to: account.email,
