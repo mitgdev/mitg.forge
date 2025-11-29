@@ -58,7 +58,7 @@ export class OtsServerClient {
 				if (!resolved) {
 					resolved = true;
 					cleanup();
-					resolve(null); // equivalente ao `false` do PHP em caso de falha
+					resolve(null); // equivalente ao `false`
 				}
 			});
 
