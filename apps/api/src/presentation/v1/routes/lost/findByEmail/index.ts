@@ -4,11 +4,11 @@ import { isNotAuthenticatedProcedure } from "@/presentation/procedures/isNotAuth
 export const findByEmailOrCharacterNameRoute = isNotAuthenticatedProcedure
 	.route({
 		method: "GET",
-		path: "/account/{emailOrCharacterName}",
+		path: "/account/{email}",
 		successStatus: 204,
-		summary: "Find lost account by email or character name",
+		summary: "Verify Account by Email",
 		description:
-			"Allows users to initiate the account recovery process by providing either their registered email address or character name.",
+			"Allows users to initiate the account recovery process by providing their registered email address.",
 	})
 	.input(LostAccountFindByEmailOrCharacterNameContractSchema.input)
 	.output(LostAccountFindByEmailOrCharacterNameContractSchema.output)

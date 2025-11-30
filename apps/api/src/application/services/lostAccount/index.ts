@@ -23,14 +23,13 @@ export class LostAccountService {
 
 	private async accountExistis(emailOrCharacterName: string) {
 		const account =
-			(await this.accountRepository.findByEmail(emailOrCharacterName)) ??
-			(await this.accountRepository.findByCharacterName(emailOrCharacterName));
+			await this.accountRepository.findByEmail(emailOrCharacterName);
 
 		return account;
 	}
 
 	@Catch()
-	async findByEmailOrPlayerName(identifier: string) {
+	async findByEmail(identifier: string) {
 		const account = await this.accountExistis(identifier);
 
 		if (!account) {

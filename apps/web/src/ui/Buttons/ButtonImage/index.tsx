@@ -41,7 +41,8 @@ export const ButtonImage = forwardRef<HTMLButtonElement, Props>(
 				{...props}
 				className={cn(
 					classNameProp,
-					"hover:filter-hover fondamento-title line-clamp-1 flex cursor-pointer items-center justify-center border-none bg-transparent p-0 font-fondamento text-black capitalize transition-all disabled:cursor-not-allowed disabled:opacity-80",
+					"fondamento-title line-clamp-1 flex cursor-pointer items-center justify-center border-none bg-transparent p-0 font-fondamento text-black capitalize transition-all",
+					"not-disabled:hover:filter-hover disabled:cursor-not-allowed disabled:opacity-70",
 					{
 						"h-[25px] w-[135px] text-sm":
 							variant === "red" || variant === "info" || variant === "green",

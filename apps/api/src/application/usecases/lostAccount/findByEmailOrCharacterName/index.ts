@@ -23,8 +23,6 @@ export class LostAccountFindByEmailOrCharacterNameUseCase
 	async execute(
 		input: LostAccountFindByEmailOrCharacterNameContractInput,
 	): Promise<LostAccountFindByEmailOrCharacterNameContractOutput> {
-		await this.lostAccountService.findByEmailOrPlayerName(
-			input.emailOrCharacterName,
-		);
+		await this.lostAccountService.findByEmail(input.email);
 	}
 }

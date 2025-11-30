@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import z from "zod";
 import { api } from "@/sdk/lib/api/factory";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
+import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
 import {
@@ -86,7 +87,10 @@ export const LoginSection = () => {
 						your <b>email address</b> but you still <b>know</b> the{" "}
 						<b>account name</b> which had been used for your account? <br />
 						Get your email address here:{" "}
-						<Link to="/" className="text-base text-blue-500 hover:underline">
+						<Link
+							to="/account/lost"
+							className="text-blue-800 text-sm hover:underline"
+						>
 							Lost Account Recovery
 						</Link>
 					</p>
@@ -144,9 +148,9 @@ export const LoginSection = () => {
 										<ButtonImage type="submit" variant="info">
 											Login
 										</ButtonImage>
-										<ButtonImage type="button" variant="info">
+										<ButtonImageLink variant="info" to="/account/lost">
 											Lost Account
-										</ButtonImage>
+										</ButtonImageLink>
 									</div>
 								</div>
 							</form>

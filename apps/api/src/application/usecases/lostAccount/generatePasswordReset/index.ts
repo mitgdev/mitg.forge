@@ -23,8 +23,6 @@ export class LostAccountGeneratePasswordResetUseCase
 	execute(
 		input: LostAccountGeneratePasswordResetContractInput,
 	): Promise<LostAccountGeneratePasswordResetContractOutput> {
-		return this.lostAccountService.generateResetPassword(
-			input.emailOrCharacterName,
-		);
+		return this.lostAccountService.generateResetPassword(input.email);
 	}
 }
