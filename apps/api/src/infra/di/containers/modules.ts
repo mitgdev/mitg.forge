@@ -4,6 +4,7 @@ import {
 	CacheKeys,
 	Cookies,
 	DetectionChanges,
+	EmailLinks,
 	HasherCrypto,
 	JwtCrypto,
 	Metadata,
@@ -69,6 +70,11 @@ export function registerModules() {
 	container.register(
 		TOKENS.RandomCode,
 		{ useClass: RandomCode },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.EmailLinks,
+		{ useClass: EmailLinks },
 		{ lifecycle: Lifecycle.Singleton },
 	);
 }

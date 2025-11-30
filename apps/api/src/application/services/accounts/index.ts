@@ -5,6 +5,7 @@ import { Catch } from "@/application/decorators/Catch";
 import type {
 	Cookies,
 	DetectionChanges,
+	EmailLinks,
 	HasherCrypto,
 	JwtCrypto,
 	Metadata,
@@ -70,6 +71,7 @@ export class AccountsService {
 		private readonly accountConfirmationsService: AccountConfirmationsService,
 		@inject(TOKENS.AuditRepository)
 		private readonly auditRepository: AuditRepository,
+		@inject(TOKENS.EmailLinks) private readonly emailLinks: EmailLinks,
 	) {}
 
 	@Catch()
@@ -1060,7 +1062,7 @@ export class AccountsService {
 			kind: "EmailJob",
 			template: "AccountConfirmationNewEmail",
 			props: {
-				link: `${env.FRONTEND_URL}/account/email/change/${token}/preview`,
+				link: this.emailLinks.links.accountEmailChangePreview(token),
 			},
 			subject: "Confirm your new email address",
 			to: account.email,

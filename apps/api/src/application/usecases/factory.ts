@@ -20,9 +20,13 @@ export class UseCasesFactory {
 		const findByEmailOrCharacterName = this.di.resolve(
 			TOKENS.LostAccountFindByEmailOrCharacterNameUseCase,
 		);
+		const generatePasswordReset = this.di.resolve(
+			TOKENS.LostAccountGeneratePasswordResetUseCase,
+		);
 
 		return {
 			findByEmailOrCharacterName,
+			generatePasswordReset,
 		} as const;
 	}
 

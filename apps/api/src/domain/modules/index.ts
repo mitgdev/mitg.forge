@@ -4,6 +4,7 @@ export * from "./cache/keys";
 export * from "./cookies";
 export * from "./crypto";
 export * from "./detection";
+export * from "./emailLinks";
 export * from "./logging";
 export * from "./metadata";
 export * from "./pagination";

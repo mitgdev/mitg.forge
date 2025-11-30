@@ -36,6 +36,7 @@ import type {
 	ConfigInfoUseCase,
 	ConfigUpdateUseCase,
 	LostAccountFindByEmailOrCharacterNameUseCase,
+	LostAccountGeneratePasswordResetUseCase,
 	SessionAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
@@ -49,6 +50,7 @@ import type {
 	CacheKeys,
 	Cookies,
 	DetectionChanges,
+	EmailLinks,
 	HasherCrypto,
 	JwtCrypto,
 	Logger,
@@ -109,6 +111,7 @@ export const TOKENS = {
 	Cache: token<Cache>("Cache"),
 	CacheKeys: token<CacheKeys>("CacheKeys"),
 	RandomCode: token<RandomCode>("RandomCode"),
+	EmailLinks: token<EmailLinks>("EmailLinks"),
 
 	// Crypto
 	HasherCrypto: token<HasherCrypto>("HasherCrypto"),
@@ -210,6 +213,10 @@ export const TOKENS = {
 	LostAccountFindByEmailOrCharacterNameUseCase:
 		token<LostAccountFindByEmailOrCharacterNameUseCase>(
 			"LostAccountFindByEmailOrCharacterNameUseCase",
+		),
+	LostAccountGeneratePasswordResetUseCase:
+		token<LostAccountGeneratePasswordResetUseCase>(
+			"LostAccountGeneratePasswordResetUseCase",
 		),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),

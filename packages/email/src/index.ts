@@ -10,7 +10,8 @@ export type TemplateName =
 	| "AccountPasswordChanged"
 	| "AccountChangedEmail"
 	| "AccountNewEmail"
-	| "AccountConfirmationNewEmail";
+	| "AccountConfirmationNewEmail"
+	| "LostAccountPasswordReset";
 
 const templates = {
 	RecoveryKey: () => import("./templates/RecoveryKey"),
@@ -26,6 +27,8 @@ const templates = {
 	AccountNewEmail: () => import("./templates/AccountNewEmail"),
 	AccountConfirmationNewEmail: () =>
 		import("./templates/AccountConfirmationNewEmail"),
+	LostAccountPasswordReset: () =>
+		import("./templates/LostAccountPasswordReset"),
 	// biome-ignore lint/suspicious/noExplicitAny: <no way to avoid using any here>
 } satisfies Record<TemplateName, () => Promise<any>>;
 

@@ -1,7 +1,7 @@
 import { LostAccountFindByEmailOrCharacterNameContractSchema } from "@/application/usecases/lostAccount/findByEmailOrCharacterName/contract";
-import { publicProcedure } from "@/presentation/procedures/public";
+import { isNotAuthenticatedProcedure } from "@/presentation/procedures/isNotAuthenticated";
 
-export const findByEmailOrCharacterNameRoute = publicProcedure
+export const findByEmailOrCharacterNameRoute = isNotAuthenticatedProcedure
 	.route({
 		method: "GET",
 		path: "/account/{emailOrCharacterName}",
