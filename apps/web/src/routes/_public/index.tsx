@@ -6,6 +6,13 @@ import { NewstickerSection } from "@/sections/newsticker";
 
 export const Route = createFileRoute("/_public/")({
 	component: RouteComponent,
+	head: () => ({
+		meta: [
+			{
+				title: "MiForge | News",
+			},
+		],
+	}),
 });
 
 function RouteComponent() {

@@ -11,7 +11,10 @@ export class RecoveryKeyService {
 	) {}
 
 	@Catch()
-	generate(): { rawRecoveryKey: string; hashedRecoveryKey: string } {
+	async generate(): Promise<{
+		rawRecoveryKey: string;
+		hashedRecoveryKey: string;
+	}> {
 		const recoveryKey = this.recoveryKey.generate();
 		const normalizedKey = this.recoveryKey.normalize(recoveryKey);
 		const hashedRecoveryKey = this.tokenHasher.hash(normalizedKey);

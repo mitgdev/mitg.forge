@@ -20,3 +20,6 @@ export * from "./permissioned";
 export * from "./previewEmailChange";
 export * from "./registration";
 export * from "./storeHistory";
+export * from "./twoFactorConfirm";
+export * from "./twoFactorDisable";
+export * from "./twoFactorSetup";

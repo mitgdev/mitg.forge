@@ -37,6 +37,7 @@
 		"ioredis": "^5.8.2",
 		"jsonwebtoken": "^9.0.2",
 		"nodemailer": "^7.0.10",
+		"otplib": "^12.0.1",
 		"react": "catalog:react",
 		"react-dom": "catalog:react",
 		"reflect-metadata": "^0.2.2",

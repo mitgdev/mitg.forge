@@ -17,4 +17,8 @@ export const AccountSchema = z.object({
 	creation: z.number().transform(unixTimestampToDate),
 	recruiter: z.number().nullable(),
 	house_bid_id: z.number(),
+	two_factor_enabled: z.boolean(),
+	two_factor_secret: z.string().nullable(),
+	two_factor_temp_secret: z.string().nullable(),
+	two_factor_confirmed_at: z.date().nullable(),
 });

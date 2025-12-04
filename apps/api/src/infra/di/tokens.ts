@@ -2,6 +2,7 @@ import type { InjectionToken } from "tsyringe";
 import type {
 	AccountConfirmationsService,
 	AccountsService,
+	AccountTwoFactorService,
 	AuditService,
 	ConfigService,
 	LostAccountService,
@@ -31,6 +32,9 @@ import type {
 	AccountPreviewEmailChangeUseCase,
 	AccountRegistrationUseCase,
 	AccountStoreHistoryUseCase,
+	AccountTwoFactorConfirmUseCase,
+	AccountTwoFactorDisableUseCase,
+	AccountTwoFactorSetupUseCase,
 	AuditAccountUseCase,
 	ChangePasswordWithOldUseCase,
 	ChangePasswordWithTokenUseCase,
@@ -66,6 +70,7 @@ import type {
 	RecoveryKey,
 	RootLogger,
 	TokenHasher,
+	TwoFactorAuth,
 } from "@/domain/modules";
 import type {
 	AccountConfirmationsRepository,
@@ -119,6 +124,7 @@ export const TOKENS = {
 	RandomCode: token<RandomCode>("RandomCode"),
 	EmailLinks: token<EmailLinks>("EmailLinks"),
 	TokenHasher: token<TokenHasher>("TokenHasher"),
+	TwoFactorAuth: token<TwoFactorAuth>("TwoFactorAuth"),
 
 	// Crypto
 	HasherCrypto: token<HasherCrypto>("HasherCrypto"),
@@ -146,6 +152,9 @@ export const TOKENS = {
 	AccountsService: token<AccountsService>("AccountsService"),
 	AccountConfirmationsService: token<AccountConfirmationsService>(
 		"AccountConfirmationsService",
+	),
+	AccountTwoFactorService: token<AccountTwoFactorService>(
+		"AccountTwoFactorService",
 	),
 	SessionService: token<SessionService>("SessionService"),
 	WorldsService: token<WorldsService>("WorldsService"),
@@ -216,6 +225,15 @@ export const TOKENS = {
 	),
 	AccountConfirmEmailChangeUseCase: token<AccountConfirmEmailChangeUseCase>(
 		"AccountConfirmEmailChangeUseCase",
+	),
+	AccountTwoFactorSetupUseCase: token<AccountTwoFactorSetupUseCase>(
+		"AccountTwoFactorSetupUseCase",
+	),
+	AccountTwoFactorConfirmUseCase: token<AccountTwoFactorConfirmUseCase>(
+		"AccountTwoFactorConfirmUseCase",
+	),
+	AccountTwoFactorDisableUseCase: token<AccountTwoFactorDisableUseCase>(
+		"AccountTwoFactorDisableUseCase",
 	),
 
 	LostAccountFindByEmailOrCharacterNameUseCase:

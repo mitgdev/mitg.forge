@@ -416,7 +416,7 @@ export class AccountsService {
 
 		if (!alreadyHasRegistration) {
 			const { hashedRecoveryKey, rawRecoveryKey } =
-				this.recoveryKeyService.generate();
+				await this.recoveryKeyService.generate();
 
 			recoveryKey = rawRecoveryKey;
 			recoveryKeyHashed = hashedRecoveryKey;

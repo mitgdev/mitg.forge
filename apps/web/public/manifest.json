@@ -1,0 +1,36 @@
+{
+	"name": "miforge",
+	"short_name": "miforge",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#694BC3",
+	"theme_color": "#694BC3",
+	"orientation": "portrait-primary",
+	"icons": [
+		{
+			"src": "/logo/icon-32.png",
+			"type": "image/png",
+			"sizes": "32x32"
+		},
+		{
+			"src": "/logo/icon-64.png",
+			"type": "image/png",
+			"sizes": "64x64"
+		},
+		{
+			"src": "/logo/icon-128.png",
+			"type": "image/png",
+			"sizes": "128x128"
+		},
+		{
+			"src": "/logo/icon-256.png",
+			"type": "image/png",
+			"sizes": "256x256"
+		},
+		{
+			"src": "/logo/icon-512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	]
+}

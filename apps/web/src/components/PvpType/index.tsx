@@ -1,12 +1,14 @@
 import { useMemo } from "react";
+import { cn } from "@/sdk/utils/cn";
 import { Tooltip } from "@/ui/Tooltip";
 
 type PvpTypeProps = {
 	description?: string;
 	type: "NO_PVP" | "PVP" | "RETRO_PVP" | "PVP_ENFORCED" | "RETRO_HARDCORE";
+	className?: string;
 };
 
-export const PvpTypeIcon = ({ type, description }: PvpTypeProps) => {
+export const PvpTypeIcon = ({ type, description, className }: PvpTypeProps) => {
 	const pvpTypeIcon = useMemo(() => {
 		switch (type) {
 			case "PVP":
@@ -41,7 +43,7 @@ export const PvpTypeIcon = ({ type, description }: PvpTypeProps) => {
 			<img
 				alt={`world-type-${type}`}
 				src={pvpTypeIcon}
-				className="h-6 w-6 object-contain"
+				className={cn("h-6 w-6 object-contain", className)}
 			/>
 		</Tooltip>
 	);

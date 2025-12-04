@@ -1,3 +1,4 @@
+import type { accounts } from "generated/client";
 import { inject, injectable } from "tsyringe";
 import type { Prisma } from "@/domain/clients";
 import { TOKENS } from "@/infra/di/tokens";
@@ -7,6 +8,37 @@ import type { PaginationInput } from "@/shared/utils/paginate";
 @injectable()
 export class AccountRepository {
 	constructor(@inject(TOKENS.Prisma) private readonly prisma: Prisma) {}
+
+	async updateTwoFactor(
+		accountId: number,
+		data: Partial<
+			Pick<
+				accounts,
+				| "two_factor_enabled"
+				| "two_factor_secret"
+				| "two_factor_temp_secret"
+				| "two_factor_confirmed_at"
+			>
+		>,
+	) {
+		return this.prisma.accounts.update({
+			where: {
+				id: accountId,
+			},
+			data: data,
+		});
+	}
+
+	async findAccountByIdWithRegistrations(accountId: number) {
+		return this.prisma.accounts.findUnique({
+			where: {
+				id: accountId,
+			},
+			include: {
+				registrations: true,
+			},
+		});
+	}
 
 	async findAccountByRecoveryKey(recoveryKey: string) {
 		return this.prisma.accounts.findFirst({

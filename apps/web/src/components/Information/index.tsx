@@ -50,7 +50,7 @@ export const Information = () => {
 						</Link>
 					</div>
 					<Link
-						to="/"
+						to="/worlds"
 						className="flex flex-row items-center justify-end gap-2 font-verdana text-white text-xxs hover:underline"
 					>
 						<img

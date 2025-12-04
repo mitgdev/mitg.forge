@@ -19,6 +19,9 @@ import {
 	AccountPreviewEmailChangeUseCase,
 	AccountRegistrationUseCase,
 	AccountStoreHistoryUseCase,
+	AccountTwoFactorConfirmUseCase,
+	AccountTwoFactorDisableUseCase,
+	AccountTwoFactorSetupUseCase,
 	AuditAccountUseCase,
 	ChangePasswordWithOldUseCase,
 	ChangePasswordWithTokenUseCase,
@@ -122,6 +125,21 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.AccountChangePasswordWithTokenUseCase,
 		{ useClass: ChangePasswordWithTokenUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountTwoFactorSetupUseCase,
+		{ useClass: AccountTwoFactorSetupUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountTwoFactorConfirmUseCase,
+		{ useClass: AccountTwoFactorConfirmUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountTwoFactorDisableUseCase,
+		{ useClass: AccountTwoFactorDisableUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

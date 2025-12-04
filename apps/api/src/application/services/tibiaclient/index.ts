@@ -1,6 +1,6 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
-import type { HasherCrypto } from "@/domain/modules";
+import type { HasherCrypto, TwoFactorAuth } from "@/domain/modules";
 import type {
 	AccountRepository,
 	ConfigRepository,
@@ -25,11 +25,13 @@ export class TibiaClientService {
 		private readonly worldsRepository: WorldsRepository,
 		@inject(TOKENS.ConfigRepository)
 		private readonly configRepository: ConfigRepository,
+		@inject(TOKENS.TwoFactorAuth) private readonly twoFactorAuth: TwoFactorAuth,
 	) {}
 
 	async login(
 		email: string,
 		password: string,
+		token?: string,
 	): Promise<
 		| TibiaClientError
 		| {
@@ -87,6 +89,34 @@ export class TibiaClientService {
 					errorCode: 3,
 					errorMessage: "Invalid email or password",
 				};
+			}
+
+			if (account.two_factor_enabled) {
+				if (!account.two_factor_secret) {
+					return {
+						errorCode: 3,
+						errorMessage: "Two-factor is misconfigured",
+					};
+				}
+
+				if (!token) {
+					return {
+						errorCode: 6,
+						errorMessage: "Invalid email or password",
+					};
+				}
+
+				const isTwoFactorTokenValid = this.twoFactorAuth.verify({
+					secret: account.two_factor_secret,
+					token: token,
+				});
+
+				if (!isTwoFactorTokenValid) {
+					return {
+						errorCode: 3,
+						errorMessage: "Invalid email or password",
+					};
+				}
 			}
 
 			const characters = await this.accountRepository.characters(account.id);

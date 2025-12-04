@@ -1,4 +1,5 @@
 import { base } from "@/infra/rpc/base";
+import { account2FARoutes } from "./2fa";
 import { auditHistoryRoute } from "./audit";
 import { accountCharactersRoutes } from "./characters";
 import { confirmEmailAccountRoute } from "./confirmEmail";
@@ -23,4 +24,5 @@ export const accountsRouter = base.prefix("/accounts").tag("Accounts").router({
 	confirmEmail: confirmEmailAccountRoute,
 	password: accountPasswordRoutes,
 	email: emailRoutes,
+	twoFactor: account2FARoutes,
 });

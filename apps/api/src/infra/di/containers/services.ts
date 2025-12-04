@@ -2,6 +2,7 @@ import { container, Lifecycle } from "tsyringe";
 import {
 	AccountConfirmationsService,
 	AccountsService,
+	AccountTwoFactorService,
 	AuditService,
 	ConfigService,
 	LostAccountService,
@@ -62,6 +63,11 @@ export function registerServices() {
 	container.register(
 		TOKENS.LostAccountService,
 		{ useClass: LostAccountService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountTwoFactorService,
+		{ useClass: AccountTwoFactorService },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 }

@@ -7,3 +7,4 @@ export * from "./detection";
 export * from "./emailLinks";
 export * from "./logging";
 export * from "./pagination";
+export * from "./twoFactorAuth";

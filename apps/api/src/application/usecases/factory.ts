@@ -103,6 +103,13 @@ export class UseCasesFactory {
 		const confirmEmailChange = this.di.resolve(
 			TOKENS.AccountConfirmEmailChangeUseCase,
 		);
+		const twoFactorSetup = this.di.resolve(TOKENS.AccountTwoFactorSetupUseCase);
+		const twoFactorConfirm = this.di.resolve(
+			TOKENS.AccountTwoFactorConfirmUseCase,
+		);
+		const twoFactorDisable = this.di.resolve(
+			TOKENS.AccountTwoFactorDisableUseCase,
+		);
 
 		return {
 			create,
@@ -127,6 +134,9 @@ export class UseCasesFactory {
 			generateEmailChange,
 			previewEmailChange,
 			confirmEmailChange,
+			twoFactorSetup,
+			twoFactorConfirm,
+			twoFactorDisable,
 		} as const;
 	}
 

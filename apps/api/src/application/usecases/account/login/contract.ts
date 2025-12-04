@@ -5,6 +5,7 @@ export const AccountLoginContractSchema = {
 	input: z.object({
 		email: z.email(),
 		password: simplePasswordSchema,
+		twoFactorCode: z.string().max(6).optional(),
 	}),
 	output: z.object({
 		token: z.string(),

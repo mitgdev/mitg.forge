@@ -12,6 +12,7 @@ import {
 	RandomCode,
 	RecoveryKey,
 	TokenHasher,
+	TwoFactorAuth,
 } from "@/domain/modules";
 import { TOKENS } from "../tokens";
 
@@ -74,6 +75,11 @@ export function registerModules() {
 	container.register(
 		TOKENS.TokenHasher,
 		{ useClass: TokenHasher },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.TwoFactorAuth,
+		{ useClass: TwoFactorAuth },
 		{ lifecycle: Lifecycle.Singleton },
 	);
 }

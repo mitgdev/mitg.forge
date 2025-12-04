@@ -5,7 +5,11 @@ import { SessionSchema } from "@/shared/schemas/Session";
 
 export const AccountDetailsContractSchema = {
 	input: z.unknown().optional(),
-	output: AccountSchema.omit({ password: true }).extend({
+	output: AccountSchema.omit({
+		password: true,
+		two_factor_secret: true,
+		two_factor_temp_secret: true,
+	}).extend({
 		sessions: z.array(SessionSchema.omit({ token: true })),
 		registration: RegistrationKeySchema.omit({
 			recoveryKey: true,

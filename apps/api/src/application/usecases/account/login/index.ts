@@ -22,6 +22,7 @@ export class AccountLoginUseCase
 		return this.sessionService.login({
 			email: input.email,
 			password: input.password,
+			twoFactorToken: input.twoFactorCode,
 		});
 	}
 }

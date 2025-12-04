@@ -26,7 +26,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 	head: () => ({
 		meta: [
 			{
-				title: "My App",
+				title: "MiForge",
 			},
 			{
 				name: "description",

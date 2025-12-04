@@ -32,6 +32,6 @@ export class TibiaLoginUseCase
 
 		const { data } = result;
 
-		return this.tibiaClientService.login(data.email, data.password);
+		return this.tibiaClientService.login(data.email, data.password, data.token);
 	}
 }
