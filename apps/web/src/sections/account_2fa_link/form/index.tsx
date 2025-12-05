@@ -243,7 +243,7 @@ export const Account2FALinkForm = () => {
 									<QRCode
 										value={setupData.uri}
 										size={200}
-										logo="/logo/miforge.png"
+										logo="/logo/icon-128.png"
 									/>
 								</div>
 							</InnerContainer>
