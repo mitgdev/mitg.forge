@@ -1,3 +1,4 @@
+import { isIP } from "node:net"; // Importing the isIP function to validate IP addresses
 import { ORPCError } from "@orpc/client";
 import { getConnInfo } from "hono/bun";
 import type { ConnInfo } from "hono/conninfo";
@@ -18,6 +19,24 @@ export class HttpExecutionContext implements ExecutionContext {
 		return "http";
 	}
 
+	private normalizeIp(ip: string): string {
+		// IPv4 mapeado em IPv6: ::ffff:10.0.1.8
+		if (ip.startsWith("::ffff:")) {
+			return ip.slice("::ffff:".length);
+		}
+
+		// loopback IPv6
+		if (ip === "::1") {
+			return "127.0.0.1";
+		}
+
+		return ip;
+	}
+
+	/**
+	 * TODO: Add support to only supported proxies from env config.
+	 * Currently, it trusts all proxies which may not be secure.
+	 */
 	ip(): string | null {
 		let info: ConnInfo | null = null;
 
@@ -28,24 +47,32 @@ export class HttpExecutionContext implements ExecutionContext {
 		}
 
 		const possibleIpHeaders = [
-			"remoteAddress",
-			"x-forwarded-for",
-			"cf-connecting-ip",
-			"x-real-ip",
+			"cf-connecting-ip", // Cloudflare
+			"x-real-ip", // Nginx / proxies
+			"x-forwarded-for", // lista de IPs (cliente, proxy1, proxy2...)
 			"fastly-client-ip",
 			"true-client-ip",
 			"x-client-ip",
 		];
 
-		if (info?.remote.address) {
-			return info.remote.address;
+		for (const header of possibleIpHeaders) {
+			const value = this.httpContext.req.header(header);
+			if (!value) continue;
+
+			const firstIp = value.split(",")[0].trim();
+
+			if (firstIp && isIP(firstIp)) {
+				// Validate the IP address format
+				return this.normalizeIp(firstIp);
+			}
 		}
 
-		return possibleIpHeaders.reduce<string | null>((foundIp, header) => {
-			if (foundIp) return foundIp;
-			const ip = this.httpContext.req.header(header);
-			return ip ?? null;
-		}, null);
+		if (info?.remote.address && isIP(info.remote.address)) {
+			// Validate the remote address format
+			return this.normalizeIp(info.remote.address);
+		}
+
+		return null;
 	}
 
 	userAgent(): string | null {
