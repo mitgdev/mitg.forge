@@ -20,13 +20,19 @@ export class CacheKeys {
 	};
 
 	readonly keys: Record<
-		"config",
+		"config" | "serverStatus",
 		(...parts: KeyPart[]) => { key: string; ttl: number }
 	> = {
 		config: () => {
 			return {
 				key: this.namespace.build("config"),
 				ttl: 30 * 24 * 60 * 60, // 30 Days
+			};
+		},
+		serverStatus: (...parts: KeyPart[]) => {
+			return {
+				key: this.namespace.build("server-status", ...parts),
+				ttl: 30, // 30 Seconds
 			};
 		},
 	};

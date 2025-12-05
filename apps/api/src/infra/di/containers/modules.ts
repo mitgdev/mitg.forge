@@ -4,13 +4,15 @@ import {
 	CacheKeys,
 	Cookies,
 	DetectionChanges,
+	EmailLinks,
 	HasherCrypto,
 	JwtCrypto,
-	Metadata,
 	Pagination,
 	PlayerNameDetection,
 	RandomCode,
 	RecoveryKey,
+	TokenHasher,
+	TwoFactorAuth,
 } from "@/domain/modules";
 import { TOKENS } from "../tokens";
 
@@ -40,12 +42,6 @@ export function registerModules() {
 		{ useClass: PlayerNameDetection },
 		{ lifecycle: Lifecycle.Singleton },
 	);
-
-	container.register(
-		TOKENS.Metadata,
-		{ useClass: Metadata },
-		{ lifecycle: Lifecycle.ResolutionScoped },
-	);
 	container.register(
 		TOKENS.Cookies,
 		{ useClass: Cookies },
@@ -69,6 +65,21 @@ export function registerModules() {
 	container.register(
 		TOKENS.RandomCode,
 		{ useClass: RandomCode },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.EmailLinks,
+		{ useClass: EmailLinks },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.TokenHasher,
+		{ useClass: TokenHasher },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.TwoFactorAuth,
+		{ useClass: TwoFactorAuth },
 		{ lifecycle: Lifecycle.Singleton },
 	);
 }

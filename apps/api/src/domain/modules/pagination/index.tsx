@@ -3,10 +3,12 @@ import { TOKENS } from "@/infra/di/tokens";
 
 @injectable()
 export class Pagination {
-	constructor(@inject(TOKENS.Context) private readonly context: ReqContext) {}
+	constructor(
+		@inject(TOKENS.HttpContext) private readonly httpContext: HttpContext,
+	) {}
 
 	private baseUrl(): URL {
-		return new URL(this.context.req.url);
+		return new URL(this.httpContext.req.url);
 	}
 
 	private makeLink(page: number, size: number): string {

@@ -1,7 +1,9 @@
 import { container, Lifecycle } from "tsyringe";
 import {
 	AccountCancelDeleteCharacterUseCase,
+	AccountChangeEmailWithPasswordUseCase,
 	AccountCharactersBySessionUseCase,
+	AccountConfirmEmailChangeUseCase,
 	AccountConfirmEmailUseCase,
 	AccountCreateCharacterUseCase,
 	AccountCreateUseCase,
@@ -9,19 +11,31 @@ import {
 	AccountDetailsBySessionUseCase,
 	AccountEditCharacterUseCase,
 	AccountFindCharacterUseCase,
+	AccountGenerateEmailChangeUseCase,
 	AccountGeneratePasswordResetUseCase,
 	AccountLoginUseCase,
 	AccountLogoutUseCase,
 	AccountPermissionedUseCase,
+	AccountPreviewEmailChangeUseCase,
 	AccountRegistrationUseCase,
 	AccountStoreHistoryUseCase,
+	AccountTwoFactorConfirmUseCase,
+	AccountTwoFactorDisableUseCase,
+	AccountTwoFactorSetupUseCase,
 	AuditAccountUseCase,
 	ChangePasswordWithOldUseCase,
 	ChangePasswordWithTokenUseCase,
 	ConfigInfoUseCase,
 	ConfigUpdateUseCase,
 	ListAccountsUseCase,
+	LostAccountFindByEmailOrCharacterNameUseCase,
+	LostAccountGeneratePasswordResetUseCase,
+	LostAccountResetPasswordWithRecoveryKeyUseCase,
+	LostAccountResetPasswordWithTokenUseCase,
+	LostAccountResetTwoFactorWithRecoveryKeyUseCase,
+	LostAccountVerifyConfirmationTokenUseCase,
 	SessionAuthenticatedUseCase,
+	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
 	TibiaLoginUseCase,
@@ -115,9 +129,22 @@ export function registerUseCases() {
 		{ useClass: ChangePasswordWithTokenUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
+	container.register(TOKENS.ListAccountsUseCase, {
+		useClass: ListAccountsUseCase,
+	});
 	container.register(
-		TOKENS.ListAccountsUseCase,
-		{ useClass: ListAccountsUseCase },
+		TOKENS.AccountTwoFactorSetupUseCase,
+		{ useClass: AccountTwoFactorSetupUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountTwoFactorConfirmUseCase,
+		{ useClass: AccountTwoFactorConfirmUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountTwoFactorDisableUseCase,
+		{ useClass: AccountTwoFactorDisableUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 
@@ -137,14 +164,73 @@ export function registerUseCases() {
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 	container.register(
+		TOKENS.SessionCanBeAuthenticatedUseCase,
+		{
+			useClass: SessionCanBeAuthenticatedUseCase,
+		},
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
 		TOKENS.AccountRegistrationUseCase,
 		{ useClass: AccountRegistrationUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountChangeEmailWithPasswordUseCase,
+		{ useClass: AccountChangeEmailWithPasswordUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountGenerateEmailChangeUseCase,
+		{ useClass: AccountGenerateEmailChangeUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountPreviewEmailChangeUseCase,
+		{ useClass: AccountPreviewEmailChangeUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountConfirmEmailChangeUseCase,
+		{ useClass: AccountConfirmEmailChangeUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 
 	container.register(
 		TOKENS.WorldsListUseCase,
 		{ useClass: WorldsListUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.LostAccountFindByEmailOrCharacterNameUseCase,
+		{ useClass: LostAccountFindByEmailOrCharacterNameUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.LostAccountGeneratePasswordResetUseCase,
+		{ useClass: LostAccountGeneratePasswordResetUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.LostAccountVerifyConfirmationTokenUseCase,
+		{ useClass: LostAccountVerifyConfirmationTokenUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.LostAccountResetPasswordWithTokenUseCase,
+		{ useClass: LostAccountResetPasswordWithTokenUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.LostAccountResetPasswordWithRecoveryKeyUseCase,
+		{ useClass: LostAccountResetPasswordWithRecoveryKeyUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.LostAccountResetTwoFactorWithRecoveryKeyUseCase,
+		{ useClass: LostAccountResetTwoFactorWithRecoveryKeyUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

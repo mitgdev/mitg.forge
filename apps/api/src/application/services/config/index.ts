@@ -6,6 +6,7 @@ import type {
 } from "@/domain/repositories";
 import { TOKENS } from "@/infra/di/tokens";
 import type { MiforgeConfig } from "@/shared/schemas/Config";
+import type { AuditService } from "../audit";
 
 @injectable()
 export class ConfigService {
@@ -14,6 +15,7 @@ export class ConfigService {
 		private readonly publisher: ConfigLiveRepository,
 		@inject(TOKENS.ConfigRepository)
 		private readonly configRepository: ConfigRepository,
+		@inject(TOKENS.AuditService) private readonly auditService: AuditService,
 	) {}
 
 	@Catch()
@@ -25,7 +27,17 @@ export class ConfigService {
 		 * At this moment, existis a procedure that is permissioned, wee can
 		 * use when exposing this service to be sure only authorized users can update the config.
 		 */
-		await this.configRepository.updateConfig(input);
+		const newConfig = await this.configRepository.updateConfig(input);
+
+		this.auditService.createAudit("UPDATED_CONFIG", {
+			success: true,
+			details: "Configuration updated",
+			metadata: {
+				input: input,
+				newConfig: newConfig,
+			},
+		});
+
 		await this.publisher.publishConfigUpdateEvent();
 	}
 

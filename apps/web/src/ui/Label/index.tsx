@@ -9,7 +9,7 @@ export const Label = forwardRef<
 		// biome-ignore lint/a11y/noLabelWithoutControl: <will be used properly />
 		<label
 			ref={ref}
-			className={cn(className, "font-semibold text-secondary text-sm")}
+			className={cn("font-semibold text-secondary text-sm", className)}
 			{...props}
 		/>
 	);

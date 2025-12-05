@@ -12,6 +12,6 @@ export class WorldsService {
 
 	@Catch()
 	async findAllWorlds() {
-		return this.worldsRepository.findAll();
+		return this.worldsRepository.findAllWithStatus();
 	}
 }

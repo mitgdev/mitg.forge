@@ -9,6 +9,7 @@
 		"ignoreUnknown": true,
 		"includes": [
 			"**",
+			"!**/bundle-analysis.html",
 			"!**/.husky",
 			"!.editorconfig",
 			"!**/.next",

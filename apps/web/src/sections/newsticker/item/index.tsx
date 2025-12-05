@@ -55,7 +55,7 @@ export const NewstickerItem = ({ icon, children, title, inverted }: Props) => {
 				)}
 
 				{/* PREVIEW MOBILE */}
-				<button
+				<span
 					className={cn(
 						"flex-1 cursor-pointer overflow-hidden text-start transition-all md:hidden",
 						{
@@ -64,13 +64,13 @@ export const NewstickerItem = ({ icon, children, title, inverted }: Props) => {
 						},
 					)}
 					onClick={handleContentClick}
-					type="button"
+					role="button"
 				>
 					{children}
-				</button>
+				</span>
 
 				{/* DESKTOP INLINE */}
-				<button
+				<span
 					className={cn(
 						"hidden flex-1 cursor-pointer overflow-hidden text-start transition-all md:block",
 						{
@@ -79,10 +79,10 @@ export const NewstickerItem = ({ icon, children, title, inverted }: Props) => {
 						},
 					)}
 					onClick={handleContentClick}
-					type="button"
+					role="button"
 				>
 					{children}
-				</button>
+				</span>
 
 				<img
 					src={open ? "/assets/buttons/minus.gif" : "/assets/buttons/plus.gif"}

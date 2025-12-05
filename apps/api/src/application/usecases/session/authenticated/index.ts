@@ -21,6 +21,6 @@ export class SessionAuthenticatedUseCase
 	) {}
 
 	async execute(): Promise<SessionAuthenticatedContractOutput> {
-		return this.sessionService.isAuthenticated();
+		return this.sessionService.setSession();
 	}
 }

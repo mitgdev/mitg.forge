@@ -7,7 +7,13 @@ export type TemplateName =
 	| "AccountConfirmationEmail"
 	| "AccountChangePasswordWithOld"
 	| "AccountChangePasswordCode"
-	| "AccountPasswordChanged";
+	| "AccountPasswordChanged"
+	| "AccountChangedEmail"
+	| "AccountNewEmail"
+	| "AccountConfirmationNewEmail"
+	| "LostAccountPasswordReset"
+	| "AccountTwoFactorEnabled"
+	| "AccountTwoFactorDisabled";
 
 const templates = {
 	RecoveryKey: () => import("./templates/RecoveryKey"),
@@ -19,6 +25,15 @@ const templates = {
 	AccountChangePasswordCode: () =>
 		import("./templates/AccountChangePasswordCode"),
 	AccountPasswordChanged: () => import("./templates/AccountPasswordChanged"),
+	AccountChangedEmail: () => import("./templates/AccountChangedEmail"),
+	AccountNewEmail: () => import("./templates/AccountNewEmail"),
+	AccountConfirmationNewEmail: () =>
+		import("./templates/AccountConfirmationNewEmail"),
+	LostAccountPasswordReset: () =>
+		import("./templates/LostAccountPasswordReset"),
+	AccountTwoFactorEnabled: () => import("./templates/AccountTwoFactorEnabled"),
+	AccountTwoFactorDisabled: () =>
+		import("./templates/AccountTwoFactorDisabled"),
 	// biome-ignore lint/suspicious/noExplicitAny: <no way to avoid using any here>
 } satisfies Record<TemplateName, () => Promise<any>>;
 

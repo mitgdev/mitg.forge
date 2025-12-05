@@ -2,9 +2,12 @@ import { container, Lifecycle } from "tsyringe";
 import {
 	AccountConfirmationsService,
 	AccountsService,
+	AccountTwoFactorService,
 	AuditService,
 	ConfigService,
+	LostAccountService,
 	PlayersService,
+	RecoveryKeyService,
 	SessionService,
 	TibiaClientService,
 	WorldsService,
@@ -33,6 +36,11 @@ export function registerServices() {
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 	container.register(
+		TOKENS.RecoveryKeyService,
+		{ useClass: RecoveryKeyService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
 		TOKENS.WorldsService,
 		{ useClass: WorldsService },
 		{ lifecycle: Lifecycle.ResolutionScoped },
@@ -50,6 +58,16 @@ export function registerServices() {
 	container.register(
 		TOKENS.ConfigService,
 		{ useClass: ConfigService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.LostAccountService,
+		{ useClass: LostAccountService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountTwoFactorService,
+		{ useClass: AccountTwoFactorService },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 }

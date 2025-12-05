@@ -1,3 +1,4 @@
+export * from "./clients";
 export * from "./core";
 export * from "./jobs";
 export * from "./modules";

@@ -1,17 +1,65 @@
+import type { accounts } from "generated/client";
 import { inject, injectable } from "tsyringe";
 import type { Prisma } from "@/domain/clients";
 import { TOKENS } from "@/infra/di/tokens";
 import { getAccountTypeId } from "@/shared/utils/account/type";
 import type { PaginationInput } from "@/shared/utils/paginate";
-import type { AuditRepository } from "../audit";
 
 @injectable()
 export class AccountRepository {
-	constructor(
-		@inject(TOKENS.Prisma) private readonly prisma: Prisma,
-		@inject(TOKENS.AuditRepository)
-		private readonly auditRepository: AuditRepository,
-	) {}
+	constructor(@inject(TOKENS.Prisma) private readonly prisma: Prisma) {}
+
+	async updateTwoFactor(
+		accountId: number,
+		data: Partial<
+			Pick<
+				accounts,
+				| "two_factor_enabled"
+				| "two_factor_secret"
+				| "two_factor_temp_secret"
+				| "two_factor_confirmed_at"
+			>
+		>,
+	) {
+		return this.prisma.accounts.update({
+			where: {
+				id: accountId,
+			},
+			data: data,
+		});
+	}
+
+	async findAccountByIdWithRegistrations(accountId: number) {
+		return this.prisma.accounts.findUnique({
+			where: {
+				id: accountId,
+			},
+			include: {
+				registrations: true,
+			},
+		});
+	}
+
+	async findAccountByRecoveryKey(recoveryKey: string) {
+		return this.prisma.accounts.findFirst({
+			where: {
+				registrations: {
+					recoveryKey: recoveryKey,
+				},
+			},
+		});
+	}
+
+	updateEmail(accountId: number, email: string) {
+		return this.prisma.accounts.update({
+			where: {
+				id: accountId,
+			},
+			data: {
+				email,
+			},
+		});
+	}
 
 	updatePassword(accountId: number, hashedPassword: string) {
 		return this.prisma.accounts.update({
@@ -20,6 +68,17 @@ export class AccountRepository {
 			},
 			data: {
 				password: hashedPassword,
+			},
+		});
+	}
+
+	resetConfirmEmail(email: string) {
+		return this.prisma.accounts.update({
+			where: {
+				email,
+			},
+			data: {
+				email_confirmed: false,
 			},
 		});
 	}
@@ -36,10 +95,6 @@ export class AccountRepository {
 	}
 
 	create(data: { name?: string; password: string; email: string }) {
-		this.auditRepository.createAudit("CREATED_ACCOUNT", {
-			details: `Account created for email: ${data.email}`,
-		});
-
 		return this.prisma.accounts.create({
 			data: {
 				...data,
@@ -56,6 +111,26 @@ export class AccountRepository {
 						token,
 					},
 				},
+			},
+		});
+	}
+
+	async findByCharacterName(name: string) {
+		return this.prisma.accounts.findFirst({
+			where: {
+				players: {
+					some: {
+						name,
+					},
+				},
+			},
+		});
+	}
+
+	async findById(id: number) {
+		return this.prisma.accounts.findUnique({
+			where: {
+				id,
 			},
 		});
 	}

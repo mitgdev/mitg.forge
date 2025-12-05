@@ -21,5 +21,5 @@ declare global {
 	};
 
 	export type ExtendedHono = Hono<ContextEnv>;
-	export type ReqContext = Context<ContextEnv>;
+	export type HttpContext = Context<ContextEnv>;
 }

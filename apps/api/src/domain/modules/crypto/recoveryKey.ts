@@ -7,6 +7,10 @@ export class RecoveryKey {
 	private readonly groups = 4;
 	private readonly size = 5;
 
+	normalize(key: string): string {
+		return key.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+	}
+
 	generate(): string {
 		const totalChars = this.groups * this.size;
 		const chars: string[] = [];

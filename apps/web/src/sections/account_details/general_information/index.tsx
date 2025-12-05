@@ -121,13 +121,15 @@ export const AccountDetailGeneralInformation = () => {
 				</List>
 			</InnerContainer>
 			<div className="flex flex-row flex-wrap justify-end gap-1">
+				{/* 
+					TODO: Implement account termination functionality
 				<ButtonImageLink variant="red" to="/">
 					Terminate Account
-				</ButtonImageLink>
+				</ButtonImageLink> */}
 				<ButtonImageLink variant="info" to="/account/reset_password">
 					Change Password
 				</ButtonImageLink>
-				<ButtonImageLink variant="info" to="/">
+				<ButtonImageLink variant="info" to="/account/email/change">
 					Change Email
 				</ButtonImageLink>
 			</div>

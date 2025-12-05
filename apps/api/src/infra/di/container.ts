@@ -1,11 +1,10 @@
-import { container, type DependencyContainer } from "tsyringe";
+import { container } from "tsyringe";
 
 import type { Prisma, Redis } from "@/domain/clients";
 
-import type { RootLogger } from "@/domain/modules";
-import { makeRequestLogger } from "@/domain/modules";
 import { env } from "@/infra/env";
 import {
+	registerClients,
 	registerCore,
 	registerJobs,
 	registerModules,
@@ -13,7 +12,6 @@ import {
 	registerServices,
 	registerUseCases,
 } from "./containers";
-import { TOKENS } from "./tokens";
 
 declare global {
 	var __REDIS__: Redis | undefined;
@@ -28,6 +26,7 @@ export function bootstrapContainer() {
 	}
 
 	registerCore();
+	registerClients();
 	registerJobs();
 	registerModules();
 	registerRepositories();
@@ -36,21 +35,4 @@ export function bootstrapContainer() {
 
 	global.__BOOTSTRAPPED__ = true;
 	return container;
-}
-
-export function createRequestContainer(
-	context: ReqContext,
-): DependencyContainer {
-	const childContainer = container.createChildContainer();
-
-	childContainer.register<ReqContext>(TOKENS.Context, { useValue: context });
-
-	// Logger (scoped per request)
-	const rootLogger = childContainer.resolve<RootLogger>(TOKENS.RootLogger);
-	childContainer.registerInstance(
-		TOKENS.Logger,
-		makeRequestLogger(rootLogger, context),
-	);
-
-	return childContainer;
 }

@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { AccountsService } from "@/application/services";
-import type { Metadata, Pagination } from "@/domain/modules";
+import type { ExecutionContext } from "@/domain/context";
+import type { Pagination } from "@/domain/modules";
 import { TOKENS } from "@/infra/di/tokens";
 import type { UseCase } from "@/shared/interfaces/usecase";
 import { parseWeaponProficiencies } from "@/shared/utils/game/proficiencies";
@@ -17,14 +18,15 @@ export class AccountCharactersBySessionUseCase
 	constructor(
 		@inject(TOKENS.AccountsService)
 		private readonly accountsService: AccountsService,
-		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
+		@inject(TOKENS.ExecutionContext)
+		private readonly executionContext: ExecutionContext,
 		@inject(TOKENS.Pagination) private readonly pagination: Pagination,
 	) {}
 
 	async execute(
 		input: AccountCharactersContractInput,
 	): Promise<AccountCharactersContractOutput> {
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		const { characters, total } = await this.accountsService.characters(
 			session.email,

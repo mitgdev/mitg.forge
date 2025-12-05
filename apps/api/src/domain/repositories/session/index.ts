@@ -1,22 +1,20 @@
 import { inject, injectable } from "tsyringe";
 import type { Prisma } from "@/domain/clients";
-import type { Metadata } from "@/domain/modules";
 import { TOKENS } from "@/infra/di/tokens";
 
 @injectable()
 export class SessionRepository {
-	constructor(
-		@inject(TOKENS.Prisma) private readonly prisma: Prisma,
-		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
-	) {}
+	constructor(@inject(TOKENS.Prisma) private readonly prisma: Prisma) {}
 
 	async create({
 		accountId,
 		expiresAt,
 		token,
+		ip,
 	}: {
 		token: string;
 		accountId: number;
+		ip: string | null;
 		expiresAt: Date;
 	}) {
 		return this.prisma.miforge_account_sessions.create({
@@ -24,7 +22,7 @@ export class SessionRepository {
 				token: token,
 				accountId: accountId,
 				expires_at: expiresAt,
-				ip: this.metadata.ip(),
+				ip: ip,
 			},
 		});
 	}

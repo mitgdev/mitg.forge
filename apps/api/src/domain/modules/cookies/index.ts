@@ -11,7 +11,9 @@ type ExtendedCookieOptions = CookieOptions & {
 export class Cookies {
 	private readonly prefix: string = "miforge_";
 
-	constructor(@inject(TOKENS.Context) private readonly context: ReqContext) {}
+	constructor(
+		@inject(TOKENS.HttpContext) private readonly httpContext: HttpContext,
+	) {}
 
 	private getPrefixedName(name: string): string {
 		return `${this.prefix}${name}`;
@@ -22,7 +24,7 @@ export class Cookies {
 
 		const finalName = namePrefix ? this.getPrefixedName(name) : name;
 
-		setCookie(this.context, finalName, value, {
+		setCookie(this.httpContext, finalName, value, {
 			secure: true,
 			httpOnly: true,
 			sameSite: "Strict",
@@ -34,7 +36,7 @@ export class Cookies {
 		const namePrefix = options?.namePrefix ?? false;
 		const finalName = namePrefix ? this.getPrefixedName(name) : name;
 
-		return getCookie(this.context, finalName) ?? null;
+		return getCookie(this.httpContext, finalName) ?? null;
 	}
 
 	delete(name: string, options?: ExtendedCookieOptions) {
@@ -42,6 +44,6 @@ export class Cookies {
 
 		const finalName = namePrefix ? this.getPrefixedName(name) : name;
 
-		deleteCookie(this.context, finalName, options);
+		deleteCookie(this.httpContext, finalName, options);
 	}
 }

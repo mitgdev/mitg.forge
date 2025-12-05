@@ -3,6 +3,8 @@ import { OpenAPIGenerator } from "@orpc/openapi";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
+import { container } from "tsyringe";
+import { TOKENS } from "@/infra/di/tokens";
 import { router } from "@/presentation/v1/routes";
 
 export const openApiHandler = new OpenAPIHandler(router, {
@@ -22,7 +24,11 @@ export const openApiHandler = new OpenAPIHandler(router, {
 			const method = execution.request.method;
 			const url = execution.request.url.href;
 
-			console.error(`${method} ${url}`, error);
+			const logger = container.resolve(TOKENS.Logger);
+
+			logger.error(`${method} ${url}`, {
+				error,
+			});
 		}),
 	],
 });

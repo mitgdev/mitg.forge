@@ -3,19 +3,22 @@ import { injectable } from "tsyringe";
 
 @injectable()
 export class RandomCode {
-	private readonly length = 12;
+	// (email or sms) verification codes are usually 6 digits long
+	private readonly defaultNumericLength = 6;
+	private readonly defaultTokenBytes = 32; // 256 bits = 32 bytes
 
-	generate(length?: number, type: "NUMBER" | "HASH" = "NUMBER"): string {
-		if (type === "HASH") {
-			return randomBytes(length ?? this.length).toString("hex");
+	generateNumeric(length = this.defaultNumericLength): string {
+		let code = "";
+		for (let i = 0; i < length; i++) {
+			code += randomInt(0, 10).toString();
 		}
+		return code;
+	}
 
-		const codeLength = length ?? this.length;
-
-		const min = 10 ** (codeLength - 1);
-		const max = 10 ** codeLength - 1;
-
-		const code = randomInt(min, max + 1);
-		return code.toString();
+	generateToken(
+		bytes = this.defaultTokenBytes,
+		encoding: BufferEncoding = "hex",
+	): string {
+		return randomBytes(bytes).toString(encoding);
 	}
 }

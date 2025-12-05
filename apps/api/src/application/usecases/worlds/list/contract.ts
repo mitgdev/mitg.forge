@@ -1,4 +1,5 @@
 import z from "zod";
+import { ServerStatus } from "@/shared/schemas/ServerStatus";
 import { Worlds } from "@/shared/schemas/Worlds";
 
 export const WorldsListContractSchema = {
@@ -9,6 +10,8 @@ export const WorldsListContractSchema = {
 			port: true,
 			port_status: true,
 			motd: true,
+		}).extend({
+			status: ServerStatus,
 		}),
 	),
 };

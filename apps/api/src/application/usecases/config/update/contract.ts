@@ -2,7 +2,7 @@ import z from "zod";
 import { MiforgeConfigSchema } from "@/shared/schemas/Config";
 
 export const ConfigUpdateContractSchema = {
-	input: MiforgeConfigSchema.partial(),
+	input: MiforgeConfigSchema.omit({ mailer: true }).partial(),
 	output: z.void(),
 };
 

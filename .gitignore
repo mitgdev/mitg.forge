@@ -5,6 +5,8 @@
 # node
 node_modules
 
+bundle-analysis.html
+
 # builds
 dist
 .turbo

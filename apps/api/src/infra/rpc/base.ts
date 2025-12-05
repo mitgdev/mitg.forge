@@ -2,7 +2,7 @@ import { oo } from "@orpc/openapi";
 import { os } from "@orpc/server";
 import z from "zod";
 
-import type { Context } from "@/infra/context";
+import type { CreatedHttpContext } from "@/infra/context/http";
 
 type Meta = {
 	permission?: Permission;
@@ -28,5 +28,5 @@ export const base = os
 		),
 		INTERNAL_SERVER_ERROR: oo.spec({}, {}),
 	})
-	.$context<Context>()
+	.$context<CreatedHttpContext>()
 	.$meta<Meta>({});

@@ -15,8 +15,15 @@ import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as Not_authRouteRouteImport } from './routes/_not_auth/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as PublicWorldsIndexRouteImport } from './routes/_public/worlds/index'
 import { Route as AuthAccountIndexRouteImport } from './routes/_auth/account/index'
+import { Route as AuthAccountEmailRouteRouteImport } from './routes/_auth/account/email/route'
+import { Route as Not_authAccountLostTokenRouteRouteImport } from './routes/_not_auth/account/lost/$token/route'
+import { Route as Not_authAccountLostEmailRouteRouteImport } from './routes/_not_auth/account/lost/$email/route'
 import { Route as AuthAccountPlayerCreateIndexRouteImport } from './routes/_auth/account/player/create/index'
+import { Route as AuthAccount2faUnlinkIndexRouteImport } from './routes/_auth/account/2fa/unlink/index'
+import { Route as AuthAccount2faLinkIndexRouteImport } from './routes/_auth/account/2fa/link/index'
+import { Route as AuthAccountEmailChangeTokenRouteRouteImport } from './routes/_auth/account/email/change/$token/route'
 import { Route as AuthAccountPlayerNameUndeleteIndexRouteImport } from './routes/_auth/account/player/$name/undelete/index'
 import { Route as AuthAccountPlayerNameEditIndexRouteImport } from './routes/_auth/account/player/$name/edit/index'
 import { Route as AuthAccountPlayerNameDeleteIndexRouteImport } from './routes/_auth/account/player/$name/delete/index'
@@ -25,6 +32,9 @@ const PublicTermsIndexLazyRouteImport = createFileRoute('/_public/terms/')()
 const Not_authLoginIndexLazyRouteImport = createFileRoute('/_not_auth/login/')()
 const AuthListAccountsIndexLazyRouteImport = createFileRoute(
   '/_auth/list-accounts/',
+)()
+const Not_authAccountLostIndexLazyRouteImport = createFileRoute(
+  '/_not_auth/account/lost/',
 )()
 const Not_authAccountCreateIndexLazyRouteImport = createFileRoute(
   '/_not_auth/account/create/',
@@ -44,11 +54,26 @@ const AuthAccountCoins_historyIndexLazyRouteImport = createFileRoute(
 const AuthAccountAudit_historyIndexLazyRouteImport = createFileRoute(
   '/_auth/account/audit_history/',
 )()
+const Not_authAccountLostEmailIndexLazyRouteImport = createFileRoute(
+  '/_not_auth/account/lost/$email/',
+)()
 const Not_authAccountEmailConfirmIndexLazyRouteImport = createFileRoute(
   '/_not_auth/account/$email/confirm/',
 )()
 const AuthAdminAccountsListIndexLazyRouteImport = createFileRoute(
   '/_auth/admin/accounts/list/',
+)()
+const AuthAccountEmailChangeIndexLazyRouteImport = createFileRoute(
+  '/_auth/account/email/change/',
+)()
+const Not_authAccountLostTokenPassword_resetIndexLazyRouteImport =
+  createFileRoute('/_not_auth/account/lost/$token/password_reset/')()
+const Not_authAccountLostEmailPassword_reset_rkIndexLazyRouteImport =
+  createFileRoute('/_not_auth/account/lost/$email/password_reset_rk/')()
+const Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRouteImport =
+  createFileRoute('/_not_auth/account/lost/$email/disabled_2fa_rk/')()
+const AuthAccountEmailChangeTokenPreviewIndexLazyRouteImport = createFileRoute(
+  '/_auth/account/email/change/$token/preview/',
 )()
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
@@ -90,6 +115,13 @@ const AuthListAccountsIndexLazyRoute =
   } as any).lazy(() =>
     import('./routes/_auth/list-accounts/index.lazy').then((d) => d.Route),
   )
+const PublicWorldsIndexRoute = PublicWorldsIndexRouteImport.update({
+  id: '/worlds/',
+  path: '/worlds/',
+  getParentRoute: () => PublicRouteRoute,
+} as any).lazy(() =>
+  import('./routes/_public/worlds/index.lazy').then((d) => d.Route),
+)
 const AuthAccountIndexRoute = AuthAccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
@@ -97,6 +129,19 @@ const AuthAccountIndexRoute = AuthAccountIndexRouteImport.update({
 } as any).lazy(() =>
   import('./routes/_auth/account/index.lazy').then((d) => d.Route),
 )
+const AuthAccountEmailRouteRoute = AuthAccountEmailRouteRouteImport.update({
+  id: '/account/email',
+  path: '/account/email',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const Not_authAccountLostIndexLazyRoute =
+  Not_authAccountLostIndexLazyRouteImport.update({
+    id: '/account/lost/',
+    path: '/account/lost/',
+    getParentRoute: () => Not_authRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_not_auth/account/lost/index.lazy').then((d) => d.Route),
+  )
 const Not_authAccountCreateIndexLazyRoute =
   Not_authAccountCreateIndexLazyRouteImport.update({
     id: '/account/create/',
@@ -153,6 +198,28 @@ const AuthAccountAudit_historyIndexLazyRoute =
       (d) => d.Route,
     ),
   )
+const Not_authAccountLostTokenRouteRoute =
+  Not_authAccountLostTokenRouteRouteImport.update({
+    id: '/account/lost/$token',
+    path: '/account/lost/$token',
+    getParentRoute: () => Not_authRouteRoute,
+  } as any)
+const Not_authAccountLostEmailRouteRoute =
+  Not_authAccountLostEmailRouteRouteImport.update({
+    id: '/account/lost/$email',
+    path: '/account/lost/$email',
+    getParentRoute: () => Not_authRouteRoute,
+  } as any)
+const Not_authAccountLostEmailIndexLazyRoute =
+  Not_authAccountLostEmailIndexLazyRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => Not_authAccountLostEmailRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_not_auth/account/lost/$email/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const Not_authAccountEmailConfirmIndexLazyRoute =
   Not_authAccountEmailConfirmIndexLazyRouteImport.update({
     id: '/account/$email/confirm/',
@@ -173,6 +240,16 @@ const AuthAdminAccountsListIndexLazyRoute =
       (d) => d.Route,
     ),
   )
+const AuthAccountEmailChangeIndexLazyRoute =
+  AuthAccountEmailChangeIndexLazyRouteImport.update({
+    id: '/change/',
+    path: '/change/',
+    getParentRoute: () => AuthAccountEmailRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/account/email/change/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const AuthAccountPlayerCreateIndexRoute =
   AuthAccountPlayerCreateIndexRouteImport.update({
     id: '/account/player/create/',
@@ -182,6 +259,57 @@ const AuthAccountPlayerCreateIndexRoute =
     import('./routes/_auth/account/player/create/index.lazy').then(
       (d) => d.Route,
     ),
+  )
+const AuthAccount2faUnlinkIndexRoute =
+  AuthAccount2faUnlinkIndexRouteImport.update({
+    id: '/account/2fa/unlink/',
+    path: '/account/2fa/unlink/',
+    getParentRoute: () => AuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/account/2fa/unlink/index.lazy').then((d) => d.Route),
+  )
+const AuthAccount2faLinkIndexRoute = AuthAccount2faLinkIndexRouteImport.update({
+  id: '/account/2fa/link/',
+  path: '/account/2fa/link/',
+  getParentRoute: () => AuthRouteRoute,
+} as any).lazy(() =>
+  import('./routes/_auth/account/2fa/link/index.lazy').then((d) => d.Route),
+)
+const AuthAccountEmailChangeTokenRouteRoute =
+  AuthAccountEmailChangeTokenRouteRouteImport.update({
+    id: '/change/$token',
+    path: '/change/$token',
+    getParentRoute: () => AuthAccountEmailRouteRoute,
+  } as any)
+const Not_authAccountLostTokenPassword_resetIndexLazyRoute =
+  Not_authAccountLostTokenPassword_resetIndexLazyRouteImport.update({
+    id: '/password_reset/',
+    path: '/password_reset/',
+    getParentRoute: () => Not_authAccountLostTokenRouteRoute,
+  } as any).lazy(() =>
+    import(
+      './routes/_not_auth/account/lost/$token/password_reset/index.lazy'
+    ).then((d) => d.Route),
+  )
+const Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute =
+  Not_authAccountLostEmailPassword_reset_rkIndexLazyRouteImport.update({
+    id: '/password_reset_rk/',
+    path: '/password_reset_rk/',
+    getParentRoute: () => Not_authAccountLostEmailRouteRoute,
+  } as any).lazy(() =>
+    import(
+      './routes/_not_auth/account/lost/$email/password_reset_rk/index.lazy'
+    ).then((d) => d.Route),
+  )
+const Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute =
+  Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRouteImport.update({
+    id: '/disabled_2fa_rk/',
+    path: '/disabled_2fa_rk/',
+    getParentRoute: () => Not_authAccountLostEmailRouteRoute,
+  } as any).lazy(() =>
+    import(
+      './routes/_not_auth/account/lost/$email/disabled_2fa_rk/index.lazy'
+    ).then((d) => d.Route),
   )
 const AuthAccountPlayerNameUndeleteIndexRoute =
   AuthAccountPlayerNameUndeleteIndexRouteImport.update({
@@ -213,44 +341,81 @@ const AuthAccountPlayerNameDeleteIndexRoute =
       (d) => d.Route,
     ),
   )
+const AuthAccountEmailChangeTokenPreviewIndexLazyRoute =
+  AuthAccountEmailChangeTokenPreviewIndexLazyRouteImport.update({
+    id: '/preview/',
+    path: '/preview/',
+    getParentRoute: () => AuthAccountEmailChangeTokenRouteRoute,
+  } as any).lazy(() =>
+    import(
+      './routes/_auth/account/email/change/$token/preview/index.lazy'
+    ).then((d) => d.Route),
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
+  '/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/account': typeof AuthAccountIndexRoute
+  '/worlds': typeof PublicWorldsIndexRoute
   '/list-accounts': typeof AuthListAccountsIndexLazyRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
+  '/account/lost/$email': typeof Not_authAccountLostEmailRouteRouteWithChildren
+  '/account/lost/$token': typeof Not_authAccountLostTokenRouteRouteWithChildren
   '/account/audit_history': typeof AuthAccountAudit_historyIndexLazyRoute
   '/account/coins_history': typeof AuthAccountCoins_historyIndexLazyRoute
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
   '/account/reset_password': typeof AuthAccountReset_passwordIndexLazyRoute
   '/account/create': typeof Not_authAccountCreateIndexLazyRoute
+  '/account/lost': typeof Not_authAccountLostIndexLazyRoute
+  '/account/email/change/$token': typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
+  '/account/2fa/link': typeof AuthAccount2faLinkIndexRoute
+  '/account/2fa/unlink': typeof AuthAccount2faUnlinkIndexRoute
   '/account/player/create': typeof AuthAccountPlayerCreateIndexRoute
+  '/account/email/change': typeof AuthAccountEmailChangeIndexLazyRoute
   '/admin/accounts/list': typeof AuthAdminAccountsListIndexLazyRoute
   '/account/$email/confirm': typeof Not_authAccountEmailConfirmIndexLazyRoute
+  '/account/lost/$email/': typeof Not_authAccountLostEmailIndexLazyRoute
   '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/account/player/$name/edit': typeof AuthAccountPlayerNameEditIndexRoute
   '/account/player/$name/undelete': typeof AuthAccountPlayerNameUndeleteIndexRoute
+  '/account/lost/$email/disabled_2fa_rk': typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute
+  '/account/lost/$email/password_reset_rk': typeof Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute
+  '/account/lost/$token/password_reset': typeof Not_authAccountLostTokenPassword_resetIndexLazyRoute
+  '/account/email/change/$token/preview': typeof AuthAccountEmailChangeTokenPreviewIndexLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
+  '/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/account': typeof AuthAccountIndexRoute
+  '/worlds': typeof PublicWorldsIndexRoute
   '/list-accounts': typeof AuthListAccountsIndexLazyRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
+  '/account/lost/$token': typeof Not_authAccountLostTokenRouteRouteWithChildren
   '/account/audit_history': typeof AuthAccountAudit_historyIndexLazyRoute
   '/account/coins_history': typeof AuthAccountCoins_historyIndexLazyRoute
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
   '/account/reset_password': typeof AuthAccountReset_passwordIndexLazyRoute
   '/account/create': typeof Not_authAccountCreateIndexLazyRoute
+  '/account/lost': typeof Not_authAccountLostIndexLazyRoute
+  '/account/email/change/$token': typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
+  '/account/2fa/link': typeof AuthAccount2faLinkIndexRoute
+  '/account/2fa/unlink': typeof AuthAccount2faUnlinkIndexRoute
   '/account/player/create': typeof AuthAccountPlayerCreateIndexRoute
+  '/account/email/change': typeof AuthAccountEmailChangeIndexLazyRoute
   '/admin/accounts/list': typeof AuthAdminAccountsListIndexLazyRoute
   '/account/$email/confirm': typeof Not_authAccountEmailConfirmIndexLazyRoute
+  '/account/lost/$email': typeof Not_authAccountLostEmailIndexLazyRoute
   '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/account/player/$name/edit': typeof AuthAccountPlayerNameEditIndexRoute
   '/account/player/$name/undelete': typeof AuthAccountPlayerNameUndeleteIndexRoute
+  '/account/lost/$email/disabled_2fa_rk': typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute
+  '/account/lost/$email/password_reset_rk': typeof Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute
+  '/account/lost/$token/password_reset': typeof Not_authAccountLostTokenPassword_resetIndexLazyRoute
+  '/account/email/change/$token/preview': typeof AuthAccountEmailChangeTokenPreviewIndexLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -258,84 +423,139 @@ export interface FileRoutesById {
   '/_not_auth': typeof Not_authRouteRouteWithChildren
   '/_public': typeof PublicRouteRouteWithChildren
   '/_public/': typeof PublicIndexRoute
+  '/_auth/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/_auth/account/': typeof AuthAccountIndexRoute
+  '/_public/worlds/': typeof PublicWorldsIndexRoute
   '/_auth/list-accounts/': typeof AuthListAccountsIndexLazyRoute
   '/_not_auth/login/': typeof Not_authLoginIndexLazyRoute
   '/_public/terms/': typeof PublicTermsIndexLazyRoute
+  '/_not_auth/account/lost/$email': typeof Not_authAccountLostEmailRouteRouteWithChildren
+  '/_not_auth/account/lost/$token': typeof Not_authAccountLostTokenRouteRouteWithChildren
   '/_auth/account/audit_history/': typeof AuthAccountAudit_historyIndexLazyRoute
   '/_auth/account/coins_history/': typeof AuthAccountCoins_historyIndexLazyRoute
   '/_auth/account/details/': typeof AuthAccountDetailsIndexLazyRoute
   '/_auth/account/registration/': typeof AuthAccountRegistrationIndexLazyRoute
   '/_auth/account/reset_password/': typeof AuthAccountReset_passwordIndexLazyRoute
   '/_not_auth/account/create/': typeof Not_authAccountCreateIndexLazyRoute
+  '/_not_auth/account/lost/': typeof Not_authAccountLostIndexLazyRoute
+  '/_auth/account/email/change/$token': typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
+  '/_auth/account/2fa/link/': typeof AuthAccount2faLinkIndexRoute
+  '/_auth/account/2fa/unlink/': typeof AuthAccount2faUnlinkIndexRoute
   '/_auth/account/player/create/': typeof AuthAccountPlayerCreateIndexRoute
+  '/_auth/account/email/change/': typeof AuthAccountEmailChangeIndexLazyRoute
   '/_auth/admin/accounts/list/': typeof AuthAdminAccountsListIndexLazyRoute
   '/_not_auth/account/$email/confirm/': typeof Not_authAccountEmailConfirmIndexLazyRoute
+  '/_not_auth/account/lost/$email/': typeof Not_authAccountLostEmailIndexLazyRoute
   '/_auth/account/player/$name/delete/': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/_auth/account/player/$name/edit/': typeof AuthAccountPlayerNameEditIndexRoute
   '/_auth/account/player/$name/undelete/': typeof AuthAccountPlayerNameUndeleteIndexRoute
+  '/_not_auth/account/lost/$email/disabled_2fa_rk/': typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute
+  '/_not_auth/account/lost/$email/password_reset_rk/': typeof Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute
+  '/_not_auth/account/lost/$token/password_reset/': typeof Not_authAccountLostTokenPassword_resetIndexLazyRoute
+  '/_auth/account/email/change/$token/preview/': typeof AuthAccountEmailChangeTokenPreviewIndexLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account/email'
     | '/account'
+    | '/worlds'
     | '/list-accounts'
     | '/login'
     | '/terms'
+    | '/account/lost/$email'
+    | '/account/lost/$token'
     | '/account/audit_history'
     | '/account/coins_history'
     | '/account/details'
     | '/account/registration'
     | '/account/reset_password'
     | '/account/create'
+    | '/account/lost'
+    | '/account/email/change/$token'
+    | '/account/2fa/link'
+    | '/account/2fa/unlink'
     | '/account/player/create'
+    | '/account/email/change'
     | '/admin/accounts/list'
     | '/account/$email/confirm'
+    | '/account/lost/$email/'
     | '/account/player/$name/delete'
     | '/account/player/$name/edit'
     | '/account/player/$name/undelete'
+    | '/account/lost/$email/disabled_2fa_rk'
+    | '/account/lost/$email/password_reset_rk'
+    | '/account/lost/$token/password_reset'
+    | '/account/email/change/$token/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account/email'
     | '/account'
+    | '/worlds'
     | '/list-accounts'
     | '/login'
     | '/terms'
+    | '/account/lost/$token'
     | '/account/audit_history'
     | '/account/coins_history'
     | '/account/details'
     | '/account/registration'
     | '/account/reset_password'
     | '/account/create'
+    | '/account/lost'
+    | '/account/email/change/$token'
+    | '/account/2fa/link'
+    | '/account/2fa/unlink'
     | '/account/player/create'
+    | '/account/email/change'
     | '/admin/accounts/list'
     | '/account/$email/confirm'
+    | '/account/lost/$email'
     | '/account/player/$name/delete'
     | '/account/player/$name/edit'
     | '/account/player/$name/undelete'
+    | '/account/lost/$email/disabled_2fa_rk'
+    | '/account/lost/$email/password_reset_rk'
+    | '/account/lost/$token/password_reset'
+    | '/account/email/change/$token/preview'
   id:
     | '__root__'
     | '/_auth'
     | '/_not_auth'
     | '/_public'
     | '/_public/'
+    | '/_auth/account/email'
     | '/_auth/account/'
+    | '/_public/worlds/'
     | '/_auth/list-accounts/'
     | '/_not_auth/login/'
     | '/_public/terms/'
+    | '/_not_auth/account/lost/$email'
+    | '/_not_auth/account/lost/$token'
     | '/_auth/account/audit_history/'
     | '/_auth/account/coins_history/'
     | '/_auth/account/details/'
     | '/_auth/account/registration/'
     | '/_auth/account/reset_password/'
     | '/_not_auth/account/create/'
+    | '/_not_auth/account/lost/'
+    | '/_auth/account/email/change/$token'
+    | '/_auth/account/2fa/link/'
+    | '/_auth/account/2fa/unlink/'
     | '/_auth/account/player/create/'
+    | '/_auth/account/email/change/'
     | '/_auth/admin/accounts/list/'
     | '/_not_auth/account/$email/confirm/'
+    | '/_not_auth/account/lost/$email/'
     | '/_auth/account/player/$name/delete/'
     | '/_auth/account/player/$name/edit/'
     | '/_auth/account/player/$name/undelete/'
+    | '/_not_auth/account/lost/$email/disabled_2fa_rk/'
+    | '/_not_auth/account/lost/$email/password_reset_rk/'
+    | '/_not_auth/account/lost/$token/password_reset/'
+    | '/_auth/account/email/change/$token/preview/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -395,12 +615,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthListAccountsIndexLazyRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_public/worlds/': {
+      id: '/_public/worlds/'
+      path: '/worlds'
+      fullPath: '/worlds'
+      preLoaderRoute: typeof PublicWorldsIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_auth/account/': {
       id: '/_auth/account/'
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AuthAccountIndexRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/account/email': {
+      id: '/_auth/account/email'
+      path: '/account/email'
+      fullPath: '/account/email'
+      preLoaderRoute: typeof AuthAccountEmailRouteRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_not_auth/account/lost/': {
+      id: '/_not_auth/account/lost/'
+      path: '/account/lost'
+      fullPath: '/account/lost'
+      preLoaderRoute: typeof Not_authAccountLostIndexLazyRouteImport
+      parentRoute: typeof Not_authRouteRoute
     }
     '/_not_auth/account/create/': {
       id: '/_not_auth/account/create/'
@@ -444,6 +685,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAccountAudit_historyIndexLazyRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_not_auth/account/lost/$token': {
+      id: '/_not_auth/account/lost/$token'
+      path: '/account/lost/$token'
+      fullPath: '/account/lost/$token'
+      preLoaderRoute: typeof Not_authAccountLostTokenRouteRouteImport
+      parentRoute: typeof Not_authRouteRoute
+    }
+    '/_not_auth/account/lost/$email': {
+      id: '/_not_auth/account/lost/$email'
+      path: '/account/lost/$email'
+      fullPath: '/account/lost/$email'
+      preLoaderRoute: typeof Not_authAccountLostEmailRouteRouteImport
+      parentRoute: typeof Not_authRouteRoute
+    }
+    '/_not_auth/account/lost/$email/': {
+      id: '/_not_auth/account/lost/$email/'
+      path: '/'
+      fullPath: '/account/lost/$email/'
+      preLoaderRoute: typeof Not_authAccountLostEmailIndexLazyRouteImport
+      parentRoute: typeof Not_authAccountLostEmailRouteRoute
+    }
     '/_not_auth/account/$email/confirm/': {
       id: '/_not_auth/account/$email/confirm/'
       path: '/account/$email/confirm'
@@ -458,12 +720,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAdminAccountsListIndexLazyRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/account/email/change/': {
+      id: '/_auth/account/email/change/'
+      path: '/change'
+      fullPath: '/account/email/change'
+      preLoaderRoute: typeof AuthAccountEmailChangeIndexLazyRouteImport
+      parentRoute: typeof AuthAccountEmailRouteRoute
+    }
     '/_auth/account/player/create/': {
       id: '/_auth/account/player/create/'
       path: '/account/player/create'
       fullPath: '/account/player/create'
       preLoaderRoute: typeof AuthAccountPlayerCreateIndexRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/account/2fa/unlink/': {
+      id: '/_auth/account/2fa/unlink/'
+      path: '/account/2fa/unlink'
+      fullPath: '/account/2fa/unlink'
+      preLoaderRoute: typeof AuthAccount2faUnlinkIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/account/2fa/link/': {
+      id: '/_auth/account/2fa/link/'
+      path: '/account/2fa/link'
+      fullPath: '/account/2fa/link'
+      preLoaderRoute: typeof AuthAccount2faLinkIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/account/email/change/$token': {
+      id: '/_auth/account/email/change/$token'
+      path: '/change/$token'
+      fullPath: '/account/email/change/$token'
+      preLoaderRoute: typeof AuthAccountEmailChangeTokenRouteRouteImport
+      parentRoute: typeof AuthAccountEmailRouteRoute
+    }
+    '/_not_auth/account/lost/$token/password_reset/': {
+      id: '/_not_auth/account/lost/$token/password_reset/'
+      path: '/password_reset'
+      fullPath: '/account/lost/$token/password_reset'
+      preLoaderRoute: typeof Not_authAccountLostTokenPassword_resetIndexLazyRouteImport
+      parentRoute: typeof Not_authAccountLostTokenRouteRoute
+    }
+    '/_not_auth/account/lost/$email/password_reset_rk/': {
+      id: '/_not_auth/account/lost/$email/password_reset_rk/'
+      path: '/password_reset_rk'
+      fullPath: '/account/lost/$email/password_reset_rk'
+      preLoaderRoute: typeof Not_authAccountLostEmailPassword_reset_rkIndexLazyRouteImport
+      parentRoute: typeof Not_authAccountLostEmailRouteRoute
+    }
+    '/_not_auth/account/lost/$email/disabled_2fa_rk/': {
+      id: '/_not_auth/account/lost/$email/disabled_2fa_rk/'
+      path: '/disabled_2fa_rk'
+      fullPath: '/account/lost/$email/disabled_2fa_rk'
+      preLoaderRoute: typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRouteImport
+      parentRoute: typeof Not_authAccountLostEmailRouteRoute
     }
     '/_auth/account/player/$name/undelete/': {
       id: '/_auth/account/player/$name/undelete/'
@@ -486,10 +797,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAccountPlayerNameDeleteIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/account/email/change/$token/preview/': {
+      id: '/_auth/account/email/change/$token/preview/'
+      path: '/preview'
+      fullPath: '/account/email/change/$token/preview'
+      preLoaderRoute: typeof AuthAccountEmailChangeTokenPreviewIndexLazyRouteImport
+      parentRoute: typeof AuthAccountEmailChangeTokenRouteRoute
+    }
   }
 }
 
+interface AuthAccountEmailChangeTokenRouteRouteChildren {
+  AuthAccountEmailChangeTokenPreviewIndexLazyRoute: typeof AuthAccountEmailChangeTokenPreviewIndexLazyRoute
+}
+
+const AuthAccountEmailChangeTokenRouteRouteChildren: AuthAccountEmailChangeTokenRouteRouteChildren =
+  {
+    AuthAccountEmailChangeTokenPreviewIndexLazyRoute:
+      AuthAccountEmailChangeTokenPreviewIndexLazyRoute,
+  }
+
+const AuthAccountEmailChangeTokenRouteRouteWithChildren =
+  AuthAccountEmailChangeTokenRouteRoute._addFileChildren(
+    AuthAccountEmailChangeTokenRouteRouteChildren,
+  )
+
+interface AuthAccountEmailRouteRouteChildren {
+  AuthAccountEmailChangeTokenRouteRoute: typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
+  AuthAccountEmailChangeIndexLazyRoute: typeof AuthAccountEmailChangeIndexLazyRoute
+}
+
+const AuthAccountEmailRouteRouteChildren: AuthAccountEmailRouteRouteChildren = {
+  AuthAccountEmailChangeTokenRouteRoute:
+    AuthAccountEmailChangeTokenRouteRouteWithChildren,
+  AuthAccountEmailChangeIndexLazyRoute: AuthAccountEmailChangeIndexLazyRoute,
+}
+
+const AuthAccountEmailRouteRouteWithChildren =
+  AuthAccountEmailRouteRoute._addFileChildren(
+    AuthAccountEmailRouteRouteChildren,
+  )
+
 interface AuthRouteRouteChildren {
+  AuthAccountEmailRouteRoute: typeof AuthAccountEmailRouteRouteWithChildren
   AuthAccountIndexRoute: typeof AuthAccountIndexRoute
   AuthListAccountsIndexLazyRoute: typeof AuthListAccountsIndexLazyRoute
   AuthAccountAudit_historyIndexLazyRoute: typeof AuthAccountAudit_historyIndexLazyRoute
@@ -497,6 +847,8 @@ interface AuthRouteRouteChildren {
   AuthAccountDetailsIndexLazyRoute: typeof AuthAccountDetailsIndexLazyRoute
   AuthAccountRegistrationIndexLazyRoute: typeof AuthAccountRegistrationIndexLazyRoute
   AuthAccountReset_passwordIndexLazyRoute: typeof AuthAccountReset_passwordIndexLazyRoute
+  AuthAccount2faLinkIndexRoute: typeof AuthAccount2faLinkIndexRoute
+  AuthAccount2faUnlinkIndexRoute: typeof AuthAccount2faUnlinkIndexRoute
   AuthAccountPlayerCreateIndexRoute: typeof AuthAccountPlayerCreateIndexRoute
   AuthAdminAccountsListIndexLazyRoute: typeof AuthAdminAccountsListIndexLazyRoute
   AuthAccountPlayerNameDeleteIndexRoute: typeof AuthAccountPlayerNameDeleteIndexRoute
@@ -505,6 +857,7 @@ interface AuthRouteRouteChildren {
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthAccountEmailRouteRoute: AuthAccountEmailRouteRouteWithChildren,
   AuthAccountIndexRoute: AuthAccountIndexRoute,
   AuthListAccountsIndexLazyRoute: AuthListAccountsIndexLazyRoute,
   AuthAccountAudit_historyIndexLazyRoute:
@@ -515,6 +868,8 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccountRegistrationIndexLazyRoute: AuthAccountRegistrationIndexLazyRoute,
   AuthAccountReset_passwordIndexLazyRoute:
     AuthAccountReset_passwordIndexLazyRoute,
+  AuthAccount2faLinkIndexRoute: AuthAccount2faLinkIndexRoute,
+  AuthAccount2faUnlinkIndexRoute: AuthAccount2faUnlinkIndexRoute,
   AuthAccountPlayerCreateIndexRoute: AuthAccountPlayerCreateIndexRoute,
   AuthAdminAccountsListIndexLazyRoute: AuthAdminAccountsListIndexLazyRoute,
   AuthAccountPlayerNameDeleteIndexRoute: AuthAccountPlayerNameDeleteIndexRoute,
@@ -527,15 +882,59 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface Not_authAccountLostEmailRouteRouteChildren {
+  Not_authAccountLostEmailIndexLazyRoute: typeof Not_authAccountLostEmailIndexLazyRoute
+  Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute: typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute
+  Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute: typeof Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute
+}
+
+const Not_authAccountLostEmailRouteRouteChildren: Not_authAccountLostEmailRouteRouteChildren =
+  {
+    Not_authAccountLostEmailIndexLazyRoute:
+      Not_authAccountLostEmailIndexLazyRoute,
+    Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute:
+      Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute,
+    Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute:
+      Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute,
+  }
+
+const Not_authAccountLostEmailRouteRouteWithChildren =
+  Not_authAccountLostEmailRouteRoute._addFileChildren(
+    Not_authAccountLostEmailRouteRouteChildren,
+  )
+
+interface Not_authAccountLostTokenRouteRouteChildren {
+  Not_authAccountLostTokenPassword_resetIndexLazyRoute: typeof Not_authAccountLostTokenPassword_resetIndexLazyRoute
+}
+
+const Not_authAccountLostTokenRouteRouteChildren: Not_authAccountLostTokenRouteRouteChildren =
+  {
+    Not_authAccountLostTokenPassword_resetIndexLazyRoute:
+      Not_authAccountLostTokenPassword_resetIndexLazyRoute,
+  }
+
+const Not_authAccountLostTokenRouteRouteWithChildren =
+  Not_authAccountLostTokenRouteRoute._addFileChildren(
+    Not_authAccountLostTokenRouteRouteChildren,
+  )
+
 interface Not_authRouteRouteChildren {
   Not_authLoginIndexLazyRoute: typeof Not_authLoginIndexLazyRoute
+  Not_authAccountLostEmailRouteRoute: typeof Not_authAccountLostEmailRouteRouteWithChildren
+  Not_authAccountLostTokenRouteRoute: typeof Not_authAccountLostTokenRouteRouteWithChildren
   Not_authAccountCreateIndexLazyRoute: typeof Not_authAccountCreateIndexLazyRoute
+  Not_authAccountLostIndexLazyRoute: typeof Not_authAccountLostIndexLazyRoute
   Not_authAccountEmailConfirmIndexLazyRoute: typeof Not_authAccountEmailConfirmIndexLazyRoute
 }
 
 const Not_authRouteRouteChildren: Not_authRouteRouteChildren = {
   Not_authLoginIndexLazyRoute: Not_authLoginIndexLazyRoute,
+  Not_authAccountLostEmailRouteRoute:
+    Not_authAccountLostEmailRouteRouteWithChildren,
+  Not_authAccountLostTokenRouteRoute:
+    Not_authAccountLostTokenRouteRouteWithChildren,
   Not_authAccountCreateIndexLazyRoute: Not_authAccountCreateIndexLazyRoute,
+  Not_authAccountLostIndexLazyRoute: Not_authAccountLostIndexLazyRoute,
   Not_authAccountEmailConfirmIndexLazyRoute:
     Not_authAccountEmailConfirmIndexLazyRoute,
 }
@@ -546,11 +945,13 @@ const Not_authRouteRouteWithChildren = Not_authRouteRoute._addFileChildren(
 
 interface PublicRouteRouteChildren {
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicWorldsIndexRoute: typeof PublicWorldsIndexRoute
   PublicTermsIndexLazyRoute: typeof PublicTermsIndexLazyRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicIndexRoute: PublicIndexRoute,
+  PublicWorldsIndexRoute: PublicWorldsIndexRoute,
   PublicTermsIndexLazyRoute: PublicTermsIndexLazyRoute,
 }
 

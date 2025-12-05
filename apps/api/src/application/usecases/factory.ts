@@ -7,6 +7,7 @@ import type { AccountLogoutUseCase } from "./account/logout";
 import type { AccountPermissionedUseCase } from "./account/permissioned";
 import type { AccountRegistrationUseCase } from "./account/registration";
 import type { AccountStoreHistoryUseCase } from "./account/storeHistory";
+import type { SessionCanBeAuthenticatedUseCase } from "./session";
 import type { SessionAuthenticatedUseCase } from "./session/authenticated";
 import type { SessionInfoUseCase } from "./session/info";
 import type { SessionNotAuthenticatedUseCase } from "./session/notAuthenticated";
@@ -15,6 +16,36 @@ import type { WorldsListUseCase } from "./worlds/list";
 
 export class UseCasesFactory {
 	constructor(private readonly di: DependencyContainer) {}
+
+	get lostAccount() {
+		const findByEmailOrCharacterName = this.di.resolve(
+			TOKENS.LostAccountFindByEmailOrCharacterNameUseCase,
+		);
+		const generatePasswordReset = this.di.resolve(
+			TOKENS.LostAccountGeneratePasswordResetUseCase,
+		);
+		const validateConfirmationToken = this.di.resolve(
+			TOKENS.LostAccountVerifyConfirmationTokenUseCase,
+		);
+		const resetPasswordWithToken = this.di.resolve(
+			TOKENS.LostAccountResetPasswordWithTokenUseCase,
+		);
+		const resetPasswordWithRecoveryKey = this.di.resolve(
+			TOKENS.LostAccountResetPasswordWithRecoveryKeyUseCase,
+		);
+		const resetTwoFactorWithRecoveryKey = this.di.resolve(
+			TOKENS.LostAccountResetTwoFactorWithRecoveryKeyUseCase,
+		);
+
+		return {
+			findByEmailOrCharacterName,
+			generatePasswordReset,
+			validateConfirmationToken,
+			resetPasswordWithToken,
+			resetPasswordWithRecoveryKey,
+			resetTwoFactorWithRecoveryKey,
+		} as const;
+	}
 
 	get account() {
 		const create = this.di.resolve(TOKENS.AccountCreateUseCase);
@@ -65,6 +96,25 @@ export class UseCasesFactory {
 			TOKENS.AccountChangePasswordWithTokenUseCase,
 		);
 		const listAccounts = this.di.resolve(TOKENS.ListAccountsUseCase);
+		const changeEmailWithPassword = this.di.resolve(
+			TOKENS.AccountChangeEmailWithPasswordUseCase,
+		);
+		const generateEmailChange = this.di.resolve(
+			TOKENS.AccountGenerateEmailChangeUseCase,
+		);
+		const previewEmailChange = this.di.resolve(
+			TOKENS.AccountPreviewEmailChangeUseCase,
+		);
+		const confirmEmailChange = this.di.resolve(
+			TOKENS.AccountConfirmEmailChangeUseCase,
+		);
+		const twoFactorSetup = this.di.resolve(TOKENS.AccountTwoFactorSetupUseCase);
+		const twoFactorConfirm = this.di.resolve(
+			TOKENS.AccountTwoFactorConfirmUseCase,
+		);
+		const twoFactorDisable = this.di.resolve(
+			TOKENS.AccountTwoFactorDisableUseCase,
+		);
 
 		return {
 			create,
@@ -86,6 +136,13 @@ export class UseCasesFactory {
 			generatePasswordReset,
 			changePasswordWithToken,
 			listAccounts,
+			changeEmailWithPassword,
+			generateEmailChange,
+			previewEmailChange,
+			confirmEmailChange,
+			twoFactorSetup,
+			twoFactorConfirm,
+			twoFactorDisable,
 		} as const;
 	}
 
@@ -113,11 +170,16 @@ export class UseCasesFactory {
 		const notAuthenticated = this.di.resolve<SessionNotAuthenticatedUseCase>(
 			TOKENS.SessionNotAuthenticatedUseCase,
 		);
+		const canBeAuthenticated =
+			this.di.resolve<SessionCanBeAuthenticatedUseCase>(
+				TOKENS.SessionCanBeAuthenticatedUseCase,
+			);
 
 		return {
 			info,
 			authenticated,
 			notAuthenticated,
+			canBeAuthenticated,
 		} as const;
 	}
 

@@ -1,19 +1,19 @@
 import type { DependencyContainer } from "tsyringe";
 import { UseCasesFactory } from "@/application/usecases/factory";
-import { createRequestContainer } from "@/infra/di/container";
+import { createRequestContainer } from "../di/requestContainer";
 
-export type CreateContextOptions = {
-	context: ReqContext;
+export type CreateHttpContextOptions = {
+	context: HttpContext;
 };
 
-export type CreateContext = {
+export type CreateHttpContext = {
 	usecases: UseCasesFactory;
 	di: DependencyContainer;
 };
 
-export async function createContext({
+export async function createHttpContext({
 	context,
-}: CreateContextOptions): Promise<CreateContext> {
+}: CreateHttpContextOptions): Promise<CreateHttpContext> {
 	const di = createRequestContainer(context);
 	const usecases = new UseCasesFactory(di);
 
@@ -23,4 +23,4 @@ export async function createContext({
 	};
 }
 
-export type Context = Awaited<ReturnType<typeof createContext>>;
+export type CreatedHttpContext = CreateHttpContext;

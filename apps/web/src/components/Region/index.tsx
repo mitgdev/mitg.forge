@@ -1,10 +1,13 @@
 import { useMemo } from "react";
+import { cn } from "@/sdk/utils/cn";
+import { Tooltip } from "@/ui/Tooltip";
 
 type RegionProps = {
 	region: "EUROPE" | "NORTH_AMERICA" | "SOUTH_AMERICA" | "OCEANIA";
+	className?: string;
 };
 
-export const RegionIcon = ({ region }: RegionProps) => {
+export const RegionIcon = ({ region, className }: RegionProps) => {
 	const worldRegionIcon = useMemo(() => {
 		switch (region) {
 			case "EUROPE":
@@ -20,5 +23,20 @@ export const RegionIcon = ({ region }: RegionProps) => {
 		}
 	}, [region]);
 
-	return <img alt="world-region" src={worldRegionIcon} className="h-12 w-12" />;
+	const regionDescriptions: Record<string, string> = {
+		EUROPE: "Servers located in Europe.",
+		NORTH_AMERICA: "Servers located in North America.",
+		SOUTH_AMERICA: "Servers located in South America.",
+		OCEANIA: "Servers located in Oceania.",
+	};
+
+	return (
+		<Tooltip content={regionDescriptions[region]}>
+			<img
+				alt="world-region"
+				src={worldRegionIcon}
+				className={cn("h-12 w-12", className)}
+			/>
+		</Tooltip>
+	);
 };

@@ -1,29 +1,23 @@
 import { ORPCError } from "@orpc/client";
-import type { Logger } from "nodemailer/lib/shared";
 import { inject, injectable } from "tsyringe";
 import { Catch } from "@/application/decorators/Catch";
+import type { ExecutionContext } from "@/domain/context";
 import type {
-	Cookies,
 	DetectionChanges,
+	EmailLinks,
 	HasherCrypto,
-	JwtCrypto,
-	Metadata,
 	PlayerNameDetection,
-	RandomCode,
-	RecoveryKey,
 } from "@/domain/modules";
 import type {
 	AccountConfirmationsRepository,
+	AccountRegistrationRepository,
 	AccountRepository,
-	AuditRepository,
 	ConfigRepository,
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
-import type { AccountRegistrationRepository } from "@/domain/repositories/account/registration";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "@/infra/di/tokens";
-import { env } from "@/infra/env";
 import type { EmailQueue } from "@/jobs/queue/email";
 import { getAccountType, getAccountTypeId } from "@/shared/utils/account/type";
 import { parseWeaponProficiencies } from "@/shared/utils/game/proficiencies";
@@ -32,28 +26,26 @@ import { getVocationId, type Vocation } from "@/shared/utils/player";
 import { type Gender, getPlayerGenderId } from "@/shared/utils/player/gender";
 import { getSampleName } from "@/shared/utils/player/sample";
 import type { AccountConfirmationsService } from "../accountConfirmations";
-import type { SessionService } from "../session";
+import type { AuditService } from "../audit";
+import type { RecoveryKeyService } from "../recoveryKey";
 
 @injectable()
 export class AccountsService {
 	constructor(
-		@inject(TOKENS.Logger) private readonly logger: Logger,
-		@inject(TOKENS.Cookies) private readonly cookies: Cookies,
 		@inject(TOKENS.AccountRepository)
 		private readonly accountRepository: AccountRepository,
 		@inject(TOKENS.SessionRepository)
 		private readonly sessionRepository: SessionRepository,
 		@inject(TOKENS.HasherCrypto)
 		private readonly hasherCrypto: HasherCrypto,
-		@inject(TOKENS.JwtCrypto) private readonly jwtCrypto: JwtCrypto,
-		@inject(TOKENS.SessionService)
-		private readonly sessionService: SessionService,
-		@inject(TOKENS.Metadata) private readonly metadata: Metadata,
+		@inject(TOKENS.RecoveryKeyService)
+		private readonly recoveryKeyService: RecoveryKeyService,
+		@inject(TOKENS.ExecutionContext)
+		private readonly executionContext: ExecutionContext,
 		@inject(TOKENS.PlayersRepository)
 		private readonly playersRepository: PlayersRepository,
 		@inject(TOKENS.AccountRegistrationRepository)
 		private readonly accountRegistrationRepository: AccountRegistrationRepository,
-		@inject(TOKENS.RecoveryKey) private readonly recoveryKey: RecoveryKey,
 		@inject(TOKENS.EmailQueue) private readonly emailQueue: EmailQueue,
 		@inject(TOKENS.DetectionChanges)
 		private readonly detection: DetectionChanges,
@@ -65,15 +57,21 @@ export class AccountsService {
 		private readonly configRepository: ConfigRepository,
 		@inject(TOKENS.AccountConfirmationsRepository)
 		private readonly accountConfirmationsRepository: AccountConfirmationsRepository,
-		@inject(TOKENS.RandomCode) private readonly randomCode: RandomCode,
 		@inject(TOKENS.AccountConfirmationsService)
 		private readonly accountConfirmationsService: AccountConfirmationsService,
-		@inject(TOKENS.AuditRepository)
-		private readonly auditRepository: AuditRepository,
+		@inject(TOKENS.AuditService)
+		private readonly auditService: AuditService,
+		@inject(TOKENS.EmailLinks) private readonly emailLinks: EmailLinks,
 	) {}
 
 	@Catch()
 	async verifyEmail(email: string, token: string) {
+		/**
+		 * TODO - When change email occurs, we need to send a confirmation email.
+		 * But the actual template and subject need to be defined depending on the context.
+		 * If it's a new account, we send a welcome email.
+		 * If it's an email change, we send a email changed confirmation.
+		 */
 		const account = await this.accountRepository.findByEmail(email);
 
 		if (!account) {
@@ -127,6 +125,11 @@ export class AccountsService {
 			email: data.email,
 		});
 
+		this.auditService.createAudit("CREATED_ACCOUNT", {
+			details: `Account created for email: ${data.email}`,
+			accountId: newAccount.id,
+		});
+
 		/**
 		 * When email confirmation is not required, we can return the new account directly.
 		 * And the frontend can redirect the user to login or call route /login directly.
@@ -147,19 +150,13 @@ export class AccountsService {
 			return newAccount;
 		}
 
-		/**
-		 * Generate a confirmation code and send to email and sabe this code in miforge_confirmations
-		 * with expiration date of 24 hours.
-		 */
-		const confirmationToken = this.randomCode.generate(24, "HASH");
-
-		const expiresAt = new Date();
-		expiresAt.setHours(expiresAt.getHours() + 24);
+		const { expiresAt, token, tokenHash } =
+			await this.accountConfirmationsService.generateTokenAndHash(24 * 60);
 
 		await this.accountConfirmationsRepository.create(newAccount.id, {
 			channel: "CODE",
 			expiresAt,
-			token: confirmationToken,
+			tokenHash: tokenHash,
 			type: "EMAIL_VERIFICATION",
 		});
 
@@ -167,96 +164,13 @@ export class AccountsService {
 			kind: "EmailJob",
 			template: "AccountConfirmationEmail",
 			props: {
-				token: confirmationToken,
+				token: token,
 			},
 			subject: "Confirm your email address",
 			to: newAccount.email,
 		});
 
 		return newAccount;
-	}
-
-	@Catch()
-	async login({ email, password }: { email: string; password: string }) {
-		/**
-		 * TODO - Implement check for banned accounts to prevent login,
-		 * returning an appropriate error message.
-		 */
-		const account = await this.accountRepository.findByEmail(email);
-		const config = await this.configRepository.findConfig();
-
-		if (!account) {
-			this.logger.warn(`Login failed for email: ${email} - account not found.`);
-			throw new ORPCError("UNAUTHORIZED", {
-				message: "Invalid credentials",
-			});
-		}
-
-		const isPasswordValid = this.hasherCrypto.compare(
-			password,
-			account.password,
-		);
-
-		if (!isPasswordValid) {
-			this.logger.warn(`Login failed for email: ${email} - invalid password.`);
-			throw new ORPCError("UNAUTHORIZED", {
-				message: "Invalid credentials",
-			});
-		}
-
-		/**
-		 * This config is a live config from database, so changes
-		 * will be reflected without server restarts.
-		 */
-		if (!account.email_confirmed && config.account.emailConfirmationRequired) {
-			this.logger.warn(
-				`Login attempt for email: ${email} - email not confirmed.`,
-			);
-			throw new ORPCError("FORBIDDEN", {
-				message: "Email address not confirmed",
-			});
-		}
-
-		const token = this.jwtCrypto.generate(
-			{
-				email: account.email,
-			},
-			{
-				expiresIn: "7d",
-				subject: String(account.id),
-			},
-		);
-		const expiredAt = new Date();
-		expiredAt.setDate(expiredAt.getDate() + 7);
-
-		/**
-		 * TODO - If the request is made multiples times quickly,
-		 * this can create a same token multiple times, breaking the unique constraint.
-		 * We should implement a better strategy to avoid this.
-		 */
-		const tokenAlreadyExists = await this.sessionRepository.findByToken(token);
-
-		if (!tokenAlreadyExists) {
-			await this.sessionRepository.create({
-				accountId: account.id,
-				token,
-				expiresAt: expiredAt,
-			});
-		}
-
-		this.cookies.set(env.SESSION_TOKEN_NAME, token, {
-			expires: expiredAt,
-			namePrefix: true,
-		});
-
-		return {
-			token: token,
-		};
-	}
-
-	@Catch()
-	async logout() {
-		return this.sessionService.destroy();
 	}
 
 	@Catch()
@@ -269,9 +183,6 @@ export class AccountsService {
 			});
 		}
 
-		/**
-		 * TODO: Remove characters from this, to be in another route.
-		 */
 		return {
 			...account,
 			sessions: account.sessions,
@@ -293,7 +204,7 @@ export class AccountsService {
 			});
 		}
 
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		const account = await this.accountRepository.findByEmail(session.email);
 
@@ -455,6 +366,10 @@ export class AccountsService {
 			sampleItems,
 		);
 
+		this.auditService.createAudit("CREATED_CHARACTER", {
+			details: `Character ${newPlayer.name} created for account`,
+		});
+
 		return {
 			name: newPlayer.name,
 			vocation: vocation,
@@ -464,7 +379,7 @@ export class AccountsService {
 
 	@Catch()
 	async storeHistory({ pagination }: { pagination: PaginationInput }) {
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		return this.accountRepository.storeHistory(session.id, {
 			pagination,
@@ -501,27 +416,20 @@ export class AccountsService {
 		const alreadyHasRegistration =
 			await this.accountRegistrationRepository.findByAccountId(account.id);
 		let recoveryKey: string | null = null;
+		let recoveryKeyHashed: string | null = null;
 
 		if (!alreadyHasRegistration) {
-			recoveryKey = this.recoveryKey.generate();
+			const { hashedRecoveryKey, rawRecoveryKey } =
+				await this.recoveryKeyService.generate();
 
-			const alreadyExists =
-				await this.accountRegistrationRepository.findByRecoveryKey(recoveryKey);
+			recoveryKey = rawRecoveryKey;
+			recoveryKeyHashed = hashedRecoveryKey;
 
-			if (alreadyExists) {
-				// Extremely unlikely, but just in case, we generate a new one.
-				recoveryKey = this.recoveryKey.generate();
-			}
-
-			/**
-			 * TODO: Find a better way to handle subject and template naming conventions.
-			 * Maybe whe can implement i18n here as well.
-			 */
 			this.emailQueue.add({
 				kind: "EmailJob",
 				to: account.email,
 				props: {
-					code: recoveryKey,
+					code: rawRecoveryKey,
 					user: account.name ?? "User",
 				},
 				subject: "Your Account Recovery Key",
@@ -561,7 +469,7 @@ export class AccountsService {
 				postal: input.postal,
 				state: input.state,
 				additional: input.additional,
-				...(recoveryKey ? { recoveryKey: recoveryKey } : {}),
+				...(recoveryKeyHashed ? { recoveryKey: recoveryKeyHashed } : {}),
 			});
 
 		return {
@@ -578,7 +486,7 @@ export class AccountsService {
 			comment?: string;
 		},
 	) {
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		const character = await this.accountRepository.findCharacterByName(
 			name,
@@ -605,6 +513,11 @@ export class AccountsService {
 			comment: data.comment,
 		});
 
+		this.auditService.createAudit("UPDATED_CHARACTER", {
+			metadata: { name, data },
+			details: `Character ${name} updated`,
+		});
+
 		const proficiencies = parseWeaponProficiencies(
 			updatedCharacter.weapon_proficiencies,
 		);
@@ -617,7 +530,7 @@ export class AccountsService {
 
 	@Catch()
 	async findCharacterByName(name: string) {
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		const character = await this.accountRepository.findCharacterByName(
 			name,
@@ -642,7 +555,7 @@ export class AccountsService {
 
 	@Catch()
 	async cancelCharacterDeletionByName(name: string) {
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		const character = await this.accountRepository.findCharacterByName(
 			name,
@@ -664,7 +577,7 @@ export class AccountsService {
 
 	@Catch()
 	async scheduleCharacterDeletionByName(name: string, password: string) {
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		const account = await this.accountRepository.findByEmail(session.email);
 
@@ -716,6 +629,16 @@ export class AccountsService {
 			deletionDate,
 		);
 
+		this.auditService.createAudit(
+			deletionDate ? "DELETED_CHARACTER" : "UNDELETE_CHARACTER",
+			{
+				metadata: { name, deleteAt: deletionDate?.toISOString() || null },
+				details: `Character ${name} scheduled for deletion at ${
+					deletionDate ? deletionDate.toISOString() : "null"
+				}`,
+			},
+		);
+
 		return {
 			scheduleDate: deletionDate,
 		};
@@ -738,7 +661,7 @@ export class AccountsService {
 			});
 		}
 
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		const account = await this.accountRepository.findByEmail(session.email);
 
@@ -763,7 +686,7 @@ export class AccountsService {
 
 		await this.accountRepository.updatePassword(account.id, hashedNewPassword);
 
-		await this.auditRepository.createAudit("CHANGED_PASSWORD_WITH_OLD", {
+		await this.auditService.createAudit("CHANGED_PASSWORD_WITH_OLD", {
 			details: "Password changed using old password for account",
 			success: true,
 		});
@@ -788,7 +711,7 @@ export class AccountsService {
 			});
 		}
 
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		const account = await this.accountRepository.findByEmail(session.email);
 
@@ -798,10 +721,8 @@ export class AccountsService {
 			});
 		}
 
-		const resetToken = this.randomCode.generate(24, "HASH");
-
-		const expiresAt = new Date();
-		expiresAt.setMinutes(expiresAt.getMinutes() + 30);
+		const { expiresAt, token, tokenHash } =
+			await this.accountConfirmationsService.generateTokenAndHash(24 * 60);
 
 		/**
 		 * This check already considers unexpired confirmations only.
@@ -822,7 +743,7 @@ export class AccountsService {
 		await this.accountConfirmationsRepository.create(account.id, {
 			channel: "CODE",
 			expiresAt,
-			token: resetToken,
+			tokenHash: tokenHash,
 			type: "PASSWORD_RESET",
 		});
 
@@ -830,7 +751,7 @@ export class AccountsService {
 			kind: "EmailJob",
 			template: "AccountChangePasswordCode",
 			props: {
-				token: resetToken,
+				token: token,
 			},
 			subject: "Password Reset Request",
 			to: account.email,
@@ -854,7 +775,7 @@ export class AccountsService {
 			});
 		}
 
-		const session = this.metadata.session();
+		const session = this.executionContext.session();
 
 		const account = await this.accountRepository.findByEmail(session.email);
 
@@ -892,7 +813,7 @@ export class AccountsService {
 
 		await this.accountRepository.updatePassword(account.id, hashedNewPassword);
 
-		await this.auditRepository.createAudit("RESET_PASSWORD_WITH_TOKEN", {
+		await this.auditService.createAudit("RESET_PASSWORD_WITH_TOKEN", {
 			details: "Password reset using confirmation token for account",
 			success: true,
 		});
@@ -904,5 +825,317 @@ export class AccountsService {
 			subject: "Your password has been changed",
 			to: account.email,
 		});
+	}
+
+	@Catch()
+	async changeEmailWithPassword({
+		newEmail,
+		password,
+	}: {
+		newEmail: string;
+		password: string;
+	}) {
+		const config = await this.configRepository.findConfig();
+
+		if (config.account.emailChangeConfirmationRequired) {
+			throw new ORPCError("FORBIDDEN", {
+				message:
+					"Changing email with password is disabled when email change confirmation is required. Please use the email change confirmation flow.",
+			});
+		}
+
+		const session = this.executionContext.session();
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		if (account.email === newEmail) {
+			throw new ORPCError("UNPROCESSABLE_CONTENT", {
+				message: "The new email address must be different from the current one",
+			});
+		}
+
+		const oldEmail = account.email;
+
+		const isPasswordValid = this.hasherCrypto.compare(
+			password,
+			account.password,
+		);
+
+		if (!isPasswordValid) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid credentials",
+			});
+		}
+
+		const newEmailInUse = await this.accountRepository.findByEmail(newEmail);
+
+		if (newEmailInUse) {
+			throw new ORPCError("CONFLICT", {
+				message: "The new email is already in use by another account",
+			});
+		}
+
+		const characters =
+			await this.playersRepository.allCharactersWithOnlineStatus(account.id);
+
+		const anyCharacterOnline = characters.some((char) => char.online);
+
+		if (anyCharacterOnline) {
+			throw new ORPCError("FORBIDDEN", {
+				message:
+					"Cannot change email while one or more characters are online. Please log out all characters and try again.",
+			});
+		}
+
+		await this.accountRepository.updateEmail(account.id, newEmail);
+
+		await this.auditService.createAudit("CHANGED_EMAIL_WITH_PASSWORD", {
+			details: `Email changed from ${oldEmail} to ${newEmail} using password`,
+			success: true,
+		});
+
+		await this.sessionRepository.clearAllSessionByAccountId(account.id);
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountChangedEmail",
+			props: {
+				newEmail: newEmail,
+			},
+			subject: "Your email address has been changed",
+			to: oldEmail,
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountNewEmail",
+			props: {},
+			subject: "New email address added to your account",
+			to: newEmail,
+		});
+	}
+
+	@Catch()
+	async generateEmailChange(newEmail: string) {
+		const config = await this.configRepository.findConfig();
+
+		if (!config.account.emailChangeConfirmationRequired) {
+			throw new ORPCError("FORBIDDEN", {
+				message:
+					"Email change confirmation is disabled. Please use the change email with password flow.",
+			});
+		}
+
+		const session = this.executionContext.session();
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		if (account.email === newEmail) {
+			throw new ORPCError("UNPROCESSABLE_CONTENT", {
+				message: "The new email address must be different from the current one",
+			});
+		}
+
+		const newEmailInUse = await this.accountRepository.findByEmail(newEmail);
+
+		if (newEmailInUse) {
+			throw new ORPCError("CONFLICT", {
+				message: "The new email is already in use by another account",
+			});
+		}
+
+		const alreadyHasChangeActive =
+			await this.accountConfirmationsRepository.findByAccountAndType(
+				account.id,
+				"EMAIL_CHANGE",
+			);
+
+		if (alreadyHasChangeActive) {
+			throw new ORPCError("CONFLICT", {
+				message:
+					"An email change is already active for this account. Please check your email or wait until it expires.",
+			});
+		}
+
+		const { expiresAt, token, tokenHash } =
+			await this.accountConfirmationsService.generateTokenAndHash(24 * 60);
+
+		await this.accountConfirmationsRepository.create(account.id, {
+			channel: "LINK",
+			expiresAt,
+			tokenHash: tokenHash,
+			value: newEmail,
+			type: "EMAIL_CHANGE",
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountConfirmationNewEmail",
+			props: {
+				link: this.emailLinks.links.accountEmailChangePreview(token),
+			},
+			subject: "Confirm your new email address",
+			to: account.email,
+		});
+	}
+
+	@Catch()
+	async previewEmailChange(token: string) {
+		const session = this.executionContext.session();
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const confirmation =
+			await this.accountConfirmationsService.isValidByAccountAndType({
+				accountId: account.id,
+				rawToken: token,
+				type: "EMAIL_CHANGE",
+			});
+
+		if (!confirmation) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Email change confirmation not found, or expired",
+			});
+		}
+
+		if (!confirmation.value) {
+			throw new ORPCError("UNPROCESSABLE_CONTENT", {
+				message: "No new email associated with this confirmation",
+			});
+		}
+
+		return {
+			newEmail: confirmation.value,
+			expiresAt: confirmation.expires_at,
+		};
+	}
+
+	@Catch()
+	async confirmEmailChange(rawToken: string) {
+		const session = this.executionContext.session();
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const confirmation =
+			await this.accountConfirmationsRepository.findByAccountAndType(
+				account.id,
+				"EMAIL_CHANGE",
+			);
+
+		if (!confirmation) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Email change confirmation not found, or expired",
+			});
+		}
+
+		if (!confirmation.value) {
+			throw new ORPCError("UNPROCESSABLE_CONTENT", {
+				message: "No new email associated with this confirmation",
+			});
+		}
+
+		await this.accountConfirmationsService.verifyConfirmation(
+			confirmation,
+			rawToken,
+		);
+
+		const newEmail = confirmation.value;
+		const oldEmail = account.email;
+
+		const emailInUse = await this.accountRepository.findByEmail(newEmail);
+
+		if (emailInUse) {
+			throw new ORPCError("CONFLICT", {
+				message: "The new email is already in use by another account",
+			});
+		}
+
+		const characters =
+			await this.playersRepository.allCharactersWithOnlineStatus(account.id);
+
+		const anyCharacterOnline = characters.some((char) => char.online);
+
+		if (anyCharacterOnline) {
+			throw new ORPCError("FORBIDDEN", {
+				message:
+					"Cannot change email while one or more characters are online. Please log out all characters and try again.",
+			});
+		}
+
+		await this.accountRepository.updateEmail(account.id, newEmail);
+
+		await this.auditService.createAudit("CHANGED_EMAIL_WITH_CONFIRMATION", {
+			details: `Email changed from ${oldEmail} to ${newEmail} using confirmation link`,
+			success: true,
+		});
+
+		await this.sessionRepository.clearAllSessionByAccountId(account.id);
+		await this.accountRepository.resetConfirmEmail(newEmail);
+
+		const { expiresAt, token, tokenHash } =
+			await this.accountConfirmationsService.generateTokenAndHash(24 * 60);
+
+		await this.accountConfirmationsRepository.create(account.id, {
+			channel: "CODE",
+			expiresAt,
+			tokenHash: tokenHash,
+			type: "EMAIL_VERIFICATION",
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountConfirmationEmail",
+			props: {
+				token: token,
+			},
+			subject: "Confirm your email address",
+			to: newEmail,
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountChangedEmail",
+			props: {
+				newEmail: newEmail,
+			},
+			subject: "Your email address has been changed",
+			to: oldEmail,
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountNewEmail",
+			props: {},
+			subject: "New email address added to your account",
+			to: newEmail,
+		});
+
+		return {
+			newEmail: newEmail,
+		};
 	}
 }
