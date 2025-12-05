@@ -1,3 +1,4 @@
+import { isIP } from "node:net"; // Importing the isIP function to validate IP addresses
 import { ORPCError } from "@orpc/client";
 import { getConnInfo } from "hono/bun";
 import type { ConnInfo } from "hono/conninfo";
@@ -32,6 +33,10 @@ export class HttpExecutionContext implements ExecutionContext {
 		return ip;
 	}
 
+	/**
+	 * TODO: Add support to only supported proxies from env config.
+	 * Currently, it trusts all proxies which may not be secure.
+	 */
 	ip(): string | null {
 		let info: ConnInfo | null = null;
 
@@ -56,12 +61,14 @@ export class HttpExecutionContext implements ExecutionContext {
 
 			const firstIp = value.split(",")[0].trim();
 
-			if (firstIp) {
+			if (firstIp && isIP(firstIp)) {
+				// Validate the IP address format
 				return this.normalizeIp(firstIp);
 			}
 		}
 
-		if (info?.remote.address) {
+		if (info?.remote.address && isIP(info.remote.address)) {
+			// Validate the remote address format
 			return this.normalizeIp(info.remote.address);
 		}
 
