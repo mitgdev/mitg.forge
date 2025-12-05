@@ -20,6 +20,7 @@ const FormSchema = z.object({
 		"forgot_password_recovery_key",
 		"account_hacked",
 		"change_email_recovery_key",
+		"disabled_two_fa_recovery_key",
 	]),
 });
 
@@ -61,6 +62,12 @@ export const AccountLostOptionsForm = () => {
 					/**
 					 * TODO: Send to a page where the user can input their recovery key to change their email.
 					 */
+					break;
+				case "disabled_two_fa_recovery_key":
+					navigate({
+						to: "/account/lost/$email/disabled_2fa_rk",
+						params: { email },
+					});
 					break;
 				default:
 					toast.error("Invalid option selected.");
@@ -179,6 +186,28 @@ export const AccountLostOptionsForm = () => {
 																	})}
 																>
 																	I have a recovery key
+																</Label>
+															</div>
+														</div>
+													</div>
+												</InnerContainer>
+												<InnerContainer>
+													<div className="flex flex-col gap-1">
+														<span className="font-bold text-secondary capitalize">
+															Two-Factor Authentication
+														</span>
+														<div className="h-px bg-secondary" />
+														<div className="ml-2">
+															<div className="flex items-center gap-2">
+																<RadioGroupItem
+																	value="disabled_two_fa_recovery_key"
+																	id="disabled_two_fa_recovery_key"
+																/>
+																<Label
+																	htmlFor="disabled_two_fa_recovery_key"
+																	className={cn("cursor-pointer font-normal")}
+																>
+																	Disable 2FA with a recovery key
 																</Label>
 															</div>
 														</div>

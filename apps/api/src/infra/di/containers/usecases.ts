@@ -31,6 +31,7 @@ import {
 	LostAccountGeneratePasswordResetUseCase,
 	LostAccountResetPasswordWithRecoveryKeyUseCase,
 	LostAccountResetPasswordWithTokenUseCase,
+	LostAccountResetTwoFactorWithRecoveryKeyUseCase,
 	LostAccountVerifyConfirmationTokenUseCase,
 	SessionAuthenticatedUseCase,
 	SessionCanBeAuthenticatedUseCase,
@@ -221,6 +222,11 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.LostAccountResetPasswordWithRecoveryKeyUseCase,
 		{ useClass: LostAccountResetPasswordWithRecoveryKeyUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.LostAccountResetTwoFactorWithRecoveryKeyUseCase,
+		{ useClass: LostAccountResetTwoFactorWithRecoveryKeyUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

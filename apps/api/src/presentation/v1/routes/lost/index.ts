@@ -3,6 +3,7 @@ import { findByEmailOrCharacterNameRoute } from "./findByEmail";
 import { generatePasswordResetRoute } from "./generatePasswordReset";
 import { resetPasswordWithRecoveryKeyRoute } from "./resetPasswordWithRecoveryKey";
 import { resetPasswordWithTokenRoute } from "./resetPasswordWithToken";
+import { resetTwoFactorWithRecoveryKeyRoute } from "./resetTwoFactorWithRecoveryKey";
 import { validConfirmationTokenRoute } from "./validConfirmationToken";
 
 export const lostAccountRouter = base
@@ -14,4 +15,5 @@ export const lostAccountRouter = base
 		resetPasswordWithToken: resetPasswordWithTokenRoute,
 		resetPasswordWithRecoveryKey: resetPasswordWithRecoveryKeyRoute,
 		validConfirmationToken: validConfirmationTokenRoute,
+		resetTwoFactorWithRecoveryKey: resetTwoFactorWithRecoveryKeyRoute,
 	});

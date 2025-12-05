@@ -186,4 +186,43 @@ export class AccountTwoFactorService {
 			subject: "Two-Factor Authentication Disabled",
 		});
 	}
+
+	@Catch()
+	async removeTwoFactor(email: string) {
+		const message = "Invalid recovery data";
+		const account = await this.accountRepository.findByEmail(email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: message,
+			});
+		}
+
+		if (!account.two_factor_enabled) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: message,
+			});
+		}
+
+		await this.accountRepository.updateTwoFactor(account.id, {
+			two_factor_enabled: false,
+			two_factor_secret: null,
+			two_factor_temp_secret: null,
+			two_factor_confirmed_at: null,
+		});
+
+		await this.auditService.createAudit(AuditAction.DISABLED_TWO_FACTOR, {
+			accountId: account.id,
+			success: true,
+			details: "Two-factor authentication disabled via removal service",
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountTwoFactorDisabled",
+			props: {},
+			to: account.email,
+			subject: "Two-Factor Authentication Disabled",
+		});
+	}
 }

@@ -33,6 +33,9 @@ export class UseCasesFactory {
 		const resetPasswordWithRecoveryKey = this.di.resolve(
 			TOKENS.LostAccountResetPasswordWithRecoveryKeyUseCase,
 		);
+		const resetTwoFactorWithRecoveryKey = this.di.resolve(
+			TOKENS.LostAccountResetTwoFactorWithRecoveryKeyUseCase,
+		);
 
 		return {
 			findByEmailOrCharacterName,
@@ -40,6 +43,7 @@ export class UseCasesFactory {
 			validateConfirmationToken,
 			resetPasswordWithToken,
 			resetPasswordWithRecoveryKey,
+			resetTwoFactorWithRecoveryKey,
 		} as const;
 	}
 

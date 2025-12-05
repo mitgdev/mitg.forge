@@ -11,6 +11,7 @@ import type {
 import { TOKENS } from "@/infra/di/tokens";
 import type { EmailQueue } from "@/jobs/queue";
 import type { AccountConfirmationsService } from "../accountConfirmations";
+import type { AccountTwoFactorService } from "../accountTwoFactor";
 import type { AuditService } from "../audit";
 import type { RecoveryKeyService } from "../recoveryKey";
 
@@ -34,6 +35,8 @@ export class LostAccountService {
 		private readonly accountRegistrationRepository: AccountRegistrationRepository,
 		@inject(TOKENS.RecoveryKeyService)
 		private readonly recoveryKeyService: RecoveryKeyService,
+		@inject(TOKENS.AccountTwoFactorService)
+		private readonly accountTwoFactorService: AccountTwoFactorService,
 	) {}
 
 	private async accountExists(emailOrCharacterName: string) {
@@ -216,5 +219,39 @@ export class LostAccountService {
 			subject: "Your password has been changed using recovery key",
 			to: account.email,
 		});
+	}
+
+	@Catch()
+	async reset2FAWithRecoveryKey(email: string, recoveryKey: string) {
+		const message = "Invalid recovery data";
+		const account = await this.accountRepository.findByEmail(email);
+
+		if (!account) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: message,
+			});
+		}
+
+		const registration =
+			await this.accountRegistrationRepository.findByAccountId(account.id);
+
+		if (!registration || !registration.recoveryKey) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: message,
+			});
+		}
+
+		const isValid = await this.recoveryKeyService.isValid(
+			recoveryKey,
+			registration.recoveryKey,
+		);
+
+		if (!isValid) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: message,
+			});
+		}
+
+		await this.accountTwoFactorService.removeTwoFactor(account.email);
 	}
 }

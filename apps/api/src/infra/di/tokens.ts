@@ -44,6 +44,7 @@ import type {
 	LostAccountGeneratePasswordResetUseCase,
 	LostAccountResetPasswordWithRecoveryKeyUseCase,
 	LostAccountResetPasswordWithTokenUseCase,
+	LostAccountResetTwoFactorWithRecoveryKeyUseCase,
 	LostAccountVerifyConfirmationTokenUseCase,
 	SessionAuthenticatedUseCase,
 	SessionCanBeAuthenticatedUseCase,
@@ -255,6 +256,10 @@ export const TOKENS = {
 	LostAccountResetPasswordWithRecoveryKeyUseCase:
 		token<LostAccountResetPasswordWithRecoveryKeyUseCase>(
 			"LostAccountResetPasswordWithRecoveryKeyUseCase",
+		),
+	LostAccountResetTwoFactorWithRecoveryKeyUseCase:
+		token<LostAccountResetTwoFactorWithRecoveryKeyUseCase>(
+			"LostAccountResetTwoFactorWithRecoveryKeyUseCase",
 		),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),
