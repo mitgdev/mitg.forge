@@ -1,5 +1,7 @@
+
+![MiForge Example](./images/wallpaper.gif)
+
 <div align="center">
-  <h1>MiForge</h1>
   <a href="https://github.com/mitgdev/mitg.forge/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
   <a href="https://discord.gg/mitg"><img alt="Discord" src="https://img.shields.io/discord/1308861105145385081?label=Discord"></a>
   <br />
