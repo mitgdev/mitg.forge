@@ -260,7 +260,5 @@ export class AccountTwoFactorService {
 				message: "Invalid credentials",
 			});
 		}
-
-		return;
 	}
 }
