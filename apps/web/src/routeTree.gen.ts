@@ -30,6 +30,9 @@ import { Route as AuthAccountPlayerNameDeleteIndexRouteImport } from './routes/_
 
 const PublicTermsIndexLazyRouteImport = createFileRoute('/_public/terms/')()
 const Not_authLoginIndexLazyRouteImport = createFileRoute('/_not_auth/login/')()
+const AuthListAccountsIndexLazyRouteImport = createFileRoute(
+  '/_auth/list-accounts/',
+)()
 const Not_authAccountLostIndexLazyRouteImport = createFileRoute(
   '/_not_auth/account/lost/',
 )()
@@ -56,6 +59,9 @@ const Not_authAccountLostEmailIndexLazyRouteImport = createFileRoute(
 )()
 const Not_authAccountEmailConfirmIndexLazyRouteImport = createFileRoute(
   '/_not_auth/account/$email/confirm/',
+)()
+const AuthAdminAccountsListIndexLazyRouteImport = createFileRoute(
+  '/_auth/admin/accounts/list/',
 )()
 const AuthAccountEmailChangeIndexLazyRouteImport = createFileRoute(
   '/_auth/account/email/change/',
@@ -101,6 +107,14 @@ const Not_authLoginIndexLazyRoute = Not_authLoginIndexLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/_not_auth/login/index.lazy').then((d) => d.Route),
 )
+const AuthListAccountsIndexLazyRoute =
+  AuthListAccountsIndexLazyRouteImport.update({
+    id: '/list-accounts/',
+    path: '/list-accounts/',
+    getParentRoute: () => AuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/list-accounts/index.lazy').then((d) => d.Route),
+  )
 const PublicWorldsIndexRoute = PublicWorldsIndexRouteImport.update({
   id: '/worlds/',
   path: '/worlds/',
@@ -213,6 +227,16 @@ const Not_authAccountEmailConfirmIndexLazyRoute =
     getParentRoute: () => Not_authRouteRoute,
   } as any).lazy(() =>
     import('./routes/_not_auth/account/$email/confirm/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AuthAdminAccountsListIndexLazyRoute =
+  AuthAdminAccountsListIndexLazyRouteImport.update({
+    id: '/admin/accounts/list/',
+    path: '/admin/accounts/list/',
+    getParentRoute: () => AuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/admin/accounts/list/index.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -333,6 +357,7 @@ export interface FileRoutesByFullPath {
   '/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/account': typeof AuthAccountIndexRoute
   '/worlds': typeof PublicWorldsIndexRoute
+  '/list-accounts': typeof AuthListAccountsIndexLazyRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
   '/account/lost/$email': typeof Not_authAccountLostEmailRouteRouteWithChildren
@@ -349,6 +374,7 @@ export interface FileRoutesByFullPath {
   '/account/2fa/unlink': typeof AuthAccount2faUnlinkIndexRoute
   '/account/player/create': typeof AuthAccountPlayerCreateIndexRoute
   '/account/email/change': typeof AuthAccountEmailChangeIndexLazyRoute
+  '/admin/accounts/list': typeof AuthAdminAccountsListIndexLazyRoute
   '/account/$email/confirm': typeof Not_authAccountEmailConfirmIndexLazyRoute
   '/account/lost/$email/': typeof Not_authAccountLostEmailIndexLazyRoute
   '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
@@ -364,6 +390,7 @@ export interface FileRoutesByTo {
   '/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/account': typeof AuthAccountIndexRoute
   '/worlds': typeof PublicWorldsIndexRoute
+  '/list-accounts': typeof AuthListAccountsIndexLazyRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
   '/account/lost/$token': typeof Not_authAccountLostTokenRouteRouteWithChildren
@@ -379,6 +406,7 @@ export interface FileRoutesByTo {
   '/account/2fa/unlink': typeof AuthAccount2faUnlinkIndexRoute
   '/account/player/create': typeof AuthAccountPlayerCreateIndexRoute
   '/account/email/change': typeof AuthAccountEmailChangeIndexLazyRoute
+  '/admin/accounts/list': typeof AuthAdminAccountsListIndexLazyRoute
   '/account/$email/confirm': typeof Not_authAccountEmailConfirmIndexLazyRoute
   '/account/lost/$email': typeof Not_authAccountLostEmailIndexLazyRoute
   '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
@@ -398,6 +426,7 @@ export interface FileRoutesById {
   '/_auth/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/_auth/account/': typeof AuthAccountIndexRoute
   '/_public/worlds/': typeof PublicWorldsIndexRoute
+  '/_auth/list-accounts/': typeof AuthListAccountsIndexLazyRoute
   '/_not_auth/login/': typeof Not_authLoginIndexLazyRoute
   '/_public/terms/': typeof PublicTermsIndexLazyRoute
   '/_not_auth/account/lost/$email': typeof Not_authAccountLostEmailRouteRouteWithChildren
@@ -414,6 +443,7 @@ export interface FileRoutesById {
   '/_auth/account/2fa/unlink/': typeof AuthAccount2faUnlinkIndexRoute
   '/_auth/account/player/create/': typeof AuthAccountPlayerCreateIndexRoute
   '/_auth/account/email/change/': typeof AuthAccountEmailChangeIndexLazyRoute
+  '/_auth/admin/accounts/list/': typeof AuthAdminAccountsListIndexLazyRoute
   '/_not_auth/account/$email/confirm/': typeof Not_authAccountEmailConfirmIndexLazyRoute
   '/_not_auth/account/lost/$email/': typeof Not_authAccountLostEmailIndexLazyRoute
   '/_auth/account/player/$name/delete/': typeof AuthAccountPlayerNameDeleteIndexRoute
@@ -431,6 +461,7 @@ export interface FileRouteTypes {
     | '/account/email'
     | '/account'
     | '/worlds'
+    | '/list-accounts'
     | '/login'
     | '/terms'
     | '/account/lost/$email'
@@ -447,6 +478,7 @@ export interface FileRouteTypes {
     | '/account/2fa/unlink'
     | '/account/player/create'
     | '/account/email/change'
+    | '/admin/accounts/list'
     | '/account/$email/confirm'
     | '/account/lost/$email/'
     | '/account/player/$name/delete'
@@ -462,6 +494,7 @@ export interface FileRouteTypes {
     | '/account/email'
     | '/account'
     | '/worlds'
+    | '/list-accounts'
     | '/login'
     | '/terms'
     | '/account/lost/$token'
@@ -477,6 +510,7 @@ export interface FileRouteTypes {
     | '/account/2fa/unlink'
     | '/account/player/create'
     | '/account/email/change'
+    | '/admin/accounts/list'
     | '/account/$email/confirm'
     | '/account/lost/$email'
     | '/account/player/$name/delete'
@@ -495,6 +529,7 @@ export interface FileRouteTypes {
     | '/_auth/account/email'
     | '/_auth/account/'
     | '/_public/worlds/'
+    | '/_auth/list-accounts/'
     | '/_not_auth/login/'
     | '/_public/terms/'
     | '/_not_auth/account/lost/$email'
@@ -511,6 +546,7 @@ export interface FileRouteTypes {
     | '/_auth/account/2fa/unlink/'
     | '/_auth/account/player/create/'
     | '/_auth/account/email/change/'
+    | '/_auth/admin/accounts/list/'
     | '/_not_auth/account/$email/confirm/'
     | '/_not_auth/account/lost/$email/'
     | '/_auth/account/player/$name/delete/'
@@ -571,6 +607,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/login'
       preLoaderRoute: typeof Not_authLoginIndexLazyRouteImport
       parentRoute: typeof Not_authRouteRoute
+    }
+    '/_auth/list-accounts/': {
+      id: '/_auth/list-accounts/'
+      path: '/list-accounts'
+      fullPath: '/list-accounts'
+      preLoaderRoute: typeof AuthListAccountsIndexLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/_public/worlds/': {
       id: '/_public/worlds/'
@@ -669,6 +712,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account/$email/confirm'
       preLoaderRoute: typeof Not_authAccountEmailConfirmIndexLazyRouteImport
       parentRoute: typeof Not_authRouteRoute
+    }
+    '/_auth/admin/accounts/list/': {
+      id: '/_auth/admin/accounts/list/'
+      path: '/admin/accounts/list'
+      fullPath: '/admin/accounts/list'
+      preLoaderRoute: typeof AuthAdminAccountsListIndexLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/_auth/account/email/change/': {
       id: '/_auth/account/email/change/'
@@ -791,6 +841,7 @@ const AuthAccountEmailRouteRouteWithChildren =
 interface AuthRouteRouteChildren {
   AuthAccountEmailRouteRoute: typeof AuthAccountEmailRouteRouteWithChildren
   AuthAccountIndexRoute: typeof AuthAccountIndexRoute
+  AuthListAccountsIndexLazyRoute: typeof AuthListAccountsIndexLazyRoute
   AuthAccountAudit_historyIndexLazyRoute: typeof AuthAccountAudit_historyIndexLazyRoute
   AuthAccountCoins_historyIndexLazyRoute: typeof AuthAccountCoins_historyIndexLazyRoute
   AuthAccountDetailsIndexLazyRoute: typeof AuthAccountDetailsIndexLazyRoute
@@ -799,6 +850,7 @@ interface AuthRouteRouteChildren {
   AuthAccount2faLinkIndexRoute: typeof AuthAccount2faLinkIndexRoute
   AuthAccount2faUnlinkIndexRoute: typeof AuthAccount2faUnlinkIndexRoute
   AuthAccountPlayerCreateIndexRoute: typeof AuthAccountPlayerCreateIndexRoute
+  AuthAdminAccountsListIndexLazyRoute: typeof AuthAdminAccountsListIndexLazyRoute
   AuthAccountPlayerNameDeleteIndexRoute: typeof AuthAccountPlayerNameDeleteIndexRoute
   AuthAccountPlayerNameEditIndexRoute: typeof AuthAccountPlayerNameEditIndexRoute
   AuthAccountPlayerNameUndeleteIndexRoute: typeof AuthAccountPlayerNameUndeleteIndexRoute
@@ -807,6 +859,7 @@ interface AuthRouteRouteChildren {
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccountEmailRouteRoute: AuthAccountEmailRouteRouteWithChildren,
   AuthAccountIndexRoute: AuthAccountIndexRoute,
+  AuthListAccountsIndexLazyRoute: AuthListAccountsIndexLazyRoute,
   AuthAccountAudit_historyIndexLazyRoute:
     AuthAccountAudit_historyIndexLazyRoute,
   AuthAccountCoins_historyIndexLazyRoute:
@@ -818,6 +871,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccount2faLinkIndexRoute: AuthAccount2faLinkIndexRoute,
   AuthAccount2faUnlinkIndexRoute: AuthAccount2faUnlinkIndexRoute,
   AuthAccountPlayerCreateIndexRoute: AuthAccountPlayerCreateIndexRoute,
+  AuthAdminAccountsListIndexLazyRoute: AuthAdminAccountsListIndexLazyRoute,
   AuthAccountPlayerNameDeleteIndexRoute: AuthAccountPlayerNameDeleteIndexRoute,
   AuthAccountPlayerNameEditIndexRoute: AuthAccountPlayerNameEditIndexRoute,
   AuthAccountPlayerNameUndeleteIndexRoute:

@@ -40,6 +40,7 @@ import type {
 	ChangePasswordWithTokenUseCase,
 	ConfigInfoUseCase,
 	ConfigUpdateUseCase,
+	ListAccountsUseCase,
 	LostAccountFindByEmailOrCharacterNameUseCase,
 	LostAccountGeneratePasswordResetUseCase,
 	LostAccountResetPasswordWithRecoveryKeyUseCase,
@@ -53,6 +54,7 @@ import type {
 	TibiaLoginUseCase,
 	WorldsListUseCase,
 } from "@/application/usecases";
+
 import type { Mailer, OtsServerClient, Prisma, Redis } from "@/domain/clients";
 import type { AppLivePublisher } from "@/domain/clients/live/types";
 import type { ExecutionContext } from "@/domain/context";
@@ -214,6 +216,7 @@ export const TOKENS = {
 	AccountChangePasswordWithTokenUseCase: token<ChangePasswordWithTokenUseCase>(
 		"AccountChangePasswordWithTokenUseCase",
 	),
+	ListAccountsUseCase: token<ListAccountsUseCase>("ListAccountsUseCase"),
 	AccountChangeEmailWithPasswordUseCase:
 		token<AccountChangeEmailWithPasswordUseCase>(
 			"AccountChangeEmailWithPasswordUseCase",

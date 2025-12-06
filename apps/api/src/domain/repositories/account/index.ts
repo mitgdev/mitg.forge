@@ -210,6 +210,27 @@ export class AccountRepository {
 		};
 	}
 
+	async listAccounts(opts?: { pagination: PaginationInput }) {
+		const page = opts?.pagination.page ?? 1;
+		const size = opts?.pagination.size ?? 10;
+
+		const [storeHistory, total] = await Promise.all([
+			this.prisma.accounts.findMany({
+				orderBy: {
+					name: "desc",
+				},
+				skip: (page - 1) * size,
+				take: size,
+			}),
+			this.prisma.accounts.count(),
+		]);
+
+		return {
+			storeHistory,
+			total,
+		};
+	}
+
 	async details(email: string) {
 		return this.prisma.accounts.findFirst({
 			where: {

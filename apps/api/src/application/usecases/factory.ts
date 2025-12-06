@@ -95,6 +95,7 @@ export class UseCasesFactory {
 		const changePasswordWithToken = this.di.resolve(
 			TOKENS.AccountChangePasswordWithTokenUseCase,
 		);
+		const listAccounts = this.di.resolve(TOKENS.ListAccountsUseCase);
 		const changeEmailWithPassword = this.di.resolve(
 			TOKENS.AccountChangeEmailWithPasswordUseCase,
 		);
@@ -134,6 +135,7 @@ export class UseCasesFactory {
 			changePasswordWithOld,
 			generatePasswordReset,
 			changePasswordWithToken,
+			listAccounts,
 			changeEmailWithPassword,
 			generateEmailChange,
 			previewEmailChange,

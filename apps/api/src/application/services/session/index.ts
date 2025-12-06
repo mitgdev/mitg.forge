@@ -288,6 +288,7 @@ export class SessionService {
 				authenticated: true,
 				session: {
 					email: account.email,
+					type: account.type,
 					token: session.token,
 				},
 			};

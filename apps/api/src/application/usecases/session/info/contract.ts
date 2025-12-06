@@ -8,6 +8,7 @@ export const SessionInfoContractSchema = {
 			.object({
 				token: z.string(),
 				email: z.email(),
+				type: z.number().nullable(),
 			})
 			.nullable(),
 	}),
