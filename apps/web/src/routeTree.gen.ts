@@ -66,6 +66,8 @@ const Not_authAccountLostEmailPassword_reset_rkIndexLazyRouteImport =
   createFileRoute('/_not_auth/account/lost/$email/password_reset_rk/')()
 const Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRouteImport =
   createFileRoute('/_not_auth/account/lost/$email/disabled_2fa_rk/')()
+const Not_authAccountLostEmailChange_email_rkIndexLazyRouteImport =
+  createFileRoute('/_not_auth/account/lost/$email/change_email_rk/')()
 const AuthAccountEmailChangeTokenPreviewIndexLazyRouteImport = createFileRoute(
   '/_auth/account/email/change/$token/preview/',
 )()
@@ -287,6 +289,16 @@ const Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute =
       './routes/_not_auth/account/lost/$email/disabled_2fa_rk/index.lazy'
     ).then((d) => d.Route),
   )
+const Not_authAccountLostEmailChange_email_rkIndexLazyRoute =
+  Not_authAccountLostEmailChange_email_rkIndexLazyRouteImport.update({
+    id: '/change_email_rk/',
+    path: '/change_email_rk/',
+    getParentRoute: () => Not_authAccountLostEmailRouteRoute,
+  } as any).lazy(() =>
+    import(
+      './routes/_not_auth/account/lost/$email/change_email_rk/index.lazy'
+    ).then((d) => d.Route),
+  )
 const AuthAccountPlayerNameUndeleteIndexRoute =
   AuthAccountPlayerNameUndeleteIndexRouteImport.update({
     id: '/account/player/$name/undelete/',
@@ -354,6 +366,7 @@ export interface FileRoutesByFullPath {
   '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/account/player/$name/edit': typeof AuthAccountPlayerNameEditIndexRoute
   '/account/player/$name/undelete': typeof AuthAccountPlayerNameUndeleteIndexRoute
+  '/account/lost/$email/change_email_rk': typeof Not_authAccountLostEmailChange_email_rkIndexLazyRoute
   '/account/lost/$email/disabled_2fa_rk': typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute
   '/account/lost/$email/password_reset_rk': typeof Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute
   '/account/lost/$token/password_reset': typeof Not_authAccountLostTokenPassword_resetIndexLazyRoute
@@ -384,6 +397,7 @@ export interface FileRoutesByTo {
   '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/account/player/$name/edit': typeof AuthAccountPlayerNameEditIndexRoute
   '/account/player/$name/undelete': typeof AuthAccountPlayerNameUndeleteIndexRoute
+  '/account/lost/$email/change_email_rk': typeof Not_authAccountLostEmailChange_email_rkIndexLazyRoute
   '/account/lost/$email/disabled_2fa_rk': typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute
   '/account/lost/$email/password_reset_rk': typeof Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute
   '/account/lost/$token/password_reset': typeof Not_authAccountLostTokenPassword_resetIndexLazyRoute
@@ -419,6 +433,7 @@ export interface FileRoutesById {
   '/_auth/account/player/$name/delete/': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/_auth/account/player/$name/edit/': typeof AuthAccountPlayerNameEditIndexRoute
   '/_auth/account/player/$name/undelete/': typeof AuthAccountPlayerNameUndeleteIndexRoute
+  '/_not_auth/account/lost/$email/change_email_rk/': typeof Not_authAccountLostEmailChange_email_rkIndexLazyRoute
   '/_not_auth/account/lost/$email/disabled_2fa_rk/': typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute
   '/_not_auth/account/lost/$email/password_reset_rk/': typeof Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute
   '/_not_auth/account/lost/$token/password_reset/': typeof Not_authAccountLostTokenPassword_resetIndexLazyRoute
@@ -452,6 +467,7 @@ export interface FileRouteTypes {
     | '/account/player/$name/delete'
     | '/account/player/$name/edit'
     | '/account/player/$name/undelete'
+    | '/account/lost/$email/change_email_rk'
     | '/account/lost/$email/disabled_2fa_rk'
     | '/account/lost/$email/password_reset_rk'
     | '/account/lost/$token/password_reset'
@@ -482,6 +498,7 @@ export interface FileRouteTypes {
     | '/account/player/$name/delete'
     | '/account/player/$name/edit'
     | '/account/player/$name/undelete'
+    | '/account/lost/$email/change_email_rk'
     | '/account/lost/$email/disabled_2fa_rk'
     | '/account/lost/$email/password_reset_rk'
     | '/account/lost/$token/password_reset'
@@ -516,6 +533,7 @@ export interface FileRouteTypes {
     | '/_auth/account/player/$name/delete/'
     | '/_auth/account/player/$name/edit/'
     | '/_auth/account/player/$name/undelete/'
+    | '/_not_auth/account/lost/$email/change_email_rk/'
     | '/_not_auth/account/lost/$email/disabled_2fa_rk/'
     | '/_not_auth/account/lost/$email/password_reset_rk/'
     | '/_not_auth/account/lost/$token/password_reset/'
@@ -726,6 +744,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRouteImport
       parentRoute: typeof Not_authAccountLostEmailRouteRoute
     }
+    '/_not_auth/account/lost/$email/change_email_rk/': {
+      id: '/_not_auth/account/lost/$email/change_email_rk/'
+      path: '/change_email_rk'
+      fullPath: '/account/lost/$email/change_email_rk'
+      preLoaderRoute: typeof Not_authAccountLostEmailChange_email_rkIndexLazyRouteImport
+      parentRoute: typeof Not_authAccountLostEmailRouteRoute
+    }
     '/_auth/account/player/$name/undelete/': {
       id: '/_auth/account/player/$name/undelete/'
       path: '/account/player/$name/undelete'
@@ -830,6 +855,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface Not_authAccountLostEmailRouteRouteChildren {
   Not_authAccountLostEmailIndexLazyRoute: typeof Not_authAccountLostEmailIndexLazyRoute
+  Not_authAccountLostEmailChange_email_rkIndexLazyRoute: typeof Not_authAccountLostEmailChange_email_rkIndexLazyRoute
   Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute: typeof Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute
   Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute: typeof Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute
 }
@@ -838,6 +864,8 @@ const Not_authAccountLostEmailRouteRouteChildren: Not_authAccountLostEmailRouteR
   {
     Not_authAccountLostEmailIndexLazyRoute:
       Not_authAccountLostEmailIndexLazyRoute,
+    Not_authAccountLostEmailChange_email_rkIndexLazyRoute:
+      Not_authAccountLostEmailChange_email_rkIndexLazyRoute,
     Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute:
       Not_authAccountLostEmailDisabled_2fa_rkIndexLazyRoute,
     Not_authAccountLostEmailPassword_reset_rkIndexLazyRoute:

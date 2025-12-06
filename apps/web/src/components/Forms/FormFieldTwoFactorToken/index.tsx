@@ -13,22 +13,23 @@ type Props<TFormValues extends FieldValues> = {
 	form: UseFormReturn<TFormValues>;
 };
 
-export function FormFieldRecoveryKey<
-	TFormValues extends { recoveryKey: string } & FieldValues,
+export function FormFieldTwoFactorToken<
+	TFormValues extends { twoFactorToken?: string } & FieldValues,
 >({ disabled, form }: Props<TFormValues>) {
 	return (
 		<FormField
 			control={form.control}
-			name={"recoveryKey" as Path<TFormValues>}
+			name={"twoFactorToken" as Path<TFormValues>}
 			render={({ field: { onChange, value, ...field } }) => {
 				return (
 					<FormItem className="flex flex-1 flex-col gap-0.5 md:flex-row md:items-center">
-						<FormLabel className="min-w-35">Recovery Key:</FormLabel>
+						<FormLabel className="min-w-35">Confirmation Code:</FormLabel>
 						<div className="flex w-full flex-col">
 							<FormControl>
 								<Input
 									{...field}
-									placeholder="Recovery Key..."
+									placeholder="Confirmation Code..."
+									maxLength={6}
 									value={value}
 									disabled={disabled}
 									onChange={(event) => {

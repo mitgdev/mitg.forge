@@ -1,3 +1,4 @@
+export * from "./changeEmailWithRecoveryKey";
 export * from "./findByEmailOrCharacterName";
 export * from "./generatePasswordReset";
 export * from "./resetPasswordWithRecoveryKey";

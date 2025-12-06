@@ -10,30 +10,32 @@ import { Input } from "@/ui/Input";
 
 type Props<TFormValues extends FieldValues> = {
 	disabled?: boolean;
+	label?: string;
 	form: UseFormReturn<TFormValues>;
 };
 
-export function FormFieldRecoveryKey<
-	TFormValues extends { recoveryKey: string } & FieldValues,
->({ disabled, form }: Props<TFormValues>) {
+export function FormFieldEmail<
+	TFormValues extends { email: string } & FieldValues,
+>({ disabled, label = "Email:", form }: Props<TFormValues>) {
 	return (
 		<FormField
 			control={form.control}
-			name={"recoveryKey" as Path<TFormValues>}
+			name={"email" as Path<TFormValues>}
 			render={({ field: { onChange, value, ...field } }) => {
 				return (
 					<FormItem className="flex flex-1 flex-col gap-0.5 md:flex-row md:items-center">
-						<FormLabel className="min-w-35">Recovery Key:</FormLabel>
+						<FormLabel className="min-w-35">{label}</FormLabel>
 						<div className="flex w-full flex-col">
 							<FormControl>
 								<Input
 									{...field}
-									placeholder="Recovery Key..."
+									placeholder="Email..."
 									value={value}
 									disabled={disabled}
 									onChange={(event) => {
 										onChange(event.target.value);
 									}}
+									type="email"
 									className="max-w-sm"
 								/>
 							</FormControl>

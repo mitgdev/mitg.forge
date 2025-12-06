@@ -59,9 +59,10 @@ export const AccountLostOptionsForm = () => {
 					setDialogResetPasswordOpen(true);
 					break;
 				case "change_email_recovery_key":
-					/**
-					 * TODO: Send to a page where the user can input their recovery key to change their email.
-					 */
+					navigate({
+						to: "/account/lost/$email/change_email_rk",
+						params: { email },
+					});
 					break;
 				case "disabled_two_fa_recovery_key":
 					navigate({

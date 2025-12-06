@@ -40,6 +40,7 @@ import type {
 	ChangePasswordWithTokenUseCase,
 	ConfigInfoUseCase,
 	ConfigUpdateUseCase,
+	LostAccountChangeEmailWithRecoveryKeyUseCase,
 	LostAccountFindByEmailOrCharacterNameUseCase,
 	LostAccountGeneratePasswordResetUseCase,
 	LostAccountResetPasswordWithRecoveryKeyUseCase,
@@ -260,6 +261,10 @@ export const TOKENS = {
 	LostAccountResetTwoFactorWithRecoveryKeyUseCase:
 		token<LostAccountResetTwoFactorWithRecoveryKeyUseCase>(
 			"LostAccountResetTwoFactorWithRecoveryKeyUseCase",
+		),
+	LostAccountChangeEmailWithRecoveryKeyUseCase:
+		token<LostAccountChangeEmailWithRecoveryKeyUseCase>(
+			"LostAccountChangeEmailWithRecoveryKeyUseCase",
 		),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),

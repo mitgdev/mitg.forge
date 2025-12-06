@@ -2,22 +2,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { simplePasswordSchema } from "@miforge/core/schemas";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { TwoFactorDialog } from "@/components/Forms/TwoFactorDialog";
 import { api } from "@/sdk/lib/api/factory";
 import { withORPCErrorHandling } from "@/sdk/utils/orpc";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
 import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-} from "@/ui/Dialog";
 import {
 	Form,
 	FormControl,
@@ -45,12 +39,14 @@ const FormSchema = z.object({
 type FormValues = z.infer<typeof FormSchema>;
 
 export const LoginSection = () => {
-	const [showTwoFactorDialog, setShowTwoFactorDialog] = useState(false);
 	const router = useRouter();
 	const navigate = useNavigate();
-	const { mutateAsync } = useMutation(
-		api.query.miforge.accounts.login.mutationOptions(),
-	);
+	const {
+		mutateAsync: login,
+		isPending,
+		isSuccess,
+		error,
+	} = useMutation(api.query.miforge.accounts.login.mutationOptions());
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(FormSchema),
@@ -64,7 +60,7 @@ export const LoginSection = () => {
 		async (data: FormValues) => {
 			withORPCErrorHandling(
 				async () => {
-					await mutateAsync({
+					await login({
 						email: data.email,
 						password: data.password,
 						twoFactorCode: data.twoFactorToken,
@@ -79,18 +75,10 @@ export const LoginSection = () => {
 							});
 						});
 					},
-					onORPCError: async (error) => {
-						const hasTwoFactorCause =
-							error?.data?.cause === "TWO_FACTOR_TOKEN_MISSING";
-
-						if (hasTwoFactorCause) {
-							setShowTwoFactorDialog(true);
-						}
-					},
 				},
 			);
 		},
-		[mutateAsync, navigate, router],
+		[login, navigate, router],
 	);
 
 	return (
@@ -133,7 +121,11 @@ export const LoginSection = () => {
 														</FormLabel>
 														<div className="flex w-full flex-col">
 															<FormControl>
-																<Input {...field} className="flex-1" />
+																<Input
+																	{...field}
+																	className="flex-1"
+																	disabled={isPending || isSuccess}
+																/>
 															</FormControl>
 															<FormMessage className="text-red-500" />
 														</div>
@@ -156,6 +148,7 @@ export const LoginSection = () => {
 																	type="password"
 																	{...field}
 																	className="flex-1"
+																	disabled={isPending || isSuccess}
 																/>
 															</FormControl>
 															<FormMessage className="text-red-500" />
@@ -166,81 +159,31 @@ export const LoginSection = () => {
 										/>
 									</div>
 									<div className="flex flex-row-reverse flex-wrap gap-1 self-end md:flex-col md:self-start">
-										<ButtonImage type="submit" variant="info">
+										<ButtonImage
+											type="submit"
+											variant="info"
+											disabled={isPending || isSuccess}
+											loading={isPending}
+										>
 											Login
 										</ButtonImage>
-										<ButtonImageLink variant="info" to="/account/lost">
+										<ButtonImageLink
+											variant="info"
+											to="/account/lost"
+											disabled={isPending || isSuccess}
+										>
 											Lost Account
 										</ButtonImageLink>
 									</div>
 								</div>
 
-								<Dialog
-									open={showTwoFactorDialog}
-									onOpenChange={setShowTwoFactorDialog}
-								>
-									<DialogContent title="Two-Factor Authentication Required">
-										<DialogHeader className="hidden">
-											<DialogTitle>
-												Two-Factor Authentication Required
-											</DialogTitle>
-											<DialogDescription>
-												Your account has two-factor authentication enabled.
-												Please enter the confirmation code from your
-												authenticator app to continue.
-											</DialogDescription>
-										</DialogHeader>
-										<InnerContainer>
-											<FormField
-												control={form.control}
-												name="twoFactorToken"
-												render={({ field: { onChange, value, ...field } }) => {
-													return (
-														<FormItem className="flex flex-1 flex-col gap-0.5 md:flex-row md:items-center">
-															<FormLabel className="min-w-35">
-																Confirmation Code:
-															</FormLabel>
-															<div className="flex w-full flex-col">
-																<FormControl>
-																	<Input
-																		{...field}
-																		placeholder="Confirmation Code..."
-																		maxLength={6}
-																		value={value}
-																		onChange={(event) => {
-																			onChange(event.target.value);
-																		}}
-																		className="max-w-sm"
-																	/>
-																</FormControl>
-																<FormMessage className="text-red-500" />
-															</div>
-														</FormItem>
-													);
-												}}
-											/>
-										</InnerContainer>
-										<InnerContainer className="mb-0">
-											<div className="flex flex-row justify-end gap-1">
-												<ButtonImage
-													variant="info"
-													onClick={() => {
-														setShowTwoFactorDialog(false);
-													}}
-												>
-													Close
-												</ButtonImage>
-												<ButtonImage
-													type="button"
-													variant="green"
-													onClick={form.handleSubmit(handleSubmit)}
-												>
-													Confirm
-												</ButtonImage>
-											</div>
-										</InnerContainer>
-									</DialogContent>
-								</Dialog>
+								<TwoFactorDialog
+									form={form}
+									handleSubmit={handleSubmit}
+									disabled={isPending || isSuccess}
+									loading={isPending}
+									error={error}
+								/>
 							</form>
 						</Form>
 					</InnerContainer>

@@ -36,6 +36,9 @@ export class UseCasesFactory {
 		const resetTwoFactorWithRecoveryKey = this.di.resolve(
 			TOKENS.LostAccountResetTwoFactorWithRecoveryKeyUseCase,
 		);
+		const changeEmailWithRecoveryKey = this.di.resolve(
+			TOKENS.LostAccountChangeEmailWithRecoveryKeyUseCase,
+		);
 
 		return {
 			findByEmailOrCharacterName,
@@ -44,6 +47,7 @@ export class UseCasesFactory {
 			resetPasswordWithToken,
 			resetPasswordWithRecoveryKey,
 			resetTwoFactorWithRecoveryKey,
+			changeEmailWithRecoveryKey,
 		} as const;
 	}
 

@@ -52,16 +52,16 @@ export const WorldsSection = () => {
 									<th className="border border-septenary px-1 text-start font-bold text-secondary">
 										World
 									</th>
-									<th className="border border-septenary px-1 text-start font-bold text-secondary md:table-cell md:w-[10%]">
+									<th className="border border-septenary px-1 text-center font-bold text-secondary md:table-cell md:w-[10%]">
 										Online
 									</th>
-									<th className="border border-septenary px-1 text-start font-bold text-secondary md:table-cell">
+									<th className="border border-septenary px-1 text-center font-bold text-secondary md:table-cell">
 										Location
 									</th>
-									<th className="border border-septenary px-1 text-start font-bold text-secondary md:table-cell">
+									<th className="border border-septenary px-1 text-center font-bold text-secondary md:table-cell">
 										PvP Type
 									</th>
-									<th className="hidden border border-septenary px-1 text-start font-bold text-secondary md:table-cell">
+									<th className="hidden border border-septenary px-1 text-center font-bold text-secondary md:table-cell">
 										Uptime
 									</th>
 								</tr>
@@ -69,6 +69,9 @@ export const WorldsSection = () => {
 							<tbody>
 								{worlds.map((world, index) => {
 									const isOdd = index % 2 === 1;
+
+									const isOnline =
+										world.status.players.online > 0 && world.status.uptime > 0;
 
 									return (
 										<tr
@@ -89,9 +92,13 @@ export const WorldsSection = () => {
 												</Link>
 											</td>
 											<td className="border border-septenary p-1 text-center md:py-0.5">
-												<span className="text-secondary text-sm">
-													{world.status.players.online}
-												</span>
+												{isOnline ? (
+													<span className="text-secondary text-sm">
+														{world.status.players.online}
+													</span>
+												) : (
+													<span className="text-error text-sm">Offline</span>
+												)}
 											</td>
 											<td className="border border-septenary p-1 text-center md:py-0.5">
 												<div className="flex justify-center">
