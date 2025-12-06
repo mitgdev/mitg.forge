@@ -1,5 +1,25 @@
+## API - .gitignore
+# Node
 node_modules
-# Keep environment variables out of version control
-.env
 
+# Environment
+.env
+.env.*
+!.env.example
+
+# Builds and caches
+dist
+out
+.turbo
+.cache
+
+# Logs and debug
+*.log
+
+# Prisma generated files
 /generated/prisma
+
+## Keep other app-specific temporary files out
+*.tgz
+coverage/
+__generated__
