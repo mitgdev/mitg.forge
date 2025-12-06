@@ -7,7 +7,6 @@ import type {
 	HasherCrypto,
 	JwtCrypto,
 	Logger,
-	TwoFactorAuth,
 } from "@/domain/modules";
 import type {
 	AccountRepository,
@@ -17,6 +16,7 @@ import type {
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
 import { getAccountType } from "@/shared/utils/account/type";
+import type { AccountTwoFactorService } from "../accountTwoFactor";
 
 @injectable()
 export class SessionService {
@@ -35,7 +35,8 @@ export class SessionService {
 		private readonly configRepository: ConfigRepository,
 		@inject(TOKENS.HasherCrypto)
 		private readonly hasherCrypto: HasherCrypto,
-		@inject(TOKENS.TwoFactorAuth) private readonly twoFactorAuth: TwoFactorAuth,
+		@inject(TOKENS.AccountTwoFactorService)
+		private readonly accountTwoFactorService: AccountTwoFactorService,
 	) {}
 
 	@Catch()
@@ -87,34 +88,11 @@ export class SessionService {
 			});
 		}
 
-		if (account.two_factor_enabled) {
-			if (!account.two_factor_secret) {
-				throw new ORPCError("INTERNAL_SERVER_ERROR", {
-					message: "Two-factor authentication is misconfigured",
-				});
-			}
-
-			if (!twoFactorToken) {
-				throw new ORPCError("FORBIDDEN", {
-					cause: "TWO_FACTOR_TOKEN_MISSING",
-					data: {
-						cause: "TWO_FACTOR_TOKEN_MISSING",
-					},
-					message: "Two-factor authentication token required",
-				});
-			}
-
-			const isTwoFactorTokenValid = this.twoFactorAuth.verify({
-				secret: account.two_factor_secret,
-				token: twoFactorToken,
-			});
-
-			if (!isTwoFactorTokenValid) {
-				throw new ORPCError("UNAUTHORIZED", {
-					message: "Invalid credentials",
-				});
-			}
-		}
+		await this.accountTwoFactorService.validateTwoFactorToken({
+			enabled: account.two_factor_enabled,
+			secret: account.two_factor_secret,
+			token: twoFactorToken,
+		});
 
 		const token = this.jwt.generate(
 			{

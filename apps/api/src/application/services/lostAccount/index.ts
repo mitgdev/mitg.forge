@@ -1,7 +1,7 @@
 import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
 import { Catch } from "@/application/decorators/Catch";
-import type { EmailLinks, HasherCrypto, TwoFactorAuth } from "@/domain/modules";
+import type { EmailLinks, HasherCrypto } from "@/domain/modules";
 import type {
 	AccountConfirmationsRepository,
 	AccountRegistrationRepository,
@@ -38,7 +38,6 @@ export class LostAccountService {
 		private readonly recoveryKeyService: RecoveryKeyService,
 		@inject(TOKENS.AccountTwoFactorService)
 		private readonly accountTwoFactorService: AccountTwoFactorService,
-		@inject(TOKENS.TwoFactorAuth) private readonly twoFactorAuth: TwoFactorAuth,
 		@inject(TOKENS.PlayersRepository)
 		private readonly playersRepository: PlayersRepository,
 	) {}
@@ -306,34 +305,17 @@ export class LostAccountService {
 			});
 		}
 
-		if (account.two_factor_enabled) {
-			if (!account.two_factor_secret) {
-				throw new ORPCError("INTERNAL_SERVER_ERROR", {
-					message: "Two-factor authentication is misconfigured",
-				});
-			}
+		await this.accountTwoFactorService.validateTwoFactorToken({
+			enabled: account.two_factor_enabled,
+			secret: account.two_factor_secret,
+			token: twoFactorToken,
+		});
 
-			if (!twoFactorToken) {
-				throw new ORPCError("FORBIDDEN", {
-					cause: "TWO_FACTOR_TOKEN_MISSING",
-					data: {
-						cause: "TWO_FACTOR_TOKEN_MISSING",
-					},
-					message: "Two-factor authentication token required",
-				});
-			}
-
-			const isTwoFactorTokenValid = this.twoFactorAuth.verify({
-				secret: account.two_factor_secret,
-				token: twoFactorToken,
-			});
-
-			if (!isTwoFactorTokenValid) {
-				throw new ORPCError("UNAUTHORIZED", {
-					message: "Invalid credentials",
-				});
-			}
-		}
+		await this.accountTwoFactorService.validateTwoFactorToken({
+			enabled: account.two_factor_enabled,
+			secret: account.two_factor_secret,
+			token: twoFactorToken,
+		});
 
 		const emailAlreadyInUse =
 			await this.accountRepository.findByEmail(newEmail);

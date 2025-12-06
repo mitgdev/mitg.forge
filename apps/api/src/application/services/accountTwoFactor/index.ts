@@ -225,4 +225,42 @@ export class AccountTwoFactorService {
 			subject: "Two-Factor Authentication Disabled via Recovery Key",
 		});
 	}
+
+	@Catch()
+	async validateTwoFactorToken(data: {
+		enabled: boolean;
+		secret: string | null;
+		token?: string;
+	}): Promise<void> {
+		if (!data.enabled) return;
+
+		if (!data.secret) {
+			throw new ORPCError("INTERNAL_SERVER_ERROR", {
+				message: "Two-factor authentication is misconfigured",
+			});
+		}
+
+		if (!data.token) {
+			throw new ORPCError("FORBIDDEN", {
+				cause: "TWO_FACTOR_TOKEN_MISSING",
+				data: {
+					cause: "TWO_FACTOR_TOKEN_MISSING",
+				},
+				message: "Two-factor authentication token required",
+			});
+		}
+
+		const isTwoFactorTokenValid = this.twoFactorAuth.verify({
+			secret: data.secret,
+			token: data.token,
+		});
+
+		if (!isTwoFactorTokenValid) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid credentials",
+			});
+		}
+
+		return;
+	}
 }
