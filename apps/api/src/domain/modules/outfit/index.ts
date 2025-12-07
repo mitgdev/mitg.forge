@@ -65,7 +65,9 @@ function resolveOutfitFolder(): string {
 export class Outfit {
 	private readonly folder = resolveOutfitFolder();
 
-	constructor(@inject(TOKENS.Logger) private readonly logger: Logger) {}
+	constructor(@inject(TOKENS.Logger) private readonly logger: Logger) {
+		this.logger.info(`[Outfit] Using outfit folder: ${this.folder}`);
+	}
 
 	private async folderExists(path: string): Promise<boolean> {
 		try {
