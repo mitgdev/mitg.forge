@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- fundo geral -->
+  <rect x="0" y="0" width="64" height="64" fill="#050608" />
+
+  <!-- borda estilo “frame” -->
+  <rect x="4" y="4" width="56" height="56" fill="#111318" stroke="#c8aa6e" stroke-width="2" />
+
+  <!-- “silhueta” de armadura bem simples -->
+  <path
+    d="M22 18h20l2 6v6l-4 4v12l-8 6-8-6V34l-4-4v-6z"
+    fill="#262b3b"
+    stroke="#7f6b3a"
+    stroke-width="2"
+  />
+
+  <!-- ponto de atenção / not found -->
+  <circle cx="32" cy="24" r="4" fill="#c94545" />
+  <rect x="30" y="30" width="4" height="10" rx="1" fill="#c94545" />
+  <rect x="30" y="44" width="4" height="4" rx="1" fill="#c94545" />
+</svg>

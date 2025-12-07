@@ -22,6 +22,7 @@
 	"dependencies": {
 		"@miforge/core": "workspace:*",
 		"@miforge/email": "workspace:*",
+		"@napi-rs/canvas": "^0.1.84",
 		"@orpc/client": "catalog:orpc",
 		"@orpc/experimental-publisher": "catalog:orpc",
 		"@orpc/json-schema": "catalog:orpc",

@@ -185,6 +185,16 @@ export class UseCasesFactory {
 		} as const;
 	}
 
+	get players() {
+		const outfit = this.di.resolve(TOKENS.PlayerOutfitUseCase);
+		const outfits = this.di.resolve(TOKENS.PlayerOutfitsUseCase);
+
+		return {
+			outfit,
+			outfits,
+		} as const;
+	}
+
 	get config() {
 		const info = this.di.resolve(TOKENS.ConfigInfoUseCase);
 		const update = this.di.resolve(TOKENS.ConfigUpdateUseCase);

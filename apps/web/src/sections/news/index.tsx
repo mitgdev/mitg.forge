@@ -5,6 +5,7 @@ import { InnerSection } from "@/ui/Section/Inner";
 
 export const NewsSection = () => {
 	const { config } = useConfig();
+
 	return (
 		<Section>
 			<SectionHeader color="green">

@@ -1,6 +1,9 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useLocalStorage } from "usehooks-ts";
+import { OutfitAnimation } from "@/components/OutfitAnimation";
 import { ThemeBox } from "@/components/Themebox";
+import { api } from "@/sdk/lib/api/factory";
 import { cn } from "@/sdk/utils/cn";
 import { Tooltip } from "@/ui/Tooltip";
 
@@ -8,52 +11,95 @@ const mockPlayers: Array<{
 	name: string;
 	level: number;
 	experience: number;
-	outfitUrl: string;
 	vocation: string;
 }> = [
 	{
 		name: "Kamity",
 		level: Math.floor(Math.random() * 1500) + 100,
 		experience: Math.floor(Math.random() * 99999999) + 1000,
-		outfitUrl:
-			"https://outfit-images.ots.me/latest_walk/animoutfit.php?id=1445&addons=3&head=114&body=114&legs=127&feet=108",
 		vocation: "Elite Knight",
 	},
 	{
 		name: "Leroy Jenkins",
 		level: Math.floor(Math.random() * 1500) + 100,
 		experience: Math.floor(Math.random() * 99999999) + 1000,
-		outfitUrl:
-			"https://outfit-images.ots.me/latest_walk/animoutfit.php?id=1444&addons=3&head=95&body=113&legs=39&feet=115",
 		vocation: "Elite Knight",
 	},
 	{
 		name: "Yeaerth",
 		level: Math.floor(Math.random() * 1500) + 100,
 		experience: Math.floor(Math.random() * 99999999) + 1000,
-		outfitUrl:
-			"https://outfit-images.ots.me/latest_walk/animoutfit.php?id=130&addons=3&head=0&body=114&legs=94&feet=94",
 		vocation: "Elite Knight",
 	},
 	{
 		name: "Kamity",
 		level: Math.floor(Math.random() * 1500) + 100,
 		experience: Math.floor(Math.random() * 99999999) + 1000,
-		outfitUrl:
-			"https://outfit-images.ots.me/latest_walk/animoutfit.php?id=130&head=114&body=114&legs=0&feet=127",
 		vocation: "Elite Knight",
 	},
 	{
 		name: "Liker",
 		level: Math.floor(Math.random() * 1500) + 100,
 		experience: Math.floor(Math.random() * 99999999) + 1000,
-		outfitUrl:
-			"https://outfit-images.ots.me/latest_walk/animoutfit.php?id=128&addons=3&head=79&body=114&legs=89&feet=78",
 		vocation: "Elite Knight",
 	},
 ];
 
 export const RankBox = () => {
+	const { data: preview } = useQuery(
+		api.query.miforge.outfit.list.queryOptions({
+			input: {
+				parameters: [
+					{
+						looktype: 128,
+						addons: 3,
+						head: 79,
+						body: 114,
+						legs: 89,
+						feet: 78,
+						direction: 3,
+					},
+					{
+						looktype: 1444,
+						addons: 3,
+						head: 95,
+						body: 113,
+						legs: 39,
+						feet: 115,
+						direction: 3,
+					},
+					{
+						looktype: 1445,
+						addons: 3,
+						head: 114,
+						body: 114,
+						legs: 127,
+						feet: 108,
+						direction: 3,
+					},
+					{
+						looktype: 130,
+						addons: 3,
+						head: 0,
+						body: 114,
+						legs: 94,
+						feet: 94,
+						direction: 3,
+					},
+					{
+						looktype: 130,
+						addons: 1,
+						head: 114,
+						body: 114,
+						legs: 0,
+						feet: 127,
+						direction: 3,
+					},
+				],
+			},
+		}),
+	);
+
 	const [mode, setMode] = useLocalStorage<"level" | "experience">(
 		"miforge:rank-box-mode",
 		"experience",
@@ -96,6 +142,7 @@ export const RankBox = () => {
 					})
 					.map((player, index) => {
 						const last = mockPlayers.length - 1;
+						const outfitFrames = preview?.outfits[index].frames ?? [];
 
 						return (
 							<Link
@@ -119,9 +166,8 @@ export const RankBox = () => {
 								</Tooltip>
 
 								<div className="h-12 w-8 min-w-8">
-									<img
-										src={player.outfitUrl}
-										alt="outfit"
+									<OutfitAnimation
+										frames={outfitFrames}
 										className="-left-8 absolute bottom-1.5 h-16 w-16"
 									/>
 								</div>

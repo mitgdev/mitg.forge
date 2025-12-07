@@ -20,7 +20,11 @@ export class Cache {
 			ttl: ttl ?? null,
 		};
 
-		await this.redis.set(key, JSON.stringify(payload), "EX", ttl ?? 0);
+		if (ttl && ttl > 0) {
+			await this.redis.set(key, JSON.stringify(payload), "EX", ttl);
+		} else {
+			await this.redis.set(key, JSON.stringify(payload));
+		}
 	}
 
 	public async get<T>(key: string): Promise<Payload<T> | null> {

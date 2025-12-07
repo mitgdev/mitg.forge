@@ -34,6 +34,8 @@ import {
 	LostAccountResetPasswordWithTokenUseCase,
 	LostAccountResetTwoFactorWithRecoveryKeyUseCase,
 	LostAccountVerifyConfirmationTokenUseCase,
+	PlayerOutfitsUseCase,
+	PlayerOutfitUseCase,
 	SessionAuthenticatedUseCase,
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
@@ -245,6 +247,17 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.ConfigUpdateUseCase,
 		{ useClass: ConfigUpdateUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.PlayerOutfitUseCase,
+		{ useClass: PlayerOutfitUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.PlayerOutfitsUseCase,
+		{ useClass: PlayerOutfitsUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

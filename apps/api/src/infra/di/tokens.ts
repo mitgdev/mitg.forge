@@ -47,6 +47,8 @@ import type {
 	LostAccountResetPasswordWithTokenUseCase,
 	LostAccountResetTwoFactorWithRecoveryKeyUseCase,
 	LostAccountVerifyConfirmationTokenUseCase,
+	PlayerOutfitsUseCase,
+	PlayerOutfitUseCase,
 	SessionAuthenticatedUseCase,
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
@@ -74,6 +76,7 @@ import type {
 	TokenHasher,
 	TwoFactorAuth,
 } from "@/domain/modules";
+import type { Outfit } from "@/domain/modules/outfit";
 import type {
 	AccountConfirmationsRepository,
 	AccountRegistrationRepository,
@@ -127,6 +130,7 @@ export const TOKENS = {
 	EmailLinks: token<EmailLinks>("EmailLinks"),
 	TokenHasher: token<TokenHasher>("TokenHasher"),
 	TwoFactorAuth: token<TwoFactorAuth>("TwoFactorAuth"),
+	Outfit: token<Outfit>("Outfit"),
 
 	// Crypto
 	HasherCrypto: token<HasherCrypto>("HasherCrypto"),
@@ -282,6 +286,9 @@ export const TOKENS = {
 	SessionCanBeAuthenticatedUseCase: token<SessionCanBeAuthenticatedUseCase>(
 		"SessionCanBeAuthenticatedUseCase",
 	),
+
+	PlayerOutfitUseCase: token<PlayerOutfitUseCase>("PlayerOutfitUseCase"),
+	PlayerOutfitsUseCase: token<PlayerOutfitsUseCase>("PlayerOutfitsUseCase"),
 
 	TibiaLoginUseCase: token<TibiaLoginUseCase>("TibiaLoginUseCase"),
 } as const;

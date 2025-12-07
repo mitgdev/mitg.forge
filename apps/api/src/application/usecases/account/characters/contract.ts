@@ -1,6 +1,7 @@
 import z from "zod";
 import { GuildSchema } from "@/shared/schemas/Guild";
 import { GuildRankSchema } from "@/shared/schemas/GuildRank";
+import { OutfitAnimationSchema } from "@/shared/schemas/OutfitAnimation";
 import { PlayerSchema } from "@/shared/schemas/Player";
 import { PlayerDailyRewardHistorySchema } from "@/shared/schemas/PlayerDailyRewardHistory";
 import { PlayerDepotItemSchema } from "@/shared/schemas/PlayerDepotItem";
@@ -13,6 +14,7 @@ export const AccountCharactersContractSchema = {
 	output: createPaginateSchema(
 		PlayerSchema.omit({ lastip: true }).extend({
 			online: z.boolean(),
+			frames: OutfitAnimationSchema,
 			depot_items: z.array(PlayerDepotItemSchema),
 			outfits: z.array(PlayerOutfitSchema),
 			rewards: z.array(PlayerRewardSchema),

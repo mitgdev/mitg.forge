@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
+import { OutfitAnimation } from "@/components/OutfitAnimation";
 import { PlayerStatusHidden } from "@/components/Player/Hidden";
 import { PlayerMain } from "@/components/Player/Main";
 import { PlayerIsOnline } from "@/components/Player/Online";
@@ -9,7 +10,6 @@ import { PlayerVocation } from "@/components/Player/Vocation";
 import { useTimezone } from "@/sdk/hooks/useTimezone";
 import { api } from "@/sdk/lib/api/factory";
 import { cn } from "@/sdk/utils/cn";
-import { makeOutfit } from "@/sdk/utils/outfit";
 import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
@@ -73,16 +73,8 @@ export const AccountCharacters = () => {
 									<td className="border border-septenary p-1 text-secondary">
 										<div className="flex flex-row flex-wrap items-center gap-1">
 											<div className="relative hidden h-16 w-16 md:block">
-												<img
-													alt="character-avatar"
-													src={makeOutfit({
-														id: character.looktype,
-														addons: character.lookaddons,
-														head: character.lookhead,
-														body: character.lookbody,
-														legs: character.looklegs,
-														feet: character.lookfeet,
-													})}
+												<OutfitAnimation
+													frames={character.frames}
 													className="absolute right-3 bottom-3"
 												/>
 											</div>

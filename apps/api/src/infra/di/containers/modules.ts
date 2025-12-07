@@ -14,6 +14,7 @@ import {
 	TokenHasher,
 	TwoFactorAuth,
 } from "@/domain/modules";
+import { Outfit } from "@/domain/modules/outfit";
 import { TOKENS } from "../tokens";
 
 export function registerModules() {
@@ -80,6 +81,11 @@ export function registerModules() {
 	container.register(
 		TOKENS.TwoFactorAuth,
 		{ useClass: TwoFactorAuth },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+	container.register(
+		TOKENS.Outfit,
+		{ useClass: Outfit },
 		{ lifecycle: Lifecycle.Singleton },
 	);
 }

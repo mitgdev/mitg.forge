@@ -62,6 +62,10 @@ const FRONTEND_CONFIG_SCHEMA = z.object({
 	FRONTEND_URL: z.url(),
 });
 
+const OUTFIT_CONFIG_SCHEMA = z.object({
+	OUTFIT_FOLDER: z.string().default("/generated/outfits"),
+});
+
 const envSchema = z.object({
 	...FRONTEND_CONFIG_SCHEMA.shape,
 	...SERVER_CONFIG_SCHEMA.shape,
@@ -69,6 +73,7 @@ const envSchema = z.object({
 	...AUTHENTICATION_CONFIG_SCHEMA.shape,
 	...REDIS_CONFIG_SCHEMA.shape,
 	...MAILER_CONFIG_SCHEMA.shape,
+	...OUTFIT_CONFIG_SCHEMA.shape,
 	LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
 	SERVICE_NAME: z.string().default("miforge-api"),
 	PORT: z.coerce.number().default(4000),
