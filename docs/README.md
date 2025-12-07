@@ -52,6 +52,12 @@ MiForge's goal is to be a **complete and modern AAC** for Tibia servers:
 
 ---
 
+## Tutorials & Documentation
+
+- [How to release a new version of outfits](./tutorials/release-outfits.md)
+
+---
+
 ## Features
 
 ### Already Implementing / In Progress
