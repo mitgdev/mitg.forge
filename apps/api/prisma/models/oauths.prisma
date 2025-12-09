@@ -1,0 +1,34 @@
+enum OAuthProvider {
+  DISCORD
+}
+
+model miforge_account_oauths {
+  id Int @id @default(autoincrement())
+
+  provider OAuthProvider
+
+  providerAccountId String @map("provider_account_id") @db.VarChar(255)
+
+  username    String? @db.VarChar(255)
+  displayName String? @map("display_name") @db.VarChar(255)
+  email       String? @db.VarChar(255)
+  avatarUrl   String? @map("avatar_url") @db.VarChar(512)
+
+  accessToken  String?   @map("access_token") @db.Text
+  refreshToken String?   @map("refresh_token") @db.Text
+  expiresAt    DateTime? @map("expires_at")
+  scope        String?   @db.VarChar(255)
+
+  rawProfile Json? @map("raw_profile")
+
+  accountId Int      @map("account_id") @db.UnsignedInt
+  account   accounts @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  /// Um mesmo (provider, providerAccountId) não pode estar em dois usuários
+  @@unique([provider, providerAccountId], name: "oauth_provider_account_unique")
+  /// Index pra listar conexões de uma conta
+  @@index([accountId, provider], name: "oauth_account_provider_idx")
+}
