@@ -36,6 +36,9 @@ const miforgeConfig = MiforgeConfigSchema.decode({
   mailer: {
     enabled: Boolean(env.MAILER_PROVIDER)
   },
+  discord: {
+    enabled: Boolean(env.DISCORD_ENABLED)
+  },
   account: {
     emailConfirmationRequired: Boolean(env.MAILER_PROVIDER),
     emailChangeConfirmationRequired: Boolean(env.MAILER_PROVIDER),

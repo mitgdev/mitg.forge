@@ -53,6 +53,7 @@ const MAILER_CONFIG_SCHEMA = z.object({
 	MAILER_SMTP_HOST: z.string().optional(),
 	MAILER_SMTP_PORT: z.coerce.number().optional(),
 	MAILER_SMTP_SECURE: z
+		.string()
 		.transform((val) => val === "true" || val === "1")
 		.optional(),
 	MAILER_SMTP_USER: z.string().optional(),
@@ -79,6 +80,7 @@ const OUTFIT_CONFIG_SCHEMA = z.object({
 
 const DISCORD_CONFIG_SCHEMA = z.object({
 	DISCORD_ENABLED: z
+		.string()
 		.transform((val) => val === "true" || val === "1")
 		.default(false),
 	DISCORD_TOKEN: z.string().optional(),
@@ -104,12 +106,8 @@ const envSchema = z.object({
 	NODE_ENV: z
 		.enum(["development", "production", "test"])
 		.default("development"),
-	isDev: z
-		.transform((val) => val !== "production")
-		.default(process.env.NODE_ENV !== "production"),
-	isProd: z
-		.transform((val) => val === "production")
-		.default(process.env.NODE_ENV === "production"),
+	isDev: z.boolean().default(process.env.NODE_ENV !== "production"),
+	isProd: z.boolean().default(process.env.NODE_ENV === "production"),
 });
 
 export const env = envSchema

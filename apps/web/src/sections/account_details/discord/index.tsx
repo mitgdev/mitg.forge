@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
+import { useConfig } from "@/sdk/contexts/config";
 import { api } from "@/sdk/lib/api/factory";
 import { withORPCErrorHandling } from "@/sdk/utils/orpc";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
@@ -15,6 +16,7 @@ import {
 } from "@/ui/Dialog";
 
 export const AccountDetailsDiscordOauth = () => {
+	const { config } = useConfig();
 	const queryClient = useQueryClient();
 	const [confirmUnlinkDialogOpen, setConfirmUnlinkDialogOpen] = useState(false);
 	const { data: details } = useQuery(
@@ -67,6 +69,10 @@ export const AccountDetailsDiscordOauth = () => {
 			},
 		);
 	}, [linkDiscord]);
+
+	if (!config.discord.enabled) {
+		return null;
+	}
 
 	return (
 		<Container title="Discord OAuth">

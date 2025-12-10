@@ -60,7 +60,7 @@ export const registerDiscord = () => {
 
 	container.register(
 		TOKENS.DiscordPingCommand,
-		{ useToken: DiscordPingCommand },
+		{ useClass: DiscordPingCommand },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

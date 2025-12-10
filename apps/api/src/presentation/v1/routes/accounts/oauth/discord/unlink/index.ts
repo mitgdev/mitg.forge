@@ -5,9 +5,9 @@ export const discordOauthUnlinkRoute = isAuthenticatedProcedure
 	.route({
 		method: "DELETE",
 		path: "/",
-		summary: "OAuth Discord Link",
+		summary: "OAuth Discord Unlink",
 		successStatus: 202,
-		description: "Get the OAuth link to authenticate with Discord.",
+		description: "Unlink the Discord account from the authenticated user.",
 	})
 	.input(AccountDiscordOauthUnlinkContractSchema.input)
 	.output(AccountDiscordOauthUnlinkContractSchema.output)

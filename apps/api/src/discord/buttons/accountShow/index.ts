@@ -45,7 +45,7 @@ export class DiscordAccountShowButtonHandler extends DiscordButtonHandlerBase<Ac
 
 		await interaction.reply({
 			content: [
-				"✅ Conta de encontrada",
+				"✅ Conta encontrada",
 				`Email: \`${session.email}\``,
 				`Criada em: \`${account.created_at.toISOString()}\``,
 			].join("\n"),

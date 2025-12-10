@@ -59,6 +59,9 @@ export class ConfigRepository {
 			mailer: {
 				enabled: Boolean(env.MAILER_PROVIDER),
 			},
+			discord: {
+				enabled: Boolean(env.DISCORD_ENABLED),
+			},
 		});
 
 		await this.database.miforge_config.upsert({
