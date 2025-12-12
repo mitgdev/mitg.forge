@@ -1,5 +1,5 @@
 import { env } from '@/infra/env'
-import {PrismaClient} from 'generated/client'
+import {PrismaClient, type miforge_shop_service} from 'generated/client'
 import {PrismaMariaDb} from "@prisma/adapter-mariadb"
 import crypto from "node:crypto";
 import { MiforgeConfigSchema } from '@/shared/schemas/Config';
@@ -39,12 +39,59 @@ const miforgeConfig = MiforgeConfigSchema.decode({
   discord: {
     enabled: Boolean(env.DISCORD_ENABLED)
   },
+  mercado_pago: {
+    enabled: Boolean(env.MERCADO_PAGO_ENABLED)
+  },
   account: {
     emailConfirmationRequired: Boolean(env.MAILER_PROVIDER),
     emailChangeConfirmationRequired: Boolean(env.MAILER_PROVIDER),
     passwordResetConfirmationRequired: Boolean(env.MAILER_PROVIDER)
   }
 })
+
+const DEFAULT_SHOP_SERVICES: Pick<miforge_shop_service, "title" | "slug" | "price" | "quantity" | "description" | "type">[] = [{
+  type: "COINS",
+  title: "250 Coins",
+  slug: "250-coins",
+  price: 10, // cents = 0.20 = 20/100 = 0.2
+  quantity: 250,
+  description: null
+}, {
+  type: "COINS",
+  title: "750 Coins",
+  slug: "750-coins",
+  price: 10,
+  quantity: 750,
+  description: null
+}, {
+  type: "COINS",
+  title: "1500 Coins",
+  slug: "1500-coins",
+  price: 10,
+  quantity: 1500,
+  description: null
+}, {
+  type: "COINS",
+  title: "3000 Coins",
+  slug: "3000-coins",
+  price: 10,
+  quantity: 3000,
+  description: null
+}, {
+  type: "COINS",
+  title: "4000 Coins",
+  slug: "4000-coins",
+  price: 10,
+  quantity: 4000,
+  description: null
+}, {
+  type: "COINS",
+  title: "12000 Coins",
+  slug: "12000-coins",
+  price: 10, 
+  quantity: 12000, 
+  description: null
+}]
 
 async function main() {
   console.log("[seed] Seeding miforge_configs")
@@ -60,6 +107,17 @@ async function main() {
       data: JSON.stringify(miforgeConfig)
     }
   })
+
+  console.log("[seed] Seeding default shop services")
+  for (const service of DEFAULT_SHOP_SERVICES) {
+    await prisma.miforge_shop_service.upsert({
+      where: {
+        slug: service.slug
+      },
+      create: service,
+      update: {}
+    })
+  }
 
   for (const config of server_configs) {
     const existing = await prisma.server_config.findUnique({

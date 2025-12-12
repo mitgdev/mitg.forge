@@ -1,0 +1,51 @@
+enum ShopServiceType {
+  COINS
+}
+
+model miforge_shop_service {
+  id          Int             @id @default(autoincrement()) @db.UnsignedInt
+  type        ShopServiceType
+  slug        String          @unique @db.VarChar(100)
+  title       String          @db.VarChar(255)
+  description String?         @db.Text
+
+  transactions miforge_shop_transactions[]
+
+  price     Int     @default(0) @db.UnsignedInt
+  quantity  Int     @default(1) @db.UnsignedInt
+  is_active Boolean @default(true)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+enum ShopTransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELED
+  REFUNDED
+}
+
+enum ShopTransactionMethod {
+  MERCADO_PAGO_PIX
+}
+
+model miforge_shop_transactions {
+  id Int @id @default(autoincrement()) @db.UnsignedInt
+
+  status ShopTransactionStatus @default(PENDING)
+  method ShopTransactionMethod
+
+  units Int @default(1) @db.UnsignedInt
+  total Int @default(0) @db.UnsignedInt
+
+  serviceId Int                  @map("service_id") @db.UnsignedInt
+  service   miforge_shop_service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  accountId Int      @map("account_id") @db.UnsignedInt
+  account   accounts @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}

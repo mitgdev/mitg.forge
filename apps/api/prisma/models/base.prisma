@@ -101,6 +101,7 @@ model accounts {
   audits        miforge_account_audit[]
   confirmations miforge_account_confirmations[]
   oauths        miforge_account_oauths[]
+  transactions  miforge_shop_transactions[]
 
   two_factor_enabled      Boolean   @default(false)
   two_factor_secret       String?   @db.VarChar(64)
