@@ -49,46 +49,46 @@ const miforgeConfig = MiforgeConfigSchema.decode({
   }
 })
 
-const DEFAULT_SHOP_SERVICES: Pick<miforge_shop_service, "title" | "slug" | "price" | "quantity" | "description" | "type">[] = [{
+const DEFAULT_SHOP_SERVICES: Pick<miforge_shop_service, "title" | "slug" | "unit_price" | "quantity" | "description" | "type">[] = [{
   type: "COINS",
   title: "250 Coins",
   slug: "250-coins",
-  price: 10, // cents = 0.20 = 20/100 = 0.2
+  unit_price: 10, // cents = 0.10 = 10/100 = 0.1
   quantity: 250,
   description: null
 }, {
   type: "COINS",
   title: "750 Coins",
   slug: "750-coins",
-  price: 10,
+  unit_price: 10,
   quantity: 750,
   description: null
 }, {
   type: "COINS",
   title: "1500 Coins",
   slug: "1500-coins",
-  price: 10,
+  unit_price: 10,
   quantity: 1500,
   description: null
 }, {
   type: "COINS",
   title: "3000 Coins",
   slug: "3000-coins",
-  price: 10,
+  unit_price: 10,
   quantity: 3000,
   description: null
 }, {
   type: "COINS",
   title: "4000 Coins",
   slug: "4000-coins",
-  price: 10,
+  unit_price: 10,
   quantity: 4000,
   description: null
 }, {
   type: "COINS",
   title: "12000 Coins",
   slug: "12000-coins",
-  price: 10, 
+  unit_price: 10, 
   quantity: 12000, 
   description: null
 }]
@@ -115,7 +115,7 @@ async function main() {
         slug: service.slug
       },
       create: service,
-      update: {}
+      update: service
     })
   }
 

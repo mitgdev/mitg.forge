@@ -11,9 +11,9 @@ model miforge_shop_service {
 
   transactions miforge_shop_transactions[]
 
-  price     Int     @default(0) @db.UnsignedInt
-  quantity  Int     @default(1) @db.UnsignedInt
-  is_active Boolean @default(true)
+  unit_price Int     @default(0) @db.UnsignedInt
+  quantity   Int     @default(1) @db.UnsignedInt
+  is_active  Boolean @default(true)
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
@@ -36,6 +36,8 @@ model miforge_shop_transactions {
 
   status ShopTransactionStatus @default(PENDING)
   method ShopTransactionMethod
+
+  methodTransactionId String? @map("method_transaction_id") @db.VarChar(255)
 
   units Int @default(1) @db.UnsignedInt
   total Int @default(0) @db.UnsignedInt
