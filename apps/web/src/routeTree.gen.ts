@@ -36,6 +36,9 @@ const Not_authAccountLostIndexLazyRouteImport = createFileRoute(
 const Not_authAccountCreateIndexLazyRouteImport = createFileRoute(
   '/_not_auth/account/create/',
 )()
+const AuthShopDonateIndexLazyRouteImport = createFileRoute(
+  '/_auth/shop/donate/',
+)()
 const AuthAccountReset_passwordIndexLazyRouteImport = createFileRoute(
   '/_auth/account/reset_password/',
 )()
@@ -138,6 +141,13 @@ const Not_authAccountCreateIndexLazyRoute =
   } as any).lazy(() =>
     import('./routes/_not_auth/account/create/index.lazy').then((d) => d.Route),
   )
+const AuthShopDonateIndexLazyRoute = AuthShopDonateIndexLazyRouteImport.update({
+  id: '/shop/donate/',
+  path: '/shop/donate/',
+  getParentRoute: () => AuthRouteRoute,
+} as any).lazy(() =>
+  import('./routes/_auth/shop/donate/index.lazy').then((d) => d.Route),
+)
 const AuthAccountReset_passwordIndexLazyRoute =
   AuthAccountReset_passwordIndexLazyRouteImport.update({
     id: '/account/reset_password/',
@@ -354,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
   '/account/reset_password': typeof AuthAccountReset_passwordIndexLazyRoute
+  '/shop/donate': typeof AuthShopDonateIndexLazyRoute
   '/account/create': typeof Not_authAccountCreateIndexLazyRoute
   '/account/lost': typeof Not_authAccountLostIndexLazyRoute
   '/account/email/change/$token': typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
@@ -385,6 +396,7 @@ export interface FileRoutesByTo {
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
   '/account/reset_password': typeof AuthAccountReset_passwordIndexLazyRoute
+  '/shop/donate': typeof AuthShopDonateIndexLazyRoute
   '/account/create': typeof Not_authAccountCreateIndexLazyRoute
   '/account/lost': typeof Not_authAccountLostIndexLazyRoute
   '/account/email/change/$token': typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
@@ -421,6 +433,7 @@ export interface FileRoutesById {
   '/_auth/account/details/': typeof AuthAccountDetailsIndexLazyRoute
   '/_auth/account/registration/': typeof AuthAccountRegistrationIndexLazyRoute
   '/_auth/account/reset_password/': typeof AuthAccountReset_passwordIndexLazyRoute
+  '/_auth/shop/donate/': typeof AuthShopDonateIndexLazyRoute
   '/_not_auth/account/create/': typeof Not_authAccountCreateIndexLazyRoute
   '/_not_auth/account/lost/': typeof Not_authAccountLostIndexLazyRoute
   '/_auth/account/email/change/$token': typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
@@ -455,6 +468,7 @@ export interface FileRouteTypes {
     | '/account/details'
     | '/account/registration'
     | '/account/reset_password'
+    | '/shop/donate'
     | '/account/create'
     | '/account/lost'
     | '/account/email/change/$token'
@@ -486,6 +500,7 @@ export interface FileRouteTypes {
     | '/account/details'
     | '/account/registration'
     | '/account/reset_password'
+    | '/shop/donate'
     | '/account/create'
     | '/account/lost'
     | '/account/email/change/$token'
@@ -521,6 +536,7 @@ export interface FileRouteTypes {
     | '/_auth/account/details/'
     | '/_auth/account/registration/'
     | '/_auth/account/reset_password/'
+    | '/_auth/shop/donate/'
     | '/_not_auth/account/create/'
     | '/_not_auth/account/lost/'
     | '/_auth/account/email/change/$token'
@@ -624,6 +640,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account/create'
       preLoaderRoute: typeof Not_authAccountCreateIndexLazyRouteImport
       parentRoute: typeof Not_authRouteRoute
+    }
+    '/_auth/shop/donate/': {
+      id: '/_auth/shop/donate/'
+      path: '/shop/donate'
+      fullPath: '/shop/donate'
+      preLoaderRoute: typeof AuthShopDonateIndexLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/_auth/account/reset_password/': {
       id: '/_auth/account/reset_password/'
@@ -821,6 +844,7 @@ interface AuthRouteRouteChildren {
   AuthAccountDetailsIndexLazyRoute: typeof AuthAccountDetailsIndexLazyRoute
   AuthAccountRegistrationIndexLazyRoute: typeof AuthAccountRegistrationIndexLazyRoute
   AuthAccountReset_passwordIndexLazyRoute: typeof AuthAccountReset_passwordIndexLazyRoute
+  AuthShopDonateIndexLazyRoute: typeof AuthShopDonateIndexLazyRoute
   AuthAccount2faLinkIndexRoute: typeof AuthAccount2faLinkIndexRoute
   AuthAccount2faUnlinkIndexRoute: typeof AuthAccount2faUnlinkIndexRoute
   AuthAccountPlayerCreateIndexRoute: typeof AuthAccountPlayerCreateIndexRoute
@@ -840,6 +864,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccountRegistrationIndexLazyRoute: AuthAccountRegistrationIndexLazyRoute,
   AuthAccountReset_passwordIndexLazyRoute:
     AuthAccountReset_passwordIndexLazyRoute,
+  AuthShopDonateIndexLazyRoute: AuthShopDonateIndexLazyRoute,
   AuthAccount2faLinkIndexRoute: AuthAccount2faLinkIndexRoute,
   AuthAccount2faUnlinkIndexRoute: AuthAccount2faUnlinkIndexRoute,
   AuthAccountPlayerCreateIndexRoute: AuthAccountPlayerCreateIndexRoute,
