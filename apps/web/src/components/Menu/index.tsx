@@ -15,6 +15,11 @@ export const Menu = () => {
 					icon="sphere"
 					menus={[{ label: "Updates", to: "/", hot: true }]}
 				/>
+				<MenuItem
+					label="Shop"
+					icon="shop"
+					menus={[{ label: "Donate", to: "/shop/donate" }]}
+				/>
 			</MenuBox>
 		</div>
 	);

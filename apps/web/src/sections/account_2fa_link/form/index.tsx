@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -39,6 +39,7 @@ type FormConfirmValues = z.infer<typeof FormConfirmSchema>;
 export const Account2FALinkForm = () => {
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
+	const router = useRouter();
 
 	const {
 		data: setupData,
@@ -212,9 +213,12 @@ export const Account2FALinkForm = () => {
 							<InnerContainer>
 								<div className="flex flex-row flex-wrap items-end justify-end gap-2">
 									{!isSetupSuccessful && (
-										<ButtonImageLink variant="info" to="/">
+										<ButtonImage
+											variant="info"
+											onClick={() => router.history.back()}
+										>
 											Back
-										</ButtonImageLink>
+										</ButtonImage>
 									)}
 
 									<ButtonImage

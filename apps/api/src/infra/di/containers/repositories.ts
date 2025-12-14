@@ -10,6 +10,9 @@ import {
 	OtsServerRepository,
 	PlayersRepository,
 	SessionRepository,
+	ShopProvidersRepository,
+	ShopServicesRepository,
+	ShopTransactionsRepository,
 } from "@/domain/repositories";
 import { WorldsRepository } from "@/domain/repositories/worlds";
 import { TOKENS } from "../tokens";
@@ -65,6 +68,21 @@ export function registerRepositories() {
 	container.register(
 		TOKENS.AccountOauthRepository,
 		{ useClass: AccountOauthRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopServicesRepository,
+		{ useClass: ShopServicesRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopTransactionsRepository,
+		{ useClass: ShopTransactionsRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopProvidersRepository,
+		{ useClass: ShopProvidersRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

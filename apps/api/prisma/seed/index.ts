@@ -1,5 +1,5 @@
 import { env } from '@/infra/env'
-import {PrismaClient} from 'generated/client'
+import {PrismaClient, type miforge_shop_service} from 'generated/client'
 import {PrismaMariaDb} from "@prisma/adapter-mariadb"
 import crypto from "node:crypto";
 import { MiforgeConfigSchema } from '@/shared/schemas/Config';
@@ -39,12 +39,59 @@ const miforgeConfig = MiforgeConfigSchema.decode({
   discord: {
     enabled: Boolean(env.DISCORD_ENABLED)
   },
+  mercado_pago: {
+    enabled: Boolean(env.MERCADO_PAGO_ENABLED)
+  },
   account: {
     emailConfirmationRequired: Boolean(env.MAILER_PROVIDER),
     emailChangeConfirmationRequired: Boolean(env.MAILER_PROVIDER),
     passwordResetConfirmationRequired: Boolean(env.MAILER_PROVIDER)
   }
 })
+
+const DEFAULT_SHOP_SERVICES: Pick<miforge_shop_service, "title" | "slug" | "unit_price" | "quantity" | "description" | "type">[] = [{
+  type: "COINS",
+  title: "250 Coins",
+  slug: "250-coins",
+  unit_price: 10, // cents = 0.10 = 10/100 = 0.1
+  quantity: 250,
+  description: null
+}, {
+  type: "COINS",
+  title: "750 Coins",
+  slug: "750-coins",
+  unit_price: 10,
+  quantity: 750,
+  description: null
+}, {
+  type: "COINS",
+  title: "1500 Coins",
+  slug: "1500-coins",
+  unit_price: 10,
+  quantity: 1500,
+  description: null
+}, {
+  type: "COINS",
+  title: "3000 Coins",
+  slug: "3000-coins",
+  unit_price: 10,
+  quantity: 3000,
+  description: null
+}, {
+  type: "COINS",
+  title: "4000 Coins",
+  slug: "4000-coins",
+  unit_price: 10,
+  quantity: 4000,
+  description: null
+}, {
+  type: "COINS",
+  title: "12000 Coins",
+  slug: "12000-coins",
+  unit_price: 10, 
+  quantity: 12000, 
+  description: null
+}]
 
 async function main() {
   console.log("[seed] Seeding miforge_configs")
@@ -59,6 +106,33 @@ async function main() {
     update: {
       data: JSON.stringify(miforgeConfig)
     }
+  })
+
+  console.log("[seed] Seeding default shop services")
+  for (const service of DEFAULT_SHOP_SERVICES) {
+    await prisma.miforge_shop_service.upsert({
+      where: {
+        slug: service.slug
+      },
+      create: service,
+      update: service
+    })
+  }
+
+  console.log("[seed] Seeding default payment providers")
+  await prisma.miforge_shop_providers.upsert({
+    where: {
+      uniq_method_provider: {
+        method: "PIX",
+        provider: "MERCADO_PAGO"
+      }
+    },
+    create: {
+      method: "PIX",
+      provider: "MERCADO_PAGO",
+      name: "Mercado Pago PIX"
+    },
+    update: {}
   })
 
   for (const config of server_configs) {

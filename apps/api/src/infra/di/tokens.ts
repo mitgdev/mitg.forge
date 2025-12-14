@@ -8,9 +8,11 @@ import type {
 	AuditService,
 	ConfigService,
 	LostAccountService,
+	MercadoPagoService,
 	PlayersService,
 	RecoveryKeyService,
 	SessionService,
+	ShopService,
 	TibiaClientService,
 	WorldsService,
 } from "@/application/services";
@@ -58,6 +60,9 @@ import type {
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
+	ShopCreateOrderUseCase,
+	ShopProvidersUserCase,
+	ShopServicesUseCase,
 	TibiaLoginUseCase,
 	WorldsListUseCase,
 } from "@/application/usecases";
@@ -79,6 +84,7 @@ import type {
 	DiscordClient,
 	HttpClient,
 	Mailer,
+	MercadoPagoClient,
 	OtsServerClient,
 	Prisma,
 	Redis,
@@ -114,6 +120,9 @@ import type {
 	OtsServerRepository,
 	PlayersRepository,
 	SessionRepository,
+	ShopProvidersRepository,
+	ShopServicesRepository,
+	ShopTransactionsRepository,
 } from "@/domain/repositories";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import type { EmailQueue } from "@/jobs/queue/email";
@@ -173,6 +182,15 @@ const REPOSITORIES_TOKENS = {
 	OtsServerRepository: token<OtsServerRepository>("OtsServerRepository"),
 	AccountOauthRepository: token<AccountOauthRepository>(
 		"AccountOauthRepository",
+	),
+	ShopServicesRepository: token<ShopServicesRepository>(
+		"ShopServicesRepository",
+	),
+	ShopTransactionsRepository: token<ShopTransactionsRepository>(
+		"ShopTransactionsRepository",
+	),
+	ShopProvidersRepository: token<ShopProvidersRepository>(
+		"ShopProvidersRepository",
 	),
 };
 
@@ -321,6 +339,11 @@ const USECASES_TOKENS = {
 	PlayerOutfitUseCase: token<PlayerOutfitUseCase>("PlayerOutfitUseCase"),
 	PlayerOutfitsUseCase: token<PlayerOutfitsUseCase>("PlayerOutfitsUseCase"),
 	TibiaLoginUseCase: token<TibiaLoginUseCase>("TibiaLoginUseCase"),
+	ShopServicesUseCase: token<ShopServicesUseCase>("ShopServicesUseCase"),
+	ShopProvidersUserCase: token<ShopProvidersUserCase>("ShopProvidersUserCase"),
+	ShopCreateOrderUseCase: token<ShopCreateOrderUseCase>(
+		"ShopCreateOrderUseCase",
+	),
 };
 
 const SERVICES_TOKENS = {
@@ -340,6 +363,8 @@ const SERVICES_TOKENS = {
 	LostAccountService: token<LostAccountService>("LostAccountService"),
 	RecoveryKeyService: token<RecoveryKeyService>("RecoveryKeyService"),
 	AccountOauthService: token<AccountOauthService>("AccountOauthService"),
+	ShopService: token<ShopService>("ShopService"),
+	MercadoPagoService: token<MercadoPagoService>("MercadoPagoService"),
 };
 
 const QUEUE_AND_WORKERS_TOKENS = {
@@ -357,6 +382,8 @@ const CLIENTS_TOKENS = {
 	AppLivePublisher: token<AppLivePublisher>("AppLivePublisher"),
 	OtsServerClient: token<OtsServerClient>("OtsServerClient"),
 	HttpClient: token<HttpClient>("HttpClient"),
+	MercadoPagoHttpClient: token<HttpClient>("MercadoPagoHttpClient"),
+	MercadoPagoClient: token<MercadoPagoClient>("MercadoPagoClient"),
 };
 
 export const TOKENS = {

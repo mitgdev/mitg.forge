@@ -1,26 +1,36 @@
 import { Link, type LinkProps, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useSession } from "@/sdk/contexts/session";
 import { cn } from "@/sdk/utils/cn";
 
 const Icons = {
 	news: "/assets/icons/32/news-menu.gif",
 	sphere: "/assets/icons/32/armillary_sphere.gif",
 	munster: "/assets/icons/32/baby_munster.gif",
+	shop: "/assets/icons/32/tibiora_box.gif",
 };
 
 type Props = {
 	label: string;
 	icon: keyof typeof Icons;
+	needsSession?: boolean;
 	menus: Array<{
 		label: string;
 		to: LinkProps["to"];
+		needsSession?: boolean;
 		new?: boolean;
 		hot?: boolean;
 	}>;
 };
 
-export const MenuItem = ({ icon, label, menus = [] }: Props) => {
+export const MenuItem = ({
+	icon,
+	label,
+	menus = [],
+	needsSession = false,
+}: Props) => {
 	const routerState = useRouterState();
+	const { session } = useSession();
 	const [show, setShow] = useState(() => {
 		return menus.some(
 			(subMenu) => subMenu.to === routerState.location.pathname,
@@ -34,7 +44,16 @@ export const MenuItem = ({ icon, label, menus = [] }: Props) => {
 		setShow((prev) => (prev ? prev : shouldShow));
 	}, [routerState.location.pathname, menus]);
 
-	const heightTotal = menus.length * 18.8;
+	const heightTotal = menus.reduce((acc, subMenu) => {
+		if (subMenu.needsSession && !session) {
+			return acc;
+		}
+		return acc + 18.8;
+	}, 0);
+
+	if (needsSession && !session) {
+		return null;
+	}
 
 	return (
 		<div>
@@ -74,6 +93,10 @@ export const MenuItem = ({ icon, label, menus = [] }: Props) => {
 				/>
 				{menus.map((subMenu) => {
 					const isActive = routerState.location.pathname === subMenu.to;
+
+					if (subMenu.needsSession && !session) {
+						return null;
+					}
 
 					return (
 						<Link
