@@ -7,9 +7,11 @@ import {
 	AuditService,
 	ConfigService,
 	LostAccountService,
+	MercadoPagoService,
 	PlayersService,
 	RecoveryKeyService,
 	SessionService,
+	ShopService,
 	TibiaClientService,
 	WorldsService,
 } from "@/application/services";
@@ -74,6 +76,17 @@ export function registerServices() {
 	container.register(
 		TOKENS.AccountOauthService,
 		{ useClass: AccountOauthService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopService,
+		{ useClass: ShopService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.MercadoPagoService,
+		{ useClass: MercadoPagoService },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 }

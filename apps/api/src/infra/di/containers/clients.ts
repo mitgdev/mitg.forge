@@ -2,6 +2,7 @@ import { container, Lifecycle } from "tsyringe";
 import {
 	DiscordApiClient,
 	HttpClient,
+	MercadoPagoClient,
 	OtsServerClient,
 } from "@/domain/clients";
 import { env } from "@/infra/env";
@@ -27,6 +28,24 @@ export function registerClients() {
 			});
 		},
 	});
+
+	container.register(TOKENS.MercadoPagoHttpClient, {
+		useFactory: (c) => {
+			const logger = c.resolve(TOKENS.Logger);
+			return new HttpClient(logger, {
+				baseURL: env.MERCADO_PAGO_BASE_URL,
+				headers: {
+					Authorization: `Bearer ${env.MERCADO_PAGO_ACCESS_TOKEN}`,
+				},
+			});
+		},
+	});
+
+	container.register(
+		TOKENS.MercadoPagoClient,
+		{ useClass: MercadoPagoClient },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
 
 	container.register(
 		TOKENS.DiscordApiClient,

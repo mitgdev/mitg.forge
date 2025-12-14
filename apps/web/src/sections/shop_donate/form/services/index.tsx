@@ -47,7 +47,7 @@ export const ShopDonateStepServices = () => {
 							<FormItem className="flex flex-col gap-1 px-1 py-2 md:px-2">
 								<div className="flex flex-row flex-wrap justify-center gap-2">
 									{servicesWithSize.map((service) => {
-										const id = service.slug;
+										const id = service.id;
 										const price = service.unit_price * service.quantity;
 
 										if (service.type === "COINS") {
@@ -86,7 +86,7 @@ export const ShopDonateStepServices = () => {
 						variant="info"
 						type="button"
 						onClick={() => {
-							form.setValue("step", "payments");
+							form.setValue("step", "providers");
 						}}
 					>
 						Back

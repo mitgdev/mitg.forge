@@ -5,14 +5,14 @@ import z from "zod";
 import { useSession } from "@/sdk/contexts/session";
 import { Container } from "@/ui/Container";
 import { Form } from "@/ui/Form";
-import { ShopDonateStepPayments } from "./payments";
+import { ShopDonateStepProviders } from "./providers";
 import { ShopDonateStepReview } from "./review";
 import { ShopDonateStepServices } from "./services";
 
 const FormSchema = z.object({
-	step: z.enum(["payments", "services", "review"]),
-	paymentMethod: z.enum(["MERCADO_PAGO_PIX"]),
-	serviceId: z.string(),
+	step: z.enum(["providers", "services", "review"]),
+	providerId: z.number(),
+	serviceId: z.number(),
 	consent: z.boolean().refine((val) => val === true, {
 		message: "You must give consent to proceed",
 	}),
@@ -26,7 +26,7 @@ export const ShopDonateForm = () => {
 	const form = useForm<FormValues>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			step: "payments",
+			step: "providers",
 		},
 	});
 
@@ -34,7 +34,7 @@ export const ShopDonateForm = () => {
 
 	const title = useMemo(() => {
 		switch (step) {
-			case "payments":
+			case "providers":
 				return "Select Payment Method";
 			case "services":
 				return "Select Products";
@@ -59,7 +59,7 @@ export const ShopDonateForm = () => {
 			<Container title={title}>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(handleSubmit)}>
-						<ShopDonateStepPayments />
+						<ShopDonateStepProviders />
 						<ShopDonateStepServices />
 						<ShopDonateStepReview />
 					</form>

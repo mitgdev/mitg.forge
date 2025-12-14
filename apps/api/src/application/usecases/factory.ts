@@ -219,4 +219,16 @@ export class UseCasesFactory {
 			update,
 		} as const;
 	}
+
+	get shop() {
+		const services = this.di.resolve(TOKENS.ShopServicesUseCase);
+		const providers = this.di.resolve(TOKENS.ShopProvidersUserCase);
+		const orderCreate = this.di.resolve(TOKENS.ShopCreateOrderUseCase);
+
+		return {
+			services,
+			providers,
+			orderCreate,
+		} as const;
+	}
 }

@@ -1,27 +1,28 @@
+import type { ShopProviderMethod } from "@miforge/api/shared/schemas/ShopProvider";
 import { cn } from "@/sdk/utils/cn";
 
-type MethodMetaKey = "mercado-pago" | "pag-seguro" | "pix";
-
-const METHOD_META: Record<MethodMetaKey, { icon: string; className?: string }> =
-	{
-		"mercado-pago": {
-			icon: "/assets/payments/methods/mercado-pago.png",
-		},
-		pix: {
-			icon: "/assets/payments/methods/pix.webp",
-			className: " mx-auto rounded-md w-[80px]",
-		},
-		"pag-seguro": {
-			icon: "/assets/payments/methods/pag-seguro.png",
-		},
-	};
+const METHOD_META: Record<
+	ShopProviderMethod,
+	{ icon: string; className?: string }
+> = {
+	// "mercado-pago": {
+	// 	icon: "/assets/payments/methods/mercado-pago.png",
+	// },
+	PIX: {
+		icon: "/assets/payments/methods/pix.webp",
+		className: " mx-auto rounded-md w-[80px]",
+	},
+	// "pag-seguro": {
+	// 	icon: "/assets/payments/methods/pag-seguro.png",
+	// },
+};
 
 type PaymentMethodItemProps = {
 	selected: boolean;
 	onClick: () => void;
 	title: string;
 	speed?: "instant" | "medium" | "slow";
-	method: MethodMetaKey;
+	method: ShopProviderMethod;
 };
 
 export const PaymentMethodItem = ({

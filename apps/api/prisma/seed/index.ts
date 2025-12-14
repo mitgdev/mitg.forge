@@ -119,6 +119,22 @@ async function main() {
     })
   }
 
+  console.log("[seed] Seeding default payment providers")
+  await prisma.miforge_shop_providers.upsert({
+    where: {
+      uniq_method_provider: {
+        method: "PIX",
+        provider: "MERCADO_PAGO"
+      }
+    },
+    create: {
+      method: "PIX",
+      provider: "MERCADO_PAGO",
+      name: "Mercado Pago PIX"
+    },
+    update: {}
+  })
+
   for (const config of server_configs) {
     const existing = await prisma.server_config.findUnique({
       where: {

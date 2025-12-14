@@ -12,9 +12,12 @@ import { InnerContainer } from "@/ui/Container/Inner";
 import { FormControl, FormField, FormItem, FormMessage } from "@/ui/Form";
 import { Label } from "@/ui/Label";
 import type { FormValues } from "..";
-import { PaymentMethods } from "../payments";
 
 export const ShopDonateStepReview = () => {
+	const { data: providers = [] } = useQuery(
+		api.query.miforge.shop.providers.queryOptions(),
+	);
+
 	const { data: services } = useQuery(
 		api.query.miforge.shop.services.queryOptions(),
 	);
@@ -22,16 +25,16 @@ export const ShopDonateStepReview = () => {
 	const form = useFormContext<FormValues>();
 	const step = form.watch("step");
 
-	const paymentMethod = form.watch("paymentMethod");
+	const providerId = form.watch("providerId");
 	const serviceId = form.watch("serviceId");
 
 	const selectedService = useMemo(() => {
-		return services?.find((service) => service.slug === serviceId);
+		return services?.find((service) => service.id === serviceId);
 	}, [serviceId, services]);
 
-	const selectedPaymentMethod = useMemo(() => {
-		return PaymentMethods.find((method) => method.id === paymentMethod);
-	}, [paymentMethod]);
+	const selectedProvider = useMemo(() => {
+		return providers.find((provider) => provider.id === providerId);
+	}, [providerId, providers]);
 
 	if (step !== "review") {
 		return null;
@@ -49,9 +52,7 @@ export const ShopDonateStepReview = () => {
 			<InnerContainer className="p-0">
 				<List zebra>
 					<List.Item title="Payment Method">
-						<span className="text-secondary">
-							{selectedPaymentMethod?.title}
-						</span>
+						<span className="text-secondary">{selectedProvider?.name}</span>
 					</List.Item>
 					<List.Item title="Service Type">
 						<span className="text-secondary">{selectedService?.type}</span>

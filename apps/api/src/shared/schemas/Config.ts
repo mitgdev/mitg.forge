@@ -17,6 +17,13 @@ export const MiforgeConfigSchema = z.object({
 		.default({
 			enabled: false,
 		}),
+	mercado_pago: z
+		.object({
+			enabled: z.boolean().default(false),
+		})
+		.default({
+			enabled: false,
+		}),
 	mailer: z
 		.object({
 			enabled: z.boolean().default(false),

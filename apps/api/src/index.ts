@@ -16,6 +16,11 @@ if (import.meta.main) {
 	bootstrapDiscord();
 	bootstrapJobs();
 
+	const configRepository = container.resolve(TOKENS.ConfigRepository);
+
+	await configRepository.updateConfig({});
+	logger.info("[Config]: Configuration initialized/updated");
+
 	const app = appFactory();
 
 	const server = Bun.serve({

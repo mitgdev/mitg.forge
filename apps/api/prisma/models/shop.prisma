@@ -27,20 +27,43 @@ enum ShopTransactionStatus {
   REFUNDED
 }
 
-enum ShopTransactionMethod {
-  MERCADO_PAGO_PIX
+enum ShopProviderMethod {
+  PIX
+}
+
+enum ShopProvider {
+  MERCADO_PAGO
+}
+
+model miforge_shop_providers {
+  id Int @id @default(autoincrement()) @db.UnsignedInt
+
+  name        String  @db.VarChar(100)
+  description String? @db.Text
+  isActive    Boolean @default(true) @map("is_active")
+
+  method   ShopProviderMethod
+  provider ShopProvider
+
+  transactions miforge_shop_transactions[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@unique([method, provider], name: "uniq_method_provider")
 }
 
 model miforge_shop_transactions {
   id Int @id @default(autoincrement()) @db.UnsignedInt
 
-  status ShopTransactionStatus @default(PENDING)
-  method ShopTransactionMethod
-
-  methodTransactionId String? @map("method_transaction_id") @db.VarChar(255)
+  status              ShopTransactionStatus @default(PENDING)
+  methodTransactionId String?               @map("method_transaction_id") @db.VarChar(255)
 
   units Int @default(1) @db.UnsignedInt
   total Int @default(0) @db.UnsignedInt
+
+  providerId Int                    @map("provider_id") @db.UnsignedInt
+  provider   miforge_shop_providers @relation(fields: [providerId], references: [id], onDelete: Cascade)
 
   serviceId Int                  @map("service_id") @db.UnsignedInt
   service   miforge_shop_service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
@@ -50,4 +73,8 @@ model miforge_shop_transactions {
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+
+  @@index([serviceId, accountId], name: "idx_service_account_provider")
+  @@index([methodTransactionId], name: "idx_method_transaction_id")
+  @@index([status], name: "idx_status")
 }
