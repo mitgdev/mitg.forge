@@ -4,7 +4,7 @@ import { isAuthenticatedProcedure } from "@/presentation/procedures/isAuthentica
 export const orderFormRoute = isAuthenticatedProcedure
 	.route({
 		method: "GET",
-		path: "/orderform",
+		path: "/",
 		summary: "OrderForm",
 		description: "Retrieves information about the order form for the shop.",
 	})

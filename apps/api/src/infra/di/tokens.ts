@@ -60,6 +60,7 @@ import type {
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
 	ShopOrderFormAddOrUpdateItemUseCase,
+	ShopOrderFormRemoveItemUseCase,
 	ShopOrderFormUseCase,
 	TibiaLoginUseCase,
 	WorldsListUseCase,
@@ -341,6 +342,9 @@ const USECASES_TOKENS = {
 		token<ShopOrderFormAddOrUpdateItemUseCase>(
 			"ShopOrderFormAddOrUpdateItemUseCase",
 		),
+	ShopOrderFormRemoveItemUseCase: token<ShopOrderFormRemoveItemUseCase>(
+		"ShopOrderFormRemoveItemUseCase",
+	),
 };
 
 const SERVICES_TOKENS = {

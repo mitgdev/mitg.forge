@@ -1,6 +1,7 @@
 import { ORPCError } from "@orpc/client";
 import { ShopOrderStatus, ShopProductQuantityMode } from "generated/client";
 import { inject, injectable } from "tsyringe";
+import { Catch } from "@/application/decorators/Catch";
 import type { ExecutionContext } from "@/domain/context";
 import type {
 	ShopOrderItemRepository,
@@ -29,6 +30,31 @@ export class ShopOrderService {
 		private readonly shopOrderItemRepository: ShopOrderItemRepository,
 	) {}
 
+	private verifyUnit(
+		units: number,
+		product: { minUnits: number; maxUnits?: number; unitStep: number },
+	) {
+		if (units < product.minUnits) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: `Minimum order quantity for this product is ${product.minUnits}.`,
+			});
+		}
+
+		if (product.maxUnits != null && units > product.maxUnits) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: `Maximum order quantity for this product is ${product.maxUnits}.`,
+			});
+		}
+
+		const diff = units - product.minUnits;
+		if (diff % product.unitStep !== 0) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: `Order quantity must be in increments of ${product.unitStep}.`,
+			});
+		}
+	}
+
+	@Catch()
 	async orderForm(): Promise<ShopOrderForm> {
 		const session = this.executionContext.session();
 
@@ -95,30 +121,7 @@ export class ShopOrderService {
 		};
 	}
 
-	private verifyUnit(
-		units: number,
-		product: { minUnits: number; maxUnits?: number; unitStep: number },
-	) {
-		if (units < product.minUnits) {
-			throw new ORPCError("BAD_REQUEST", {
-				message: `Minimum order quantity for this product is ${product.minUnits}.`,
-			});
-		}
-
-		if (product.maxUnits != null && units > product.maxUnits) {
-			throw new ORPCError("BAD_REQUEST", {
-				message: `Maximum order quantity for this product is ${product.maxUnits}.`,
-			});
-		}
-
-		const diff = units - product.minUnits;
-		if (diff % product.unitStep !== 0) {
-			throw new ORPCError("BAD_REQUEST", {
-				message: `Order quantity must be in increments of ${product.unitStep}.`,
-			});
-		}
-	}
-
+	@Catch()
 	async addOrUpdateItem(input: {
 		productId: string;
 		quantity: number;
@@ -204,6 +207,29 @@ export class ShopOrderService {
 				totalPriceCents: totalPriceCents,
 			});
 		}
+
+		return this.orderForm();
+	}
+
+	@Catch()
+	async removeItem(itemId: string): Promise<ShopOrderForm> {
+		const orderform = await this.orderForm();
+
+		if (orderform.status !== ShopOrderStatus.DRAFT) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: "Cannot remove items from a non-draft order.",
+			});
+		}
+
+		const existingItem = orderform.items.find((item) => item.id === itemId);
+
+		if (!existingItem) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Order item not found.",
+			});
+		}
+
+		await this.shopOrderItemRepository.deleteItem(itemId);
 
 		return this.orderForm();
 	}

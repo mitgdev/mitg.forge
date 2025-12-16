@@ -26,6 +26,18 @@ export class ShopOrderItemRepository {
 		});
 	}
 
+	deleteManyByOrderId(orderId: string) {
+		return this.database.miforge_shop_order_item.deleteMany({
+			where: { orderId },
+		});
+	}
+
+	deleteItem(id: string) {
+		return this.database.miforge_shop_order_item.delete({
+			where: { id },
+		});
+	}
+
 	createItem(
 		orderId: string,
 		productId: string,
