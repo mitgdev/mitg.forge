@@ -11,6 +11,7 @@ import type {
 	PlayersService,
 	RecoveryKeyService,
 	SessionService,
+	ShopOrderService,
 	TibiaClientService,
 	WorldsService,
 } from "@/application/services";
@@ -58,6 +59,7 @@ import type {
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
+	ShopOrderFormUseCase,
 	TibiaLoginUseCase,
 	WorldsListUseCase,
 } from "@/application/usecases";
@@ -114,6 +116,8 @@ import type {
 	OtsServerRepository,
 	PlayersRepository,
 	SessionRepository,
+	ShopOrderRepository,
+	ShopPaymentOptionRepository,
 } from "@/domain/repositories";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import type { EmailQueue } from "@/jobs/queue/email";
@@ -173,6 +177,10 @@ const REPOSITORIES_TOKENS = {
 	OtsServerRepository: token<OtsServerRepository>("OtsServerRepository"),
 	AccountOauthRepository: token<AccountOauthRepository>(
 		"AccountOauthRepository",
+	),
+	ShopOrderRepository: token<ShopOrderRepository>("ShopOrderRepository"),
+	ShopPaymentOptionRepository: token<ShopPaymentOptionRepository>(
+		"ShopPaymentOptionRepository",
 	),
 };
 
@@ -321,6 +329,7 @@ const USECASES_TOKENS = {
 	PlayerOutfitUseCase: token<PlayerOutfitUseCase>("PlayerOutfitUseCase"),
 	PlayerOutfitsUseCase: token<PlayerOutfitsUseCase>("PlayerOutfitsUseCase"),
 	TibiaLoginUseCase: token<TibiaLoginUseCase>("TibiaLoginUseCase"),
+	ShopOrderFormUseCase: token<ShopOrderFormUseCase>("ShopOrderFormUseCase"),
 };
 
 const SERVICES_TOKENS = {
@@ -340,6 +349,7 @@ const SERVICES_TOKENS = {
 	LostAccountService: token<LostAccountService>("LostAccountService"),
 	RecoveryKeyService: token<RecoveryKeyService>("RecoveryKeyService"),
 	AccountOauthService: token<AccountOauthService>("AccountOauthService"),
+	ShopOrderService: token<ShopOrderService>("ShopOrderService"),
 };
 
 const QUEUE_AND_WORKERS_TOKENS = {

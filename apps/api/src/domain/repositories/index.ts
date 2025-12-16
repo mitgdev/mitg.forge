@@ -10,4 +10,6 @@ export * from "./live";
 export * from "./otsServer";
 export * from "./players";
 export * from "./session";
+export * from "./shopOrder";
+export * from "./shopPaymentOption";
 export * from "./worlds";

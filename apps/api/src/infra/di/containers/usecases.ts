@@ -43,6 +43,7 @@ import {
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
+	ShopOrderFormUseCase,
 	TibiaLoginUseCase,
 	WorldsListUseCase,
 } from "@/application/usecases";
@@ -285,6 +286,12 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.AccountDiscordOauthUnlinkUseCase,
 		{ useClass: AccountDiscordOauthUnlinkUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.ShopOrderFormUseCase,
+		{ useClass: ShopOrderFormUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 }

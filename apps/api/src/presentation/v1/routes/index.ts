@@ -6,6 +6,7 @@ import { lostAccountRouter } from "./lost";
 import { outfitRouter } from "./outfit";
 import { pingRoute } from "./ping";
 import { sessionRouter } from "./session";
+import { shopRouter } from "./shop";
 import { worldsRouter } from "./worlds";
 
 export const router = base.router({
@@ -17,4 +18,5 @@ export const router = base.router({
 	config: configRouter,
 	outfit: outfitRouter,
 	lost: lostAccountRouter,
+	shop: shopRouter,
 });

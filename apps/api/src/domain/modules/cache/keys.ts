@@ -20,9 +20,15 @@ export class CacheKeys {
 	};
 
 	readonly keys: Record<
-		"config" | "serverStatus" | "outfit",
+		"config" | "serverStatus" | "outfit" | "shopPaymentOptions",
 		(...parts: KeyPart[]) => { key: string; ttl: number | undefined }
 	> = {
+		shopPaymentOptions: (...parts: KeyPart[]) => {
+			return {
+				key: this.namespace.build("shop-payment-options", ...parts),
+				ttl: 5 * 60, // 5 Minutes
+			};
+		},
 		config: () => {
 			return {
 				key: this.namespace.build("config"),
