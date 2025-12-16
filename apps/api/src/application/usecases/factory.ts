@@ -222,9 +222,13 @@ export class UseCasesFactory {
 
 	get shop() {
 		const orderForm = this.di.resolve(TOKENS.ShopOrderFormUseCase);
+		const orderFormAddOrUpdateItem = this.di.resolve(
+			TOKENS.ShopOrderFormAddOrUpdateItemUseCase,
+		);
 
 		return {
 			orderForm,
+			orderFormAddOrUpdateItem,
 		} as const;
 	}
 }

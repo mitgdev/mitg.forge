@@ -7,7 +7,7 @@ import { lazy, Suspense } from "react";
 import { Layout } from "@/layout";
 import type { RouterContext } from "@/router";
 import { ConfigProvider } from "@/sdk/contexts/config";
-import { OrderformProvider } from "@/sdk/contexts/orderform";
+import { OrderFormProvider } from "@/sdk/contexts/orderform";
 import { SessionProvider } from "@/sdk/contexts/session";
 import { env } from "@/sdk/env";
 import { api } from "@/sdk/lib/api/factory";
@@ -55,7 +55,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 		return (
 			<ConfigProvider>
 				<SessionProvider>
-					<OrderformProvider>
+					<OrderFormProvider>
 						<HeadContent />
 						<Outlet />
 						{env.VITE_SHOW_DEVTOOLS && (
@@ -67,7 +67,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 								<ReactQueryDevtools position="bottom" initialIsOpen={false} />
 							</Suspense>
 						)}
-					</OrderformProvider>
+					</OrderFormProvider>
 				</SessionProvider>
 			</ConfigProvider>
 		);

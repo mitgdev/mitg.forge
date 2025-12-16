@@ -7,40 +7,42 @@ import { useSession } from "./session";
 type Context = {
 	orderForm: ShopOrderForm | null;
 	invalidate: () => Promise<void>;
+	loading: boolean;
 };
 
-const OrderformContext = createContext<Context | null>(null);
+const OrderFormContext = createContext<Context | null>(null);
 
-export function OrderformProvider({ children }: { children: React.ReactNode }) {
+export function OrderFormProvider({ children }: { children: React.ReactNode }) {
 	const queryClient = useQueryClient();
 	const { session } = useSession();
-	const { data: orderForm } = useQuery(
-		api.query.miforge.shop.orderForm.queryOptions({
+	const { data: orderForm, isPending: orderFormLoading } = useQuery(
+		api.query.miforge.shop.orderForm.getMostRecent.queryOptions({
 			enabled: !!session,
 		}),
 	);
 
 	return (
-		<OrderformContext.Provider
+		<OrderFormContext.Provider
 			value={{
 				orderForm: orderForm ?? null,
+				loading: orderFormLoading,
 				invalidate: async () => {
 					await queryClient.invalidateQueries({
-						queryKey: api.query.miforge.shop.orderForm.queryKey(),
+						queryKey: api.query.miforge.shop.orderForm.getMostRecent.queryKey(),
 					});
 				},
 			}}
 		>
 			{children}
-		</OrderformContext.Provider>
+		</OrderFormContext.Provider>
 	);
 }
 
-export const useOrderform = () => {
-	const context = use(OrderformContext);
+export const useOrderForm = () => {
+	const context = use(OrderFormContext);
 
 	if (!context) {
-		throw new Error("useOrderform must be used within OrderformProvider");
+		throw new Error("useOrderForm must be used within OrderFormProvider");
 	}
 
 	return context;

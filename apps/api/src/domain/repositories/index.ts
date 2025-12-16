@@ -11,5 +11,7 @@ export * from "./otsServer";
 export * from "./players";
 export * from "./session";
 export * from "./shopOrder";
+export * from "./shopOrderItem";
 export * from "./shopPaymentOption";
+export * from "./shopProduct";
 export * from "./worlds";

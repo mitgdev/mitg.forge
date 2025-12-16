@@ -1,15 +1,8 @@
-import { ShopOrderFormContractSchema } from "@/application/usecases/shop/orderform/contract";
-import { isAuthenticatedProcedure } from "@/presentation/procedures/isAuthenticated";
+import { base } from "@/infra/rpc/base";
+import { orderFormAddOrUpdateItemRoute } from "./addOrUpdateItem";
+import { orderFormRoute } from "./mostRecent";
 
-export const orderFormRoute = isAuthenticatedProcedure
-	.route({
-		method: "GET",
-		path: "/orderform",
-		summary: "OrderForm",
-		description: "Retrieves information about the order form for the shop.",
-	})
-	.input(ShopOrderFormContractSchema.input)
-	.output(ShopOrderFormContractSchema.output)
-	.handler(async ({ context }) => {
-		return context.usecases.shop.orderForm.execute({});
-	});
+export const orderFormRouter = base.prefix("/orderform").router({
+	getMostRecent: orderFormRoute,
+	addOrUpdateItem: orderFormAddOrUpdateItemRoute,
+});

@@ -59,6 +59,7 @@ import type {
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
+	ShopOrderFormAddOrUpdateItemUseCase,
 	ShopOrderFormUseCase,
 	TibiaLoginUseCase,
 	WorldsListUseCase,
@@ -116,8 +117,10 @@ import type {
 	OtsServerRepository,
 	PlayersRepository,
 	SessionRepository,
+	ShopOrderItemRepository,
 	ShopOrderRepository,
 	ShopPaymentOptionRepository,
+	ShopProductRepository,
 } from "@/domain/repositories";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import type { EmailQueue } from "@/jobs/queue/email";
@@ -181,6 +184,10 @@ const REPOSITORIES_TOKENS = {
 	ShopOrderRepository: token<ShopOrderRepository>("ShopOrderRepository"),
 	ShopPaymentOptionRepository: token<ShopPaymentOptionRepository>(
 		"ShopPaymentOptionRepository",
+	),
+	ShopProductRepository: token<ShopProductRepository>("ShopProductRepository"),
+	ShopOrderItemRepository: token<ShopOrderItemRepository>(
+		"ShopOrderItemRepository",
 	),
 };
 
@@ -330,6 +337,10 @@ const USECASES_TOKENS = {
 	PlayerOutfitsUseCase: token<PlayerOutfitsUseCase>("PlayerOutfitsUseCase"),
 	TibiaLoginUseCase: token<TibiaLoginUseCase>("TibiaLoginUseCase"),
 	ShopOrderFormUseCase: token<ShopOrderFormUseCase>("ShopOrderFormUseCase"),
+	ShopOrderFormAddOrUpdateItemUseCase:
+		token<ShopOrderFormAddOrUpdateItemUseCase>(
+			"ShopOrderFormAddOrUpdateItemUseCase",
+		),
 };
 
 const SERVICES_TOKENS = {

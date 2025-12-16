@@ -43,6 +43,7 @@ import {
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
+	ShopOrderFormAddOrUpdateItemUseCase,
 	ShopOrderFormUseCase,
 	TibiaLoginUseCase,
 	WorldsListUseCase,
@@ -292,6 +293,11 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.ShopOrderFormUseCase,
 		{ useClass: ShopOrderFormUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopOrderFormAddOrUpdateItemUseCase,
+		{ useClass: ShopOrderFormAddOrUpdateItemUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 }
