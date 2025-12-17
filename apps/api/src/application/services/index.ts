@@ -9,5 +9,6 @@ export * from "./players";
 export * from "./recoveryKey";
 export * from "./session";
 export * from "./shopOrder";
+export * from "./shopProducts";
 export * from "./tibiaclient";
 export * from "./worlds";

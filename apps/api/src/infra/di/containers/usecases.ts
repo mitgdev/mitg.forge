@@ -43,6 +43,7 @@ import {
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
+	ShopListProductsUseCase,
 	ShopOrderFormAddOrUpdateItemUseCase,
 	ShopOrderFormRemoveItemUseCase,
 	ShopOrderFormUseCase,
@@ -304,6 +305,11 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.ShopOrderFormRemoveItemUseCase,
 		{ useClass: ShopOrderFormRemoveItemUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopListProductsUseCase,
+		{ useClass: ShopListProductsUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 }

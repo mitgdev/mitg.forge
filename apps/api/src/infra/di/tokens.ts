@@ -12,6 +12,7 @@ import type {
 	RecoveryKeyService,
 	SessionService,
 	ShopOrderService,
+	ShopProductsService,
 	TibiaClientService,
 	WorldsService,
 } from "@/application/services";
@@ -59,6 +60,7 @@ import type {
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
+	ShopListProductsUseCase,
 	ShopOrderFormAddOrUpdateItemUseCase,
 	ShopOrderFormRemoveItemUseCase,
 	ShopOrderFormUseCase,
@@ -345,6 +347,9 @@ const USECASES_TOKENS = {
 	ShopOrderFormRemoveItemUseCase: token<ShopOrderFormRemoveItemUseCase>(
 		"ShopOrderFormRemoveItemUseCase",
 	),
+	ShopListProductsUseCase: token<ShopListProductsUseCase>(
+		"ShopListProductsUseCase",
+	),
 };
 
 const SERVICES_TOKENS = {
@@ -365,6 +370,7 @@ const SERVICES_TOKENS = {
 	RecoveryKeyService: token<RecoveryKeyService>("RecoveryKeyService"),
 	AccountOauthService: token<AccountOauthService>("AccountOauthService"),
 	ShopOrderService: token<ShopOrderService>("ShopOrderService"),
+	ShopProductsService: token<ShopProductsService>("ShopProductsService"),
 };
 
 const QUEUE_AND_WORKERS_TOKENS = {

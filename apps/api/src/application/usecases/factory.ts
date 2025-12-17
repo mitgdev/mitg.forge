@@ -228,11 +228,13 @@ export class UseCasesFactory {
 		const orderFormRemoveItem = this.di.resolve(
 			TOKENS.ShopOrderFormRemoveItemUseCase,
 		);
+		const listProducts = this.di.resolve(TOKENS.ShopListProductsUseCase);
 
 		return {
 			orderForm,
 			orderFormAddOrUpdateItem,
 			orderFormRemoveItem,
+			listProducts,
 		} as const;
 	}
 }

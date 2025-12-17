@@ -24,3 +24,16 @@ export const ShopProduct = z.object({
 	createdAt: z.date(),
 	updatedAt: z.date(),
 });
+
+export const ShopProductFacetSchema = z.discriminatedUnion("key", [
+	z.object({
+		key: z.literal("title"),
+		value: z.array(z.string().trim().min(1)).min(1),
+	}),
+	z.object({
+		key: z.literal("enabled"),
+		value: z.coerce.string().transform((val) => val === "true"),
+	}),
+]);
+
+export type ShopProductFacet = z.infer<typeof ShopProductFacetSchema>;
