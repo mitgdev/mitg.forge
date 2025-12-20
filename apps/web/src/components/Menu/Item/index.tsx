@@ -6,7 +6,8 @@ const Icons = {
 	news: "/assets/icons/32/news-menu.gif",
 	sphere: "/assets/icons/32/armillary_sphere.gif",
 	munster: "/assets/icons/32/baby_munster.gif",
-};
+	tibiora_box: "/assets/icons/32/tibiora_box.gif",
+} as const;
 
 type Props = {
 	label: string;

@@ -4,7 +4,7 @@ import { cn } from "@/sdk/utils/cn";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	loading?: boolean;
-	variant?: "regular" | "large" | "info" | "green" | "red";
+	variant?: "regular" | "large" | "info" | "green" | "red" | "greenExtended";
 };
 
 export const ButtonImage = forwardRef<HTMLButtonElement, Props>(
@@ -24,6 +24,8 @@ export const ButtonImage = forwardRef<HTMLButtonElement, Props>(
 					return assets.buttons.buttonRed;
 				case "green":
 					return assets.buttons.buttonGreen;
+				case "greenExtended":
+					return assets.buttons.buttonGreenExtended;
 				case "info":
 					return assets.buttons.buttonBlue;
 				case "large":
@@ -46,6 +48,7 @@ export const ButtonImage = forwardRef<HTMLButtonElement, Props>(
 					{
 						"h-[25px] w-[135px] text-sm":
 							variant === "red" || variant === "info" || variant === "green",
+						"h-[25px] w-[150px] text-sm": variant === "greenExtended",
 						"h-[34px] w-[142px] px-2 text-base": variant === "regular",
 						"h-[34px] w-[150px] px-2 text-base": variant === "large",
 					},

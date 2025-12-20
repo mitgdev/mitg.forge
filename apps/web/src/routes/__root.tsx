@@ -4,6 +4,8 @@ import {
 	Outlet,
 } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
+import { CartDrawer } from "@/components/Cart/Drawer";
+import { CartOpen } from "@/components/Cart/Open";
 import { Layout } from "@/layout";
 import type { RouterContext } from "@/router";
 import { ConfigProvider } from "@/sdk/contexts/config";
@@ -58,13 +60,19 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 					<OrderFormProvider>
 						<HeadContent />
 						<Outlet />
+						<CartDrawer />
+						<CartOpen />
 						{env.VITE_SHOW_DEVTOOLS && (
 							<Suspense fallback={null}>
 								<TanStackRouterDevtools
 									position="bottom-left"
 									initialIsOpen={false}
 								/>
-								<ReactQueryDevtools position="bottom" initialIsOpen={false} />
+								<ReactQueryDevtools
+									position="left"
+									buttonPosition="bottom-left"
+									initialIsOpen={false}
+								/>
 							</Suspense>
 						)}
 					</OrderFormProvider>

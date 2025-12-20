@@ -30,6 +30,7 @@ import { Route as AuthAccountPlayerNameDeleteIndexRouteImport } from './routes/_
 
 const PublicTermsIndexLazyRouteImport = createFileRoute('/_public/terms/')()
 const Not_authLoginIndexLazyRouteImport = createFileRoute('/_not_auth/login/')()
+const AuthShopIndexLazyRouteImport = createFileRoute('/_auth/shop/')()
 const Not_authAccountLostIndexLazyRouteImport = createFileRoute(
   '/_not_auth/account/lost/',
 )()
@@ -102,6 +103,13 @@ const Not_authLoginIndexLazyRoute = Not_authLoginIndexLazyRouteImport.update({
   getParentRoute: () => Not_authRouteRoute,
 } as any).lazy(() =>
   import('./routes/_not_auth/login/index.lazy').then((d) => d.Route),
+)
+const AuthShopIndexLazyRoute = AuthShopIndexLazyRouteImport.update({
+  id: '/shop/',
+  path: '/shop/',
+  getParentRoute: () => AuthRouteRoute,
+} as any).lazy(() =>
+  import('./routes/_auth/shop/index.lazy').then((d) => d.Route),
 )
 const PublicWorldsIndexRoute = PublicWorldsIndexRouteImport.update({
   id: '/worlds/',
@@ -345,6 +353,7 @@ export interface FileRoutesByFullPath {
   '/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/account': typeof AuthAccountIndexRoute
   '/worlds': typeof PublicWorldsIndexRoute
+  '/shop': typeof AuthShopIndexLazyRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
   '/account/lost/$email': typeof Not_authAccountLostEmailRouteRouteWithChildren
@@ -377,6 +386,7 @@ export interface FileRoutesByTo {
   '/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/account': typeof AuthAccountIndexRoute
   '/worlds': typeof PublicWorldsIndexRoute
+  '/shop': typeof AuthShopIndexLazyRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
   '/account/lost/$token': typeof Not_authAccountLostTokenRouteRouteWithChildren
@@ -412,6 +422,7 @@ export interface FileRoutesById {
   '/_auth/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/_auth/account/': typeof AuthAccountIndexRoute
   '/_public/worlds/': typeof PublicWorldsIndexRoute
+  '/_auth/shop/': typeof AuthShopIndexLazyRoute
   '/_not_auth/login/': typeof Not_authLoginIndexLazyRoute
   '/_public/terms/': typeof PublicTermsIndexLazyRoute
   '/_not_auth/account/lost/$email': typeof Not_authAccountLostEmailRouteRouteWithChildren
@@ -446,6 +457,7 @@ export interface FileRouteTypes {
     | '/account/email'
     | '/account'
     | '/worlds'
+    | '/shop'
     | '/login'
     | '/terms'
     | '/account/lost/$email'
@@ -478,6 +490,7 @@ export interface FileRouteTypes {
     | '/account/email'
     | '/account'
     | '/worlds'
+    | '/shop'
     | '/login'
     | '/terms'
     | '/account/lost/$token'
@@ -512,6 +525,7 @@ export interface FileRouteTypes {
     | '/_auth/account/email'
     | '/_auth/account/'
     | '/_public/worlds/'
+    | '/_auth/shop/'
     | '/_not_auth/login/'
     | '/_public/terms/'
     | '/_not_auth/account/lost/$email'
@@ -589,6 +603,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/login'
       preLoaderRoute: typeof Not_authLoginIndexLazyRouteImport
       parentRoute: typeof Not_authRouteRoute
+    }
+    '/_auth/shop/': {
+      id: '/_auth/shop/'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof AuthShopIndexLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/_public/worlds/': {
       id: '/_public/worlds/'
@@ -816,6 +837,7 @@ const AuthAccountEmailRouteRouteWithChildren =
 interface AuthRouteRouteChildren {
   AuthAccountEmailRouteRoute: typeof AuthAccountEmailRouteRouteWithChildren
   AuthAccountIndexRoute: typeof AuthAccountIndexRoute
+  AuthShopIndexLazyRoute: typeof AuthShopIndexLazyRoute
   AuthAccountAudit_historyIndexLazyRoute: typeof AuthAccountAudit_historyIndexLazyRoute
   AuthAccountCoins_historyIndexLazyRoute: typeof AuthAccountCoins_historyIndexLazyRoute
   AuthAccountDetailsIndexLazyRoute: typeof AuthAccountDetailsIndexLazyRoute
@@ -832,6 +854,7 @@ interface AuthRouteRouteChildren {
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccountEmailRouteRoute: AuthAccountEmailRouteRouteWithChildren,
   AuthAccountIndexRoute: AuthAccountIndexRoute,
+  AuthShopIndexLazyRoute: AuthShopIndexLazyRoute,
   AuthAccountAudit_historyIndexLazyRoute:
     AuthAccountAudit_historyIndexLazyRoute,
   AuthAccountCoins_historyIndexLazyRoute:
