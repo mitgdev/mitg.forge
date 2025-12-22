@@ -6,6 +6,10 @@
   - changed-files:
       - any-glob-to-any-file: ["apps/api/**"]
 
+"Area: Client":
+  - changed-files:
+      - any-glob-to-any-file: ["apps/client/**"]
+
 "Area: Web":
   - changed-files:
       - any-glob-to-any-file: ["apps/web/**"]
