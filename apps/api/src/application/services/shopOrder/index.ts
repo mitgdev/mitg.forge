@@ -102,6 +102,9 @@ export class ShopOrderService {
 			items: order.items.map((item) => {
 				return {
 					...item,
+					baseUnitQuantity: item.product.baseUnitQuantity,
+					maxUnits: item.product.maxUnits,
+					minUnits: item.product.minUnits,
 					productId: item.product.id,
 					productSlug: item.product.slug,
 					category: item.product.category,
@@ -110,8 +113,8 @@ export class ShopOrderService {
 				};
 			}),
 			payment: {
-				providers: providers,
-				selectedProvider: selectedProvider,
+				providers,
+				selectedProvider,
 			},
 			totals: {
 				totalizers: totalizers,
@@ -230,6 +233,60 @@ export class ShopOrderService {
 		}
 
 		await this.shopOrderItemRepository.deleteItem(itemId);
+
+		return this.orderForm();
+	}
+
+	@Catch()
+	async removePaymentOption(): Promise<ShopOrderForm> {
+		const orderform = await this.orderForm();
+
+		if (orderform.status !== ShopOrderStatus.DRAFT) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: "Cannot change payment option of a non-draft order.",
+			});
+		}
+
+		await this.shopOrderRepository.setPaymentOption(orderform.id, null);
+
+		return this.orderForm();
+	}
+
+	@Catch()
+	async selectPaymentOption(paymentOptionId: string): Promise<ShopOrderForm> {
+		const orderform = await this.orderForm();
+
+		if (orderform.status !== ShopOrderStatus.DRAFT) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: "Cannot change payment option of a non-draft order.",
+			});
+		}
+
+		const provider =
+			await this.shopPaymentOptionRepository.findById(paymentOptionId);
+
+		if (!provider) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: "Selected payment option is not available.",
+			});
+		}
+
+		if (!provider.enabled) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: "Selected payment option is currently disabled.",
+			});
+		}
+
+		if (provider.id === orderform.payment.selectedProvider?.id) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: "Selected payment option is already set.",
+			});
+		}
+
+		await this.shopOrderRepository.setPaymentOption(
+			orderform.id,
+			paymentOptionId,
+		);
 
 		return this.orderForm();
 	}

@@ -63,6 +63,8 @@ import type {
 	ShopListProductsUseCase,
 	ShopOrderFormAddOrUpdateItemUseCase,
 	ShopOrderFormRemoveItemUseCase,
+	ShopOrderFormRemovePaymentOptionUseCase,
+	ShopOrderFormSetPaymentOptionUseCase,
 	ShopOrderFormUseCase,
 	TibiaLoginUseCase,
 	WorldsListUseCase,
@@ -350,6 +352,14 @@ const USECASES_TOKENS = {
 	ShopListProductsUseCase: token<ShopListProductsUseCase>(
 		"ShopListProductsUseCase",
 	),
+	ShopOrderFormSetPaymentOptionUseCase:
+		token<ShopOrderFormSetPaymentOptionUseCase>(
+			"ShopOrderFormSetPaymentOptionUseCase",
+		),
+	ShopOrderFormRemovePaymentOptionUseCase:
+		token<ShopOrderFormRemovePaymentOptionUseCase>(
+			"ShopOrderFormRemovePaymentOptionUseCase",
+		),
 };
 
 const SERVICES_TOKENS = {

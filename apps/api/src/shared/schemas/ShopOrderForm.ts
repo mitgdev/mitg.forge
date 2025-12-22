@@ -8,7 +8,14 @@ export const ShopOrderFormItem = z.object({
 	id: z.uuid(),
 	productId: z.uuid(),
 	productSlug: z.string(),
-	...ShopProduct.pick({ title: true, description: true, category: true }).shape,
+	...ShopProduct.pick({
+		title: true,
+		description: true,
+		category: true,
+		maxUnits: true,
+		minUnits: true,
+		baseUnitQuantity: true,
+	}).shape,
 	...ShopOrderItem.pick({
 		quantity: true,
 		unitPriceCents: true,

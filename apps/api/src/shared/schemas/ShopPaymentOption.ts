@@ -11,9 +11,9 @@ export const ShopPaymentOption = z.object({
 	method: ShopPaymentOptionMethodEnum,
 
 	enabled: z.boolean(),
-	label: z.string().max(100),
+	label: z.string(),
 	description: z.string().nullable(),
 
-	createdAt: z.date(),
-	updatedAt: z.date(),
+	createdAt: z.coerce.date(),
+	updatedAt: z.coerce.date(),
 });

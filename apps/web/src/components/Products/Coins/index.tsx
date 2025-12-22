@@ -35,9 +35,16 @@ type Props = Pick<BaseProductServiceCardProps, "disabled" | "selected"> & {
 	loading?: boolean;
 	onSelect: (quantity: number, effectiveQuantity: number) => void;
 	initialUnit?: number;
+	options?: {
+		showSlider?: boolean;
+		showButton?: boolean;
+	};
 };
 
 export function ProductCoinsCard(props: Props) {
+	const showSlider = props.options?.showSlider ?? true;
+	const showButton = props.options?.showButton ?? true;
+
 	const type = props.coinType || "transferable";
 	const [value, setValue] = useState<number[]>(() => {
 		const base = props.baseUnitQuantity;
@@ -158,26 +165,30 @@ export function ProductCoinsCard(props: Props) {
 						cents: true,
 					})} *`}
 				/>
-				<Slider
-					id="slider"
-					disabled={props.disabled}
-					onValueChange={setValue}
-					value={value}
-					min={minValue}
-					step={props.baseUnitQuantity}
-					orientation="vertical"
-					max={maxValue}
-					className="data-[orientation=vertical]:min-h-[150px]"
-				/>
+				{showSlider && (
+					<Slider
+						id="slider"
+						disabled={props.disabled}
+						onValueChange={setValue}
+						value={value}
+						min={minValue}
+						step={props.baseUnitQuantity}
+						orientation="vertical"
+						max={maxValue}
+						className="data-[orientation=vertical]:min-h-[150px]"
+					/>
+				)}
 			</div>
-			<ButtonImage
-				variant="greenExtended"
-				disabled={props.disabled}
-				loading={props.loading}
-				onClick={() => props.onSelect(quantity, value[0])}
-			>
-				{props.selected ? "Atualizar" : "Adicionar"}
-			</ButtonImage>
+			{showButton && (
+				<ButtonImage
+					variant="greenExtended"
+					disabled={props.disabled}
+					loading={props.loading}
+					onClick={() => props.onSelect(quantity, value[0])}
+				>
+					{props.selected ? "Atualizar" : "Adicionar"}
+				</ButtonImage>
+			)}
 		</div>
 	);
 }

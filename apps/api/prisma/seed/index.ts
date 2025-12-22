@@ -61,6 +61,27 @@ async function main() {
     }
   })
 
+  console.log("[seed] Seeding default payment options")
+  if (env.MERCADO_PAGO_ENABLED) {
+    await prisma.miforge_shop_payment_option.upsert({
+      where: {
+        uniq_shop_payment_option_provider_method: {
+          method: "PIX",
+          provider: "MERCADO_PAGO"
+        }
+      },
+      create: {
+        method: "PIX",
+        provider: "MERCADO_PAGO",
+        label: "Mercado Pago - PIX",
+        enabled: true,
+        description: "Pay using Mercado Pago's PIX integration.",
+      },
+      update: {}
+    })
+  }
+  
+
   console.log("[seed] Seeding default product coins")
   await prisma.miforge_shop_product.upsert({
     where: {

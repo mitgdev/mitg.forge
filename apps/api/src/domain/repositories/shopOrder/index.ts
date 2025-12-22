@@ -28,6 +28,17 @@ export class ShopOrderRepository {
 		});
 	}
 
+	setPaymentOption(orderId: string, paymentOptionId: string | null) {
+		return this.database.miforge_shop_order.update({
+			where: {
+				id: orderId,
+			},
+			data: {
+				paymentOptionId,
+			},
+		});
+	}
+
 	createOrder(accountId: number) {
 		return this.database.miforge_shop_order.create({
 			data: {
