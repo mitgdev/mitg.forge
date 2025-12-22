@@ -91,6 +91,16 @@ const DISCORD_CONFIG_SCHEMA = z.object({
 	DISCORD_API_URL: z.url().default("https://discord.com"),
 });
 
+const MERCADO_PAGO_CONFIG_SCHEMA = z.object({
+	MERCADO_PAGO_ENABLED: z
+		.string()
+		.transform((val) => val === "true" || val === "1")
+		.default(false),
+	MERCADO_PAGO_ACCESS_TOKEN: z.string().optional(),
+	MERCADO_PAGO_WEBHOOK_URL: z.url().optional(),
+	MERCADO_PAGO_WEBHOOK_SECRET: z.string().optional(),
+});
+
 const envSchema = z.object({
 	...FRONTEND_CONFIG_SCHEMA.shape,
 	...SERVER_CONFIG_SCHEMA.shape,
@@ -100,6 +110,7 @@ const envSchema = z.object({
 	...MAILER_CONFIG_SCHEMA.shape,
 	...OUTFIT_CONFIG_SCHEMA.shape,
 	...DISCORD_CONFIG_SCHEMA.shape,
+	...MERCADO_PAGO_CONFIG_SCHEMA.shape,
 	LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
 	SERVICE_NAME: z.string().default("miforge-api"),
 	PORT: z.coerce.number().default(4000),
@@ -168,6 +179,24 @@ export const env = envSchema
 				ctx.addIssue({
 					code: "custom",
 					message: `${field} is required when DISCORD_ENABLED is true`,
+				});
+			}
+		}
+	})
+	.superRefine((env, ctx) => {
+		if (!env.MERCADO_PAGO_ENABLED) return;
+
+		const requiredFields: (keyof typeof env)[] = [
+			"MERCADO_PAGO_ACCESS_TOKEN",
+			"MERCADO_PAGO_WEBHOOK_URL",
+			"MERCADO_PAGO_WEBHOOK_SECRET",
+		];
+
+		for (const field of requiredFields) {
+			if (!env[field]) {
+				ctx.addIssue({
+					code: "custom",
+					message: `${field} is required when MERCADO_PAGO_ENABLED is true`,
 				});
 			}
 		}

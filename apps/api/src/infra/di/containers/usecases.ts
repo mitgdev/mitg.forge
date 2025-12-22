@@ -43,6 +43,12 @@ import {
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
+	ShopListProductsUseCase,
+	ShopOrderFormAddOrUpdateItemUseCase,
+	ShopOrderFormRemoveItemUseCase,
+	ShopOrderFormRemovePaymentOptionUseCase,
+	ShopOrderFormSetPaymentOptionUseCase,
+	ShopOrderFormUseCase,
 	TibiaLoginUseCase,
 	WorldsListUseCase,
 } from "@/application/usecases";
@@ -285,6 +291,37 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.AccountDiscordOauthUnlinkUseCase,
 		{ useClass: AccountDiscordOauthUnlinkUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.ShopOrderFormUseCase,
+		{ useClass: ShopOrderFormUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopOrderFormAddOrUpdateItemUseCase,
+		{ useClass: ShopOrderFormAddOrUpdateItemUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopOrderFormRemoveItemUseCase,
+		{ useClass: ShopOrderFormRemoveItemUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopListProductsUseCase,
+		{ useClass: ShopListProductsUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopOrderFormSetPaymentOptionUseCase,
+		{ useClass: ShopOrderFormSetPaymentOptionUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.ShopOrderFormRemovePaymentOptionUseCase,
+		{ useClass: ShopOrderFormRemovePaymentOptionUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 }

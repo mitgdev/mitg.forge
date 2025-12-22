@@ -219,4 +219,30 @@ export class UseCasesFactory {
 			update,
 		} as const;
 	}
+
+	get shop() {
+		const orderForm = this.di.resolve(TOKENS.ShopOrderFormUseCase);
+		const orderFormAddOrUpdateItem = this.di.resolve(
+			TOKENS.ShopOrderFormAddOrUpdateItemUseCase,
+		);
+		const orderFormRemoveItem = this.di.resolve(
+			TOKENS.ShopOrderFormRemoveItemUseCase,
+		);
+		const orderFormSetPaymentOption = this.di.resolve(
+			TOKENS.ShopOrderFormSetPaymentOptionUseCase,
+		);
+		const orderFormRemovePaymentOption = this.di.resolve(
+			TOKENS.ShopOrderFormRemovePaymentOptionUseCase,
+		);
+		const listProducts = this.di.resolve(TOKENS.ShopListProductsUseCase);
+
+		return {
+			orderForm,
+			orderFormAddOrUpdateItem,
+			orderFormRemoveItem,
+			listProducts,
+			orderFormSetPaymentOption,
+			orderFormRemovePaymentOption,
+		} as const;
+	}
 }

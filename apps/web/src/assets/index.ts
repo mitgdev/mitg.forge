@@ -13,6 +13,7 @@ export const assets = {
 	buttons: {
 		buttonBlue: "/assets/buttons/button_blue.gif",
 		buttonGreen: "/assets/buttons/button_green.gif",
+		buttonGreenExtended: "/assets/buttons/button_green_extended.gif",
 		buttonRed: "/assets/buttons/button_red.gif",
 		buttonExtend: "/assets/buttons/button-extend.webp",
 		buttonMenu: "/assets/buttons/button-menu.webp",

@@ -6,10 +6,22 @@ type Props = React.HTMLAttributes<HTMLDivElement> & {
 	title: string;
 	innerContainer?: boolean;
 	actions?: React.ReactNode;
+	loading?: boolean;
 };
 
 export const Container = forwardRef<HTMLDivElement, Props>(
-	({ children, className, innerContainer, title, actions, ...props }, ref) => {
+	(
+		{
+			children,
+			className,
+			innerContainer,
+			title,
+			actions,
+			loading = false,
+			...props
+		},
+		ref,
+	) => {
 		const anchorId = title.toLowerCase().replace(/\s+/g, "-");
 
 		const corner = cn(
@@ -42,14 +54,34 @@ export const Container = forwardRef<HTMLDivElement, Props>(
 					<span className={`${corner} -top-px -left-px`} />
 					<span className={`${corner} -bottom-px -left-px`} />
 				</div>
-				{innerContainer ? (
+				{loading ? (
 					<div className="border-3 border-t-0 bg-tibia-800 p-2 text-senary">
-						<InnerContainer className="p-1">{children}</InnerContainer>
+						<InnerContainer>
+							<div className="flex min-h-40 flex-col items-center justify-center gap-2">
+								<img
+									src="/assets/icon-hourglass.png"
+									alt="Loading"
+									width={22}
+									height={22}
+								/>
+								<h1 className="section-title ml-2 font-medium text-lg">
+									Carregando
+								</h1>
+							</div>
+						</InnerContainer>
 					</div>
 				) : (
-					<div className="border-3 border-t-0 bg-tibia-800 p-2 text-senary">
-						{children}
-					</div>
+					<>
+						{innerContainer ? (
+							<div className="border-3 border-t-0 bg-tibia-800 p-2 text-senary">
+								<InnerContainer className="p-1">{children}</InnerContainer>
+							</div>
+						) : (
+							<div className="border-3 border-t-0 bg-tibia-800 p-2 text-senary">
+								{children}
+							</div>
+						)}
+					</>
 				)}
 			</div>
 		);

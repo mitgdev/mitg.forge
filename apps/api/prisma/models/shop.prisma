@@ -1,0 +1,115 @@
+enum ShopOrderStatus {
+  DRAFT
+  CANCELLED
+  PAID
+  PENDING_PAYMENT
+  REFUNDED
+  CONTESTED
+}
+
+model miforge_shop_order {
+  id String @id @default(uuid(7))
+
+  accountId Int      @map("account_id") @db.UnsignedInt
+  account   accounts @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  paymentOptionId String?                      @map("payment_option_id")
+  paymentOption   miforge_shop_payment_option? @relation(fields: [paymentOptionId], references: [id], onDelete: Restrict)
+
+  status ShopOrderStatus @default(DRAFT)
+
+  items miforge_shop_order_item[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("miforge_shop_orders")
+}
+
+model miforge_shop_order_item {
+  id String @id @default(uuid(7))
+
+  quantity Int @default(1)
+
+  // Snapshot pricing fields to avoid price changes affecting existing orders
+  unitPriceCents    Int @map("unit_price_cents") @db.UnsignedInt
+  totalPriceCents   Int @map("total_price_cents") @db.UnsignedInt
+  effectiveQuantity Int @map("effective_quantity") @db.UnsignedInt
+
+  orderId String             @map("order_id")
+  order   miforge_shop_order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String               @map("product_id")
+  product   miforge_shop_product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("miforge_shop_order_items")
+}
+
+enum ShopProductCategory {
+  COINS
+  RECOVERY_KEY
+  CHANGE_NAME
+}
+
+enum ShopProductQuantityMode {
+  FIXED // e.g, recovery key, premium time.
+  VARIABLE // e.g., coins
+}
+
+model miforge_shop_product {
+  id String @id @default(uuid(7))
+
+  category    ShopProductCategory
+  slug        String              @unique @db.VarChar(100)
+  title       String              @db.VarChar(255)
+  description String?             @db.Text
+  enabled     Boolean             @default(true)
+
+  baseUnitQuantity Int @default(1) @map("base_unit_quantity")
+
+  quantityMode ShopProductQuantityMode @map("quantity_mode")
+  minUnits     Int                     @default(1) @map("min_units") @db.UnsignedInt
+  maxUnits     Int?                    @map("max_units") @db.UnsignedInt
+  unitStep     Int                     @default(1) @map("unit_step") @db.UnsignedInt
+
+  unitPriceCents   Int     @map("unit_price_cents") @db.UnsignedInt
+  displayUnitLabel String? @map("display_unit_label") @db.VarChar(32)
+
+  orders miforge_shop_order_item[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@index([slug], name: "idx_shop_product_slug")
+  @@map("miforge_shop_products")
+}
+
+enum ShopPaymentProvider {
+  MERCADO_PAGO
+}
+
+enum ShopPaymentMethod {
+  PIX
+}
+
+model miforge_shop_payment_option {
+  id String @id @default(uuid(7))
+
+  orders miforge_shop_order[]
+
+  provider ShopPaymentProvider
+  method   ShopPaymentMethod
+
+  enabled     Boolean @default(true)
+  label       String  @db.VarChar(100)
+  description String? @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([provider, method], name: "uniq_shop_payment_option_provider_method")
+  @@map("miforge_shop_payment_options")
+}

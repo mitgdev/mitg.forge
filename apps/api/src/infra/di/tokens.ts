@@ -11,6 +11,8 @@ import type {
 	PlayersService,
 	RecoveryKeyService,
 	SessionService,
+	ShopOrderService,
+	ShopProductsService,
 	TibiaClientService,
 	WorldsService,
 } from "@/application/services";
@@ -58,6 +60,12 @@ import type {
 	SessionCanBeAuthenticatedUseCase,
 	SessionInfoUseCase,
 	SessionNotAuthenticatedUseCase,
+	ShopListProductsUseCase,
+	ShopOrderFormAddOrUpdateItemUseCase,
+	ShopOrderFormRemoveItemUseCase,
+	ShopOrderFormRemovePaymentOptionUseCase,
+	ShopOrderFormSetPaymentOptionUseCase,
+	ShopOrderFormUseCase,
 	TibiaLoginUseCase,
 	WorldsListUseCase,
 } from "@/application/usecases";
@@ -114,6 +122,10 @@ import type {
 	OtsServerRepository,
 	PlayersRepository,
 	SessionRepository,
+	ShopOrderItemRepository,
+	ShopOrderRepository,
+	ShopPaymentOptionRepository,
+	ShopProductRepository,
 } from "@/domain/repositories";
 import type { WorldsRepository } from "@/domain/repositories/worlds";
 import type { EmailQueue } from "@/jobs/queue/email";
@@ -173,6 +185,14 @@ const REPOSITORIES_TOKENS = {
 	OtsServerRepository: token<OtsServerRepository>("OtsServerRepository"),
 	AccountOauthRepository: token<AccountOauthRepository>(
 		"AccountOauthRepository",
+	),
+	ShopOrderRepository: token<ShopOrderRepository>("ShopOrderRepository"),
+	ShopPaymentOptionRepository: token<ShopPaymentOptionRepository>(
+		"ShopPaymentOptionRepository",
+	),
+	ShopProductRepository: token<ShopProductRepository>("ShopProductRepository"),
+	ShopOrderItemRepository: token<ShopOrderItemRepository>(
+		"ShopOrderItemRepository",
 	),
 };
 
@@ -321,6 +341,25 @@ const USECASES_TOKENS = {
 	PlayerOutfitUseCase: token<PlayerOutfitUseCase>("PlayerOutfitUseCase"),
 	PlayerOutfitsUseCase: token<PlayerOutfitsUseCase>("PlayerOutfitsUseCase"),
 	TibiaLoginUseCase: token<TibiaLoginUseCase>("TibiaLoginUseCase"),
+	ShopOrderFormUseCase: token<ShopOrderFormUseCase>("ShopOrderFormUseCase"),
+	ShopOrderFormAddOrUpdateItemUseCase:
+		token<ShopOrderFormAddOrUpdateItemUseCase>(
+			"ShopOrderFormAddOrUpdateItemUseCase",
+		),
+	ShopOrderFormRemoveItemUseCase: token<ShopOrderFormRemoveItemUseCase>(
+		"ShopOrderFormRemoveItemUseCase",
+	),
+	ShopListProductsUseCase: token<ShopListProductsUseCase>(
+		"ShopListProductsUseCase",
+	),
+	ShopOrderFormSetPaymentOptionUseCase:
+		token<ShopOrderFormSetPaymentOptionUseCase>(
+			"ShopOrderFormSetPaymentOptionUseCase",
+		),
+	ShopOrderFormRemovePaymentOptionUseCase:
+		token<ShopOrderFormRemovePaymentOptionUseCase>(
+			"ShopOrderFormRemovePaymentOptionUseCase",
+		),
 };
 
 const SERVICES_TOKENS = {
@@ -340,6 +379,8 @@ const SERVICES_TOKENS = {
 	LostAccountService: token<LostAccountService>("LostAccountService"),
 	RecoveryKeyService: token<RecoveryKeyService>("RecoveryKeyService"),
 	AccountOauthService: token<AccountOauthService>("AccountOauthService"),
+	ShopOrderService: token<ShopOrderService>("ShopOrderService"),
+	ShopProductsService: token<ShopProductsService>("ShopProductsService"),
 };
 
 const QUEUE_AND_WORKERS_TOKENS = {

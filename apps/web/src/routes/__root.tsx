@@ -7,6 +7,7 @@ import { lazy, Suspense } from "react";
 import { Layout } from "@/layout";
 import type { RouterContext } from "@/router";
 import { ConfigProvider } from "@/sdk/contexts/config";
+import { OrderFormProvider } from "@/sdk/contexts/orderform";
 import { SessionProvider } from "@/sdk/contexts/session";
 import { env } from "@/sdk/env";
 import { api } from "@/sdk/lib/api/factory";
@@ -54,17 +55,23 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 		return (
 			<ConfigProvider>
 				<SessionProvider>
-					<HeadContent />
-					<Outlet />
-					{env.VITE_SHOW_DEVTOOLS && (
-						<Suspense fallback={null}>
-							<TanStackRouterDevtools
-								position="bottom-left"
-								initialIsOpen={false}
-							/>
-							<ReactQueryDevtools position="bottom" initialIsOpen={false} />
-						</Suspense>
-					)}
+					<OrderFormProvider>
+						<HeadContent />
+						<Outlet />
+						{env.VITE_SHOW_DEVTOOLS && (
+							<Suspense fallback={null}>
+								<TanStackRouterDevtools
+									position="bottom-left"
+									initialIsOpen={false}
+								/>
+								<ReactQueryDevtools
+									position="left"
+									buttonPosition="bottom-left"
+									initialIsOpen={false}
+								/>
+							</Suspense>
+						)}
+					</OrderFormProvider>
 				</SessionProvider>
 			</ConfigProvider>
 		);

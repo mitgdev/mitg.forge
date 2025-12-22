@@ -30,11 +30,15 @@ import { Route as AuthAccountPlayerNameDeleteIndexRouteImport } from './routes/_
 
 const PublicTermsIndexLazyRouteImport = createFileRoute('/_public/terms/')()
 const Not_authLoginIndexLazyRouteImport = createFileRoute('/_not_auth/login/')()
+const AuthShopIndexLazyRouteImport = createFileRoute('/_auth/shop/')()
 const Not_authAccountLostIndexLazyRouteImport = createFileRoute(
   '/_not_auth/account/lost/',
 )()
 const Not_authAccountCreateIndexLazyRouteImport = createFileRoute(
   '/_not_auth/account/create/',
+)()
+const AuthShopCheckoutIndexLazyRouteImport = createFileRoute(
+  '/_auth/shop/checkout/',
 )()
 const AuthAccountReset_passwordIndexLazyRouteImport = createFileRoute(
   '/_auth/account/reset_password/',
@@ -103,6 +107,13 @@ const Not_authLoginIndexLazyRoute = Not_authLoginIndexLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/_not_auth/login/index.lazy').then((d) => d.Route),
 )
+const AuthShopIndexLazyRoute = AuthShopIndexLazyRouteImport.update({
+  id: '/shop/',
+  path: '/shop/',
+  getParentRoute: () => AuthRouteRoute,
+} as any).lazy(() =>
+  import('./routes/_auth/shop/index.lazy').then((d) => d.Route),
+)
 const PublicWorldsIndexRoute = PublicWorldsIndexRouteImport.update({
   id: '/worlds/',
   path: '/worlds/',
@@ -137,6 +148,14 @@ const Not_authAccountCreateIndexLazyRoute =
     getParentRoute: () => Not_authRouteRoute,
   } as any).lazy(() =>
     import('./routes/_not_auth/account/create/index.lazy').then((d) => d.Route),
+  )
+const AuthShopCheckoutIndexLazyRoute =
+  AuthShopCheckoutIndexLazyRouteImport.update({
+    id: '/shop/checkout/',
+    path: '/shop/checkout/',
+    getParentRoute: () => AuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/shop/checkout/index.lazy').then((d) => d.Route),
   )
 const AuthAccountReset_passwordIndexLazyRoute =
   AuthAccountReset_passwordIndexLazyRouteImport.update({
@@ -345,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/account': typeof AuthAccountIndexRoute
   '/worlds': typeof PublicWorldsIndexRoute
+  '/shop': typeof AuthShopIndexLazyRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
   '/account/lost/$email': typeof Not_authAccountLostEmailRouteRouteWithChildren
@@ -354,6 +374,7 @@ export interface FileRoutesByFullPath {
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
   '/account/reset_password': typeof AuthAccountReset_passwordIndexLazyRoute
+  '/shop/checkout': typeof AuthShopCheckoutIndexLazyRoute
   '/account/create': typeof Not_authAccountCreateIndexLazyRoute
   '/account/lost': typeof Not_authAccountLostIndexLazyRoute
   '/account/email/change/$token': typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
@@ -377,6 +398,7 @@ export interface FileRoutesByTo {
   '/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/account': typeof AuthAccountIndexRoute
   '/worlds': typeof PublicWorldsIndexRoute
+  '/shop': typeof AuthShopIndexLazyRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
   '/account/lost/$token': typeof Not_authAccountLostTokenRouteRouteWithChildren
@@ -385,6 +407,7 @@ export interface FileRoutesByTo {
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
   '/account/reset_password': typeof AuthAccountReset_passwordIndexLazyRoute
+  '/shop/checkout': typeof AuthShopCheckoutIndexLazyRoute
   '/account/create': typeof Not_authAccountCreateIndexLazyRoute
   '/account/lost': typeof Not_authAccountLostIndexLazyRoute
   '/account/email/change/$token': typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
@@ -412,6 +435,7 @@ export interface FileRoutesById {
   '/_auth/account/email': typeof AuthAccountEmailRouteRouteWithChildren
   '/_auth/account/': typeof AuthAccountIndexRoute
   '/_public/worlds/': typeof PublicWorldsIndexRoute
+  '/_auth/shop/': typeof AuthShopIndexLazyRoute
   '/_not_auth/login/': typeof Not_authLoginIndexLazyRoute
   '/_public/terms/': typeof PublicTermsIndexLazyRoute
   '/_not_auth/account/lost/$email': typeof Not_authAccountLostEmailRouteRouteWithChildren
@@ -421,6 +445,7 @@ export interface FileRoutesById {
   '/_auth/account/details/': typeof AuthAccountDetailsIndexLazyRoute
   '/_auth/account/registration/': typeof AuthAccountRegistrationIndexLazyRoute
   '/_auth/account/reset_password/': typeof AuthAccountReset_passwordIndexLazyRoute
+  '/_auth/shop/checkout/': typeof AuthShopCheckoutIndexLazyRoute
   '/_not_auth/account/create/': typeof Not_authAccountCreateIndexLazyRoute
   '/_not_auth/account/lost/': typeof Not_authAccountLostIndexLazyRoute
   '/_auth/account/email/change/$token': typeof AuthAccountEmailChangeTokenRouteRouteWithChildren
@@ -446,6 +471,7 @@ export interface FileRouteTypes {
     | '/account/email'
     | '/account'
     | '/worlds'
+    | '/shop'
     | '/login'
     | '/terms'
     | '/account/lost/$email'
@@ -455,6 +481,7 @@ export interface FileRouteTypes {
     | '/account/details'
     | '/account/registration'
     | '/account/reset_password'
+    | '/shop/checkout'
     | '/account/create'
     | '/account/lost'
     | '/account/email/change/$token'
@@ -478,6 +505,7 @@ export interface FileRouteTypes {
     | '/account/email'
     | '/account'
     | '/worlds'
+    | '/shop'
     | '/login'
     | '/terms'
     | '/account/lost/$token'
@@ -486,6 +514,7 @@ export interface FileRouteTypes {
     | '/account/details'
     | '/account/registration'
     | '/account/reset_password'
+    | '/shop/checkout'
     | '/account/create'
     | '/account/lost'
     | '/account/email/change/$token'
@@ -512,6 +541,7 @@ export interface FileRouteTypes {
     | '/_auth/account/email'
     | '/_auth/account/'
     | '/_public/worlds/'
+    | '/_auth/shop/'
     | '/_not_auth/login/'
     | '/_public/terms/'
     | '/_not_auth/account/lost/$email'
@@ -521,6 +551,7 @@ export interface FileRouteTypes {
     | '/_auth/account/details/'
     | '/_auth/account/registration/'
     | '/_auth/account/reset_password/'
+    | '/_auth/shop/checkout/'
     | '/_not_auth/account/create/'
     | '/_not_auth/account/lost/'
     | '/_auth/account/email/change/$token'
@@ -590,6 +621,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Not_authLoginIndexLazyRouteImport
       parentRoute: typeof Not_authRouteRoute
     }
+    '/_auth/shop/': {
+      id: '/_auth/shop/'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof AuthShopIndexLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_public/worlds/': {
       id: '/_public/worlds/'
       path: '/worlds'
@@ -624,6 +662,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account/create'
       preLoaderRoute: typeof Not_authAccountCreateIndexLazyRouteImport
       parentRoute: typeof Not_authRouteRoute
+    }
+    '/_auth/shop/checkout/': {
+      id: '/_auth/shop/checkout/'
+      path: '/shop/checkout'
+      fullPath: '/shop/checkout'
+      preLoaderRoute: typeof AuthShopCheckoutIndexLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/_auth/account/reset_password/': {
       id: '/_auth/account/reset_password/'
@@ -816,11 +861,13 @@ const AuthAccountEmailRouteRouteWithChildren =
 interface AuthRouteRouteChildren {
   AuthAccountEmailRouteRoute: typeof AuthAccountEmailRouteRouteWithChildren
   AuthAccountIndexRoute: typeof AuthAccountIndexRoute
+  AuthShopIndexLazyRoute: typeof AuthShopIndexLazyRoute
   AuthAccountAudit_historyIndexLazyRoute: typeof AuthAccountAudit_historyIndexLazyRoute
   AuthAccountCoins_historyIndexLazyRoute: typeof AuthAccountCoins_historyIndexLazyRoute
   AuthAccountDetailsIndexLazyRoute: typeof AuthAccountDetailsIndexLazyRoute
   AuthAccountRegistrationIndexLazyRoute: typeof AuthAccountRegistrationIndexLazyRoute
   AuthAccountReset_passwordIndexLazyRoute: typeof AuthAccountReset_passwordIndexLazyRoute
+  AuthShopCheckoutIndexLazyRoute: typeof AuthShopCheckoutIndexLazyRoute
   AuthAccount2faLinkIndexRoute: typeof AuthAccount2faLinkIndexRoute
   AuthAccount2faUnlinkIndexRoute: typeof AuthAccount2faUnlinkIndexRoute
   AuthAccountPlayerCreateIndexRoute: typeof AuthAccountPlayerCreateIndexRoute
@@ -832,6 +879,7 @@ interface AuthRouteRouteChildren {
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccountEmailRouteRoute: AuthAccountEmailRouteRouteWithChildren,
   AuthAccountIndexRoute: AuthAccountIndexRoute,
+  AuthShopIndexLazyRoute: AuthShopIndexLazyRoute,
   AuthAccountAudit_historyIndexLazyRoute:
     AuthAccountAudit_historyIndexLazyRoute,
   AuthAccountCoins_historyIndexLazyRoute:
@@ -840,6 +888,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccountRegistrationIndexLazyRoute: AuthAccountRegistrationIndexLazyRoute,
   AuthAccountReset_passwordIndexLazyRoute:
     AuthAccountReset_passwordIndexLazyRoute,
+  AuthShopCheckoutIndexLazyRoute: AuthShopCheckoutIndexLazyRoute,
   AuthAccount2faLinkIndexRoute: AuthAccount2faLinkIndexRoute,
   AuthAccount2faUnlinkIndexRoute: AuthAccount2faUnlinkIndexRoute,
   AuthAccountPlayerCreateIndexRoute: AuthAccountPlayerCreateIndexRoute,
