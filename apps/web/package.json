@@ -26,14 +26,14 @@
 		"@radix-ui/react-radio-group": "^1.3.8",
 		"@radix-ui/react-slot": "^1.2.4",
 		"@radix-ui/react-tooltip": "^1.2.8",
-		"@tailwindcss/vite": "^4.1.17",
+		"@tailwindcss/vite": "catalog:vite",
 		"@tanstack/react-query": "^5.90.12",
 		"@tanstack/react-query-devtools": "^5.91.1",
 		"@tanstack/react-router": "^1.139.14",
 		"@tanstack/react-router-devtools": "^1.139.14",
 		"@tanstack/router-plugin": "^1.139.14",
 		"class-variance-authority": "^0.7.1",
-		"clsx": "^2.1.1",
+		"clsx": "catalog:tailwind",
 		"cmdk": "^1.1.1",
 		"envalid": "^8.1.1",
 		"input-otp": "^1.4.2",
@@ -42,18 +42,18 @@
 		"react-hook-form": "^7.68.0",
 		"react-qrcode-logo": "^4.0.0",
 		"sonner": "^2.0.7",
-		"tailwind-merge": "^3.4.0",
-		"tailwindcss": "^4.1.17",
-		"tw-animate-css": "^1.4.0",
+		"tailwind-merge": "catalog:tailwind",
+		"tailwindcss": "catalog:tailwind",
+		"tw-animate-css": "catalog:tailwind",
 		"usehooks-ts": "^3.1.1",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@types/react": "catalog:react",
 		"@types/react-dom": "catalog:react",
-		"@vitejs/plugin-react": "^5.1.1",
+		"@vitejs/plugin-react": "catalog:vite",
 		"rollup-plugin-visualizer": "^6.0.5",
 		"typescript": "catalog:ts",
-		"vite": "^7.2.6"
+		"vite": "catalog:vite"
 	}
 }
