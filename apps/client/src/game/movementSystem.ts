@@ -13,7 +13,7 @@ export function startMovementSystem() {
 
 	ticker.add((delta) => {
 		// delta ~ 1 a 60 FPS
-		const dtMs = delta * (1000 / 60);
+		const dtMs = Number(delta) * (1000 / 60);
 		accumulator += dtMs;
 
 		if (accumulator < stepIntervalMs) return;

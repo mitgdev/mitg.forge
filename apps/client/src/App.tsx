@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/core";
+// import { invoke } from "@tauri-apps/api/core";
 import { GameStage } from "./game/GameStage";
 
 export default function App() {
