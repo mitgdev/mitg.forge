@@ -7,6 +7,7 @@ import {
 	VIEW_TILES_Y,
 } from "@/sdk/constants";
 import { usePixiScreen } from "@/sdk/hooks/usePixiScreen";
+import { useDragStore } from "@/sdk/store/drag";
 import { useGameStore } from "@/sdk/store/game";
 import { startMovementSystem } from "@/sdk/systems/movement";
 import { getViewTiles } from "@/sdk/systems/tiles";
@@ -18,6 +19,13 @@ export function World() {
 	const playerPosition = useGameStore((s) => s.playerPosition);
 	const setMoveTarget = useGameStore((s) => s.setMoveTarget);
 	const moveTarget = useGameStore((s) => s.moveTarget);
+	const setViewport = useDragStore((s) => s.setViewport);
+	const startDrag = useDragStore((s) => s.startDrag);
+	const groundItem = { itemId: "A", vx: 7, vy: 5 };
+	const target = useDragStore((s) => s.target);
+	const canDrop = useDragStore((s) => s.canDrop);
+
+	const worldHover = target?.zone === "WORLD" ? target.tile : null;
 
 	useEffect(() => {
 		if (tiles.size === 0) initTestMap();
@@ -50,9 +58,17 @@ export function World() {
 	const offsetX = (width - logicalWidth * scale) / 2;
 	const offsetY = (height - logicalHeight * scale) / 2;
 
-	if (width <= 0 || height <= 0) return null;
+	useEffect(() => {
+		setViewport({
+			stageW: width,
+			stageH: height,
+			scale,
+			offsetX,
+			offsetY,
+		});
+	}, [width, height, scale, offsetX, offsetY, setViewport]);
 
-	console.log("World render", { width, height, scale, offsetX, offsetY });
+	if (width <= 0 || height <= 0) return null;
 
 	return (
 		<pixiContainer x={offsetX} y={offsetY} scale={scale}>
@@ -96,6 +112,40 @@ export function World() {
 					/>
 				);
 			})}
+			<pixiGraphics
+				eventMode="static"
+				cursor="grab"
+				draw={(g) => {
+					g.clear();
+					const x = groundItem.vx * TILE_SIZE_PX;
+					const y = groundItem.vy * TILE_SIZE_PX;
+					g.rect(x + 8, y + 8, 16, 16).fill(0xffcc00);
+				}}
+				onPointerDown={(e: any) => {
+					const oe = e.data.originalEvent as PointerEvent;
+					startDrag(
+						{ kind: "ITEM", itemId: groundItem.itemId, from: "WORLD" },
+						{ x: oe.clientX, y: oe.clientY },
+						{ label: `WorldItem ${groundItem.itemId}` },
+					);
+				}}
+			/>
+			{worldHover && (
+				<pixiGraphics
+					key={`hover:${worldHover.vx}:${worldHover.vy}`}
+					draw={(g) => {
+						g.clear();
+						const x = worldHover.vx * TILE_SIZE_PX;
+						const y = worldHover.vy * TILE_SIZE_PX;
+						const strokeColor = canDrop ? 0x00ff66 : 0xff3355;
+
+						g.rect(x, y, TILE_SIZE_PX, TILE_SIZE_PX).stroke({
+							color: new Color(strokeColor).setAlpha(1),
+							pixelLine: true,
+						});
+					}}
+				/>
+			)}
 		</pixiContainer>
 	);
 }

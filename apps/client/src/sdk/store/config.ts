@@ -22,7 +22,7 @@ type GameConfigState = {
 
 export const useConfigStore = create<GameConfigState>((set, get) => ({
 	panels: {
-		left1: false,
+		left1: true,
 		left2: false,
 		right1: true,
 		right2: false,

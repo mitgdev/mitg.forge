@@ -1,7 +1,7 @@
 import { Application, extend } from "@pixi/react";
 import { Container, Graphics as PixiGraphics, Sprite } from "pixi.js";
-import { ResizeBridge } from "@/components/game/ResizeBridge";
 import { World } from "@/components/game/World";
+import { ResizeBridge } from "../ResizeBridge";
 
 extend({ Container, Graphics: PixiGraphics, Sprite });
 
@@ -12,7 +12,6 @@ export function GameStage({
 }) {
 	return (
 		<Application
-			resizeTo={resizeTo}
 			antialias
 			autoStart
 			sharedTicker
@@ -21,8 +20,8 @@ export function GameStage({
 			resolution={window.devicePixelRatio}
 			autoDensity
 		>
-			<ResizeBridge resizeTo={resizeTo} />
 			<World />
+			<ResizeBridge resizeTo={resizeTo} />
 		</Application>
 	);
 }

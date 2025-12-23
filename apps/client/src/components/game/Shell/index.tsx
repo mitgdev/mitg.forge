@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { InventoryItem, InventoryPanel } from "@/components/Zones/Inventory";
 import { useContainerSize } from "@/sdk/hooks/useContainerSize";
 import {
 	type GameConfigPanels,
@@ -117,7 +118,15 @@ export const GameShell = ({ children }: { children: React.ReactNode }) => {
 				className="border-neutral-800 border-l"
 			>
 				{effectiveColumns.right1 && (
-					<div className="h-full p-2 text-neutral-200 text-xs">Right 1</div>
+					<div className="h-full p-2 text-neutral-200 text-xs">
+						<InventoryPanel />
+						<span>Right 1</span>
+						<div className="flex flex-row flex-wrap gap-2">
+							<InventoryItem itemId="Sword" />
+							<InventoryItem itemId="Wand" />
+							<InventoryItem itemId="Shield" />
+						</div>
+					</div>
 				)}
 			</div>
 
