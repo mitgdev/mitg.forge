@@ -1,0 +1,6 @@
+const TILE_SIZE_PX = 32;
+const VIEW_TILES_X = 15;
+const VIEW_TILES_Y = 11;
+const MAX_SCALE = 2;
+
+export { TILE_SIZE_PX, VIEW_TILES_X, VIEW_TILES_Y, MAX_SCALE };
