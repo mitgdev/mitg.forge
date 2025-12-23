@@ -1,14 +1,31 @@
+import { invoke } from "@tauri-apps/api/core";
 import { create } from "zustand";
 import type { Position } from "@/sdk/types/position";
 import type { Tile } from "@/sdk/types/tile";
+import { applyDir, type Direction } from "../movement";
 
 export function positionKey(pos: Position): string {
 	return `${pos.x}:${pos.y}:${pos.z}`;
 }
 
+type PendingMove = {
+	requestId: string;
+	prev: Position;
+};
+
+type MoveResultEvent = {
+	request_id: string;
+	ok: boolean;
+	position?: Position | null;
+	error?: string | null;
+};
+
 type GameState = {
 	tiles: Map<string, Tile>;
 	hoveredTile: Position | null;
+	pending: PendingMove | null;
+	requestMove: (target: Direction) => void;
+	onMoveResult: (event: MoveResultEvent) => void;
 	playerPosition: Position;
 	moveTarget: Position | null;
 	stepDurationMs: number;
@@ -23,6 +40,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 	tiles: new Map<string, Tile>(),
 	hoveredTile: null,
 	playerPosition: { x: 50, y: 50, z: 0 },
+	pending: null,
 
 	moveTarget: null,
 	stepDurationMs: 50, // duração de um passo em ms
@@ -30,6 +48,47 @@ export const useGameStore = create<GameState>((set, get) => ({
 
 	setHoveredTile: (pos: Position | null) => {
 		set({ hoveredTile: pos });
+	},
+
+	requestMove: (direction) => {
+		// trava 1 por vez (mais simples). Depois dá pra virar fila.
+		if (get().pending) return;
+
+		const prev = get().playerPosition;
+		const predicted = applyDir(prev, direction);
+		const requestId = crypto.randomUUID();
+
+		// optimistic
+		set({ playerPosition: predicted, pending: { requestId, prev } });
+
+		// chama Rust (autoritativo)
+		void invoke("request_move", {
+			req: {
+				request_id: requestId,
+				from: prev,
+				direction: direction, // snake_case no Rust via serde rename_all
+			},
+		}).catch((err) => {
+			// se der erro no invoke, rollback imediato
+			const pending = get().pending;
+			if (pending?.requestId === requestId) {
+				set({ playerPosition: pending.prev, pending: null });
+			}
+			console.error("invoke request_move failed:", err);
+		});
+	},
+
+	onMoveResult: (ev) => {
+		const pending = get().pending;
+		if (!pending) return;
+		if (ev.request_id !== pending.requestId) return; // ignora resposta velha
+
+		if (ev.ok && ev.position) {
+			set({ playerPosition: ev.position, pending: null });
+		} else {
+			// rollback
+			set({ playerPosition: pending.prev, pending: null });
+		}
 	},
 
 	initTestMap: () => {

@@ -91,9 +91,9 @@ export function World() {
 				const x = vx * TILE_SIZE_PX;
 				const y = vy * TILE_SIZE_PX;
 
-				return (
+				return [
 					<pixiGraphics
-						key={`${tile.position.x}:${tile.position.y}:${tile.position.z}`}
+						key={`g:${tile.position.x}:${tile.position.y}:${tile.position.z}`}
 						eventMode="static"
 						draw={(g) => {
 							g.clear();
@@ -109,8 +109,20 @@ export function World() {
 								.fill(color);
 						}}
 						onPointerDown={() => handleTileClick(tile.position)}
-					/>
-				);
+					/>,
+					// <pixiText
+					// 	key={`t:${tile.position.x}:${tile.position.y}:${tile.position.z}`}
+					// 	text={`${tile.position.x},${tile.position.y},${tile.position.z}`}
+					// 	x={x + 2}
+					// 	y={y + 2}
+					// 	scale={0.4}
+					// 	style={{
+					// 		fill: "#ffffff",
+					// 		fontSize: 10,
+					// 		fontFamily: "monospace",
+					// 	}}
+					// />,
+				];
 			})}
 			<pixiGraphics
 				eventMode="static"

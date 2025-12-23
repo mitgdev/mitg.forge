@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/a11y/useButtonType: <test> */
 import { useMemo } from "react";
 import { InventoryItem, InventoryPanel } from "@/components/Zones/Inventory";
 import { useContainerSize } from "@/sdk/hooks/useContainerSize";
@@ -6,6 +7,7 @@ import {
 	type PanelSlot,
 	useConfigStore,
 } from "@/sdk/store/config";
+import { useGameStore } from "@/sdk/store/game";
 
 const PANEL_WIDTH = 175;
 const MIN_CANVAS_WIDTH = 240;
@@ -163,6 +165,27 @@ const MAX_HEALTH = 60;
 const MIN_BOTTOM = 120;
 const MAX_BOTTOM = 180;
 
+export function MoveTestButtons() {
+	const requestMove = useGameStore((s) => s.requestMove);
+	const pos = useGameStore((s) => s.playerPosition);
+	const pending = useGameStore((s) => s.pending);
+
+	return (
+		<div className="space-y-2 p-2 text-neutral-200 text-xs">
+			<div>
+				pos: {pos.x},{pos.y},{pos.z} {pending ? "(pending)" : ""}
+			</div>
+
+			<div className="flex gap-2">
+				<button onClick={() => requestMove("north")}>↑</button>
+				<button onClick={() => requestMove("west")}>←</button>
+				<button onClick={() => requestMove("south")}>↓</button>
+				<button onClick={() => requestMove("east")}>→</button>
+			</div>
+		</div>
+	);
+}
+
 export function CenterColumn({
 	children,
 	showHealth,
@@ -205,7 +228,7 @@ export function CenterColumn({
 				{showBottom && (
 					<div className="flex h-full min-w-0">
 						<div className="min-w-0 flex-1 border-neutral-800 border-r p-2 text-neutral-200 text-xs">
-							chat
+							<MoveTestButtons />
 						</div>
 					</div>
 				)}
