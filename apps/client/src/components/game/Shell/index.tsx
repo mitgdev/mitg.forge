@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { DragControllerLayer } from "@/components/Drag/ControllerLayer";
+
 import { Panel as PanelSlot } from "@/components/Panel";
 import { Panel } from "@/components/ui/Panel";
 import { MIN_GAME_WIDTH, PANEL_WIDTH } from "@/sdk/constants";
@@ -42,13 +42,13 @@ export const GameShell = () => {
 				style={{ gridArea: "left1" }}
 				className="border-neutral-800 border-r"
 			>
-				<PanelSlot panelId="left1" title="Left 1" />
+				<PanelSlot panelId="left1" />
 			</div>
 			<div
 				style={{ gridArea: "left2" }}
 				className="border-neutral-800 border-r"
 			>
-				<PanelSlot panelId="left2" title="Left 2" />
+				<PanelSlot panelId="left2" />
 			</div>
 
 			{/* CENTER: grid INTERNO com health / game / bottom */}
@@ -80,7 +80,6 @@ export const GameShell = () => {
 					<div className="h-full p-2 text-neutral-200 text-xs">Right 3</div>
 				)}
 			</Panel>
-			<DragControllerLayer />
 		</div>
 	);
 };

@@ -1,57 +1,54 @@
-import { Fragment } from "react";
-import { Widget } from "@/components/Widget";
+import { AvailableZones } from "@/sdk/drag/types";
 import { useDragStore } from "@/sdk/store/drag";
-import type { PanelId } from "@/sdk/store/layout";
-import { useLayoutStore } from "@/sdk/store/layout";
+import { type PanelId, useLayoutStore } from "@/sdk/store/layout";
 import { cn } from "@/sdk/utils/cn";
+import { WidgetShell } from "../Widgets/Shell";
 
-function InsertIndicator({ ok }: { ok: boolean }) {
-	return (
-		<div
-			className={cn("my-1 h-0.5 rounded", {
-				"bg-emerald-400/60": ok,
-				"bg-red-500/60": !ok,
-			})}
-		/>
-	);
-}
-
-export function Panel({ panelId, title }: { panelId: PanelId; title: string }) {
-	const ids = useLayoutStore((s) => s.panels[panelId]);
-
+export function PanelTargetOutline({ panelId }: { panelId: string }) {
 	const dragging = useDragStore((s) => s.dragging);
 	const target = useDragStore((s) => s.target);
 	const canDrop = useDragStore((s) => s.canDrop);
 
-	const active =
-		dragging && target?.zone === "PANEL" && target.panelId === panelId;
+	const isTarget =
+		!!dragging &&
+		!!target &&
+		target.zone === AvailableZones.PANEL &&
+		target.panelId === panelId;
 
-	const insertIndex = active && target?.zone === "PANEL" ? target.index : -1;
+	const isStartingPanel =
+		dragging?.from === AvailableZones.PANEL &&
+		dragging?.fromPanelId === panelId;
+
+	if (isStartingPanel) return null;
+
+	if (!isTarget) return null;
 
 	return (
-		<div className="h-full min-h-0 p-2">
-			<div className="mb-2 text-neutral-300 text-xs">{title}</div>
+		<div
+			className={cn(
+				"pointer-events-none absolute inset-0 z-50",
+				// ✅ tibia-like: contorno dentro do painel (não “empurra” layout)
+				canDrop
+					? "-outline-offset-1 outline-1 outline-white"
+					: "-outline-offset-1 outline-1 outline-red-500",
+			)}
+		/>
+	);
+}
 
-			<div
-				data-dropzone="PANEL"
-				data-panel-id={panelId}
-				className={cn(
-					"min-h-0 rounded border border-neutral-800 bg-neutral-900/40 p-2",
-					active && canDrop && "outline-1 outline-emerald-400/30",
-					active && !canDrop && "outline-1 outline-red-500/30",
-				)}
-			>
-				{ids.map((id, i) => (
-					<Fragment key={id}>
-						{active && insertIndex === i && <InsertIndicator ok={canDrop} />}
-						<Widget panelId={panelId} index={i} widgetId={id} />
-					</Fragment>
-				))}
+export function Panel({ panelId }: { panelId: PanelId }) {
+	const widgetIds = useLayoutStore((s) => s.panels[panelId]);
 
-				{active && insertIndex === ids.length && (
-					<InsertIndicator ok={canDrop} />
-				)}
-			</div>
+	return (
+		<div
+			data-dropzone="PANEL"
+			data-panel-id={panelId}
+			className="relative h-full min-h-0 w-full min-w-0"
+		>
+			<PanelTargetOutline panelId={panelId} />
+			{widgetIds.map((id, idx) => (
+				<WidgetShell key={id} widgetId={id} panelId={panelId} index={idx} />
+			))}
 		</div>
 	);
 }

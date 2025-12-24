@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import type { DragPayload, DragPreview, DropTarget } from "../drag/types";
+import type { DragPayload, DragPreview, DropTarget } from "@/sdk/drag/types";
 
 function targetKey(t: DropTarget) {
 	if (!t) return "";
-	return `P:${t.panelId}:${t.index}`;
+	return `P:${t.panelId}:${t.insertIndex}`;
 }
 
 type DragState = {
@@ -25,7 +25,7 @@ type DragState = {
 	endDrag: () => void;
 };
 
-export const useDragStore = create<DragState>((set) => ({
+export const useDragStore = create<DragState>((set, get) => ({
 	dragging: null,
 	pointer: null,
 
@@ -34,40 +34,29 @@ export const useDragStore = create<DragState>((set) => ({
 	preview: null,
 
 	startDrag: (payload, startPointer, preview) =>
-		set(() => {
-			return {
-				dragging: payload,
-				pointer: startPointer,
-				target: null,
-				canDrop: false,
-				preview: preview ?? { label: payload.kind },
-			};
+		set({
+			dragging: payload,
+			pointer: startPointer,
+			target: null,
+			canDrop: false,
+			preview: preview ?? { type: "LABEL", label: payload.kind },
 		}),
 
-	setPointer: (p) =>
-		set(() => ({
-			pointer: p,
-		})),
+	setPointer: (p) => set({ pointer: p }),
 
-	setTarget: (t, canDrop) =>
-		set((state) => {
-			const same =
-				targetKey(state.target) === targetKey(t) && state.canDrop === canDrop;
-
-			if (same) return {};
-
-			return {
-				target: t,
-				canDrop,
-			};
-		}),
+	setTarget: (t, canDrop) => {
+		const s = get();
+		const same = targetKey(s.target) === targetKey(t) && s.canDrop === canDrop;
+		if (same) return;
+		set({ target: t, canDrop });
+	},
 
 	endDrag: () =>
-		set(() => ({
+		set({
 			dragging: null,
 			pointer: null,
 			target: null,
 			canDrop: false,
 			preview: null,
-		})),
+		}),
 }));
