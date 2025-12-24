@@ -1,44 +1,40 @@
-import type { DragViewportTransform, WorldTile } from "@/sdk/drag/types";
-import { TILE_SIZE_PX, VIEW_TILES_X, VIEW_TILES_Y } from "../constants";
+import type { ViewportTransform, WorldTile } from "@/sdk/store/viewport";
 
 export function screenToTile(args: {
-	localX: number;
+	localX: number; // coordenada dentro do worldEl (DOM)
 	localY: number;
-	viewport: DragViewportTransform;
-	player: { x: number; y: number; z: number };
+	viewport: ViewportTransform;
 }): WorldTile | null {
-	const { localX, localY, viewport, player } = args;
-	const { scale, offsetX, offsetY } = viewport;
+	const { localX, localY, viewport } = args;
 
-	const logicalW = VIEW_TILES_X * TILE_SIZE_PX;
-	const logicalH = VIEW_TILES_Y * TILE_SIZE_PX;
+	// 1) remove letterbox (offset) e volta pro espaço lógico (antes do scale)
+	const x = (localX - viewport.offsetX) / viewport.scale;
+	const y = (localY - viewport.offsetY) / viewport.scale;
 
-	const mapLeft = offsetX;
-	const mapTop = offsetY;
-	const mapRight = offsetX + logicalW * scale;
-	const mapBottom = offsetY + logicalH * scale;
+	// 2) recorte 15x11 (mask). Se estiver na borda preta, null
+	if (x < 0 || y < 0 || x >= viewport.viewW || y >= viewport.viewH) return null;
+
+	// 3) desfaz camera scroll (camera move o mundo)
+	const worldPxX = x - viewport.cameraX;
+	const worldPxY = y - viewport.cameraY;
+
+	const vx = Math.floor(worldPxX / viewport.tileSize);
+	const vy = Math.floor(worldPxY / viewport.tileSize);
 
 	if (
-		localX < mapLeft ||
-		localX >= mapRight ||
-		localY < mapTop ||
-		localY >= mapBottom
+		vx < 0 ||
+		vy < 0 ||
+		vx >= viewport.viewTilesX ||
+		vy >= viewport.viewTilesY
 	) {
-		return null; // borda preta
+		return null;
 	}
 
-	const worldPxX = (localX - offsetX) / scale;
-	const worldPxY = (localY - offsetY) / scale;
-
-	const vx = Math.floor(worldPxX / TILE_SIZE_PX);
-	const vy = Math.floor(worldPxY / TILE_SIZE_PX);
-
-	if (vx < 0 || vy < 0 || vx >= VIEW_TILES_X || vy >= VIEW_TILES_Y) return null;
-
-	const halfX = Math.floor(VIEW_TILES_X / 2);
-	const halfY = Math.floor(VIEW_TILES_Y / 2);
-	const originX = player.x - halfX;
-	const originY = player.y - halfY;
-
-	return { vx, vy, x: originX + vx, y: originY + vy, z: player.z };
+	return {
+		vx,
+		vy,
+		x: viewport.originX + vx,
+		y: viewport.originY + vy,
+		z: viewport.z,
+	};
 }

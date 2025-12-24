@@ -1,27 +1,30 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import { useDragStore } from "@/sdk/store/drag";
-import { GameStage } from "../Stage";
+import { useLayoutEffect, useRef } from "react";
+import { PixiHost } from "@/components/game/PixiHost";
+import { useWorldStore } from "@/sdk/store/world";
 
-export function GameCanvas() {
+type Props = { gridArea?: string };
+
+export function GameCanvas({ gridArea }: Props) {
 	const parentRef = useRef<HTMLDivElement>(null);
-	const [mounted, setMounted] = useState(false);
-	const setWorldEl = useDragStore((s) => s.setWorldEl);
+	const setWorldElement = useWorldStore((s) => s.setWorldElement);
 
-	// monta UMA vez quando o ref existir (evita remounts e perda de contexto)
 	useLayoutEffect(() => {
-		if (parentRef.current) {
-			setMounted(true);
-			setWorldEl(parentRef.current);
-		}
-		return () => setWorldEl(null);
-	}, [setWorldEl]);
+		setWorldElement(parentRef.current);
+		return () => setWorldElement(null);
+	}, [setWorldElement]);
 
 	return (
 		<div
 			ref={parentRef}
-			className="relative h-full min-h-0 w-full min-w-0 overflow-hidden"
+			style={{
+				gridArea,
+				backgroundImage: "url(/textures/background.png)",
+				backgroundRepeat: "repeat",
+				backgroundSize: "64px 64px",
+			}}
+			className="relative min-h-0 min-w-0 overflow-hidden"
 		>
-			{mounted && <GameStage resizeTo={parentRef} />}
+			<PixiHost />
 		</div>
 	);
 }
