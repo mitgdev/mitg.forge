@@ -1,5 +1,6 @@
 import { Application, TextureStyle } from "pixi.js";
 import { useEffect, useRef } from "react";
+import { attachPixiPerf } from "@/sdk/pixi/utils/AttachPerformance";
 import { ResizeBridge } from "@/sdk/pixi/utils/ResizeBridge";
 import { World } from "@/sdk/pixi/world";
 
@@ -18,6 +19,7 @@ export function PixiHost() {
 		let ro: ResizeObserver | null = null;
 		let application: Application | null = null;
 		let world: World | null = null;
+		let detachPerf: null | (() => void) = null;
 
 		// garante que não ficou canvas “antigo” no DOM
 		host.replaceChildren();
@@ -28,6 +30,9 @@ export function PixiHost() {
 
 			world?.destroy();
 			world = null;
+
+			detachPerf?.();
+			detachPerf = null;
 
 			// remove canvas do DOM também (não confia só no destroy)
 			if (application) {
@@ -57,6 +62,8 @@ export function PixiHost() {
 				powerPreference: "high-performance",
 				preference: "webgpu",
 			});
+
+			detachPerf = attachPixiPerf(application);
 
 			application.canvas.style.display = "block";
 

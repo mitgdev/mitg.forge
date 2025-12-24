@@ -1,41 +1,43 @@
-import { Container, Graphics, Text, TextStyle } from "pixi.js";
+import { BitmapText, Container, Graphics } from "pixi.js";
 import { TILE_SIZE_PX, VIEW_TILES_X, VIEW_TILES_Y } from "@/sdk/constants";
 
 export class DebugGridLayer {
-	private readonly viewX: number = VIEW_TILES_X;
-	private readonly viewY: number = VIEW_TILES_Y;
-	private readonly tileSize: number = TILE_SIZE_PX;
+	private readonly viewX = VIEW_TILES_X;
+	private readonly viewY = VIEW_TILES_Y;
+	private readonly tileSize = TILE_SIZE_PX;
 
 	container = new Container();
 
 	private grid = new Graphics();
 	private center = new Graphics();
-	private labels: Text[] = [];
+	private labels: BitmapText[] = [];
 
 	private lastOriginX = Number.NaN;
 	private lastOriginY = Number.NaN;
 	private lastZ = Number.NaN;
 	private lastVisible = true;
 
-	private style = new TextStyle({
-		fontFamily: "monospace",
-		fontSize: 10,
-		fill: 0xffffff,
-		align: "left",
-	});
-
 	constructor() {
 		this.container.addChild(this.grid);
 		this.container.addChild(this.center);
 
-		// labels (opcional, mas útil)
 		const total = this.viewX * this.viewY;
+
 		for (let i = 0; i < total; i++) {
-			const text = new Text({ text: "", style: this.style, scale: 0.6 });
-			text.alpha = 0.6;
-			text.visible = false; // só mostra se enabled
-			this.labels.push(text);
-			this.container.addChild(text);
+			const t = new BitmapText({
+				text: "",
+				style: {
+					fontFamily: "DebugMono", // mesmo nome definido no .fnt
+					fontSize: 8,
+					fill: "#ffffff",
+				},
+			});
+
+			t.alpha = 0.6;
+			t.visible = false;
+
+			this.labels.push(t);
+			this.container.addChild(t);
 		}
 
 		this.drawGridLines();
@@ -48,7 +50,6 @@ export class DebugGridLayer {
 		this.container.visible = v;
 	}
 
-	/** Atualiza os textos de coordenadas (só quando a janela muda) */
 	update(originX: number, originY: number, z: number) {
 		if (
 			originX === this.lastOriginX &&
@@ -88,11 +89,8 @@ export class DebugGridLayer {
 		const h = this.viewY * this.tileSize;
 
 		this.grid.clear();
-
-		// contorno DENTRO da área visível
 		this.grid.rect(0.5, 0.5, w - 1, h - 1);
 
-		// linhas internas (sem desenhar na borda)
 		for (let i = 1; i < this.viewX; i++) {
 			const x = i * this.tileSize + 0.5;
 			this.grid.moveTo(x, 0.5).lineTo(x, h - 0.5);
@@ -117,11 +115,13 @@ export class DebugGridLayer {
 		const cx = Math.floor(this.viewX / 2);
 		const cy = Math.floor(this.viewY / 2);
 
-		const x = cx * this.tileSize;
-		const y = cy * this.tileSize;
-
 		this.center
-			.rect(x, y, this.tileSize, this.tileSize)
+			.rect(
+				cx * this.tileSize,
+				cy * this.tileSize,
+				this.tileSize,
+				this.tileSize,
+			)
 			.stroke({ color: 0x00ff88, width: 1, alpha: 0.9, pixelLine: true });
 	}
 }

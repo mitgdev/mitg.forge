@@ -1,4 +1,3 @@
-// sdk/pixi/World.ts
 import { type Application, Container, Graphics, Rectangle } from "pixi.js";
 import { createDemoMapLoader } from "@/sdk/demo/demoMapLoader";
 import {
@@ -18,11 +17,14 @@ import { CreatureLayer } from "./layers/CreatureLayer";
 import { DebugGridLayer } from "./layers/DebugGridLayer";
 import { GroundLayer } from "./layers/GroundLayer";
 import { OverlayLayer } from "./layers/OverlayLayer";
+import { WorldPerfSampler } from "./utils/WorldPerfSamples";
 
 const demo = createDemoMapLoader();
 
 export class World {
 	private app: Application;
+
+	private perf = new WorldPerfSampler(250);
 
 	private rootView = new Container();
 	private clip = new Container();
@@ -98,20 +100,22 @@ export class World {
 
 		this.scale = Math.min(width / viewW, height / viewH, MAX_SCALE);
 
-		this.offsetX = (width - viewW * this.scale) / 2;
-		this.offsetY = (height - viewH * this.scale) / 2;
+		const rawOffsetX = (width - viewW * this.scale) / 2;
+		const rawOffsetY = (height - viewH * this.scale) / 2;
 
-		this.rootView.position.set(
-			Math.round(this.offsetX),
-			Math.round(this.offsetY),
-		);
+		this.offsetX = Math.round(rawOffsetX);
+		this.offsetY = Math.round(rawOffsetY);
+
+		this.rootView.position.set(this.offsetX, this.offsetY);
 		this.rootView.scale.set(this.scale);
 
 		this.clipMask.clear().rect(0, 0, viewW, viewH).fill(0xffffff);
+		const cam = useMovementStore.getState().cameraPx;
 
 		const player = useMovementStore.getState().playerTile;
 		const halfX = Math.floor(VIEW_TILES_X / 2);
 		const halfY = Math.floor(VIEW_TILES_Y / 2);
+
 		const originX = player.x - halfX;
 		const originY = player.y - halfY;
 
@@ -123,8 +127,8 @@ export class World {
 			offsetX: this.offsetX,
 			offsetY: this.offsetY,
 
-			cameraX: this.camera.x,
-			cameraY: this.camera.y,
+			cameraX: cam.x,
+			cameraY: cam.y,
 
 			originX,
 			originY,
@@ -141,9 +145,16 @@ export class World {
 	}
 
 	update(nowMs: number, _deltaMs: number) {
-		this.applyWalkScroll(nowMs);
+		this.perf.frame();
+		const tWorld = this.perf.begin();
+		useMovementStore.getState().tick(nowMs);
 
-		const player = useMovementStore.getState().playerTile;
+		const playerTile = useMovementStore.getState().playerTile;
+		const player = playerTile;
+		const cameraPx = useMovementStore.getState().cameraPx;
+
+		this.camera.x = cameraPx.x;
+		this.camera.y = cameraPx.y;
 
 		const halfX = Math.floor(VIEW_TILES_X / 2);
 		const halfY = Math.floor(VIEW_TILES_Y / 2);
@@ -154,6 +165,8 @@ export class World {
 			originX,
 			originY,
 			z: player.z,
+			cameraX: this.camera.x,
+			cameraY: this.camera.y,
 		});
 
 		demo.ensureForView({
@@ -192,6 +205,17 @@ export class World {
 		this.overlay.update();
 
 		this.viewDirty = false;
+		this.perf.end("world", tWorld);
+		this.perf.flushIfDue({
+			groundSprites: this.ground.getSpriteCount?.() ?? 0,
+			creaturesTotal: this.creatures.getTotalCreatures?.() ?? 0,
+			creaturesVisible: 0,
+			tilesInCache: useWorldStore.getState().tiles.size,
+
+			viewDirty: this.viewDirty,
+			tilesDirty: this.tilesDirty,
+			creaturesDirty: this.creaturesDirty,
+		});
 	}
 
 	destroy() {
@@ -207,42 +231,5 @@ export class World {
 		this.debug.destroy();
 
 		this.rootView.destroy({ children: true });
-	}
-
-	private applyWalkScroll(nowMs: number) {
-		const anim = useMovementStore.getState().walkAnim;
-
-		if (!anim) {
-			if (this.camera.x !== 0 || this.camera.y !== 0) {
-				this.camera.x = 0;
-				this.camera.y = 0;
-				this.publishCamera();
-			}
-			return;
-		}
-
-		const t = Math.max(
-			0,
-			Math.min(1, (nowMs - anim.startMs) / anim.durationMs),
-		);
-		const dx = anim.to.x - anim.from.x;
-		const dy = anim.to.y - anim.from.y;
-
-		this.camera.x = -dx * TILE_SIZE_PX * t;
-		this.camera.y = -dy * TILE_SIZE_PX * t;
-
-		this.publishCamera();
-	}
-
-	private publishCamera() {
-		const vp = useViewportStore.getState().viewport;
-		if (!vp) return;
-
-		if (vp.cameraX === this.camera.x && vp.cameraY === this.camera.y) return;
-
-		useViewportStore.getState().patchViewport({
-			cameraX: this.camera.x,
-			cameraY: this.camera.y,
-		});
 	}
 }

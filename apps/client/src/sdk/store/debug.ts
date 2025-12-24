@@ -7,7 +7,7 @@ type State = {
 };
 
 export const useDebugStore = create<State>((set) => ({
-	showGrid: false,
+	showGrid: true,
 	toggleGrid: () => set((s) => ({ showGrid: !s.showGrid })),
 	setShowGrid: (v) => set({ showGrid: v }),
 }));

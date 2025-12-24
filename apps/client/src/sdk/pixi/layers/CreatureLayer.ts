@@ -77,6 +77,10 @@ export class CreatureLayer {
 		this.pool.releaseMissing(alive);
 	}
 
+	getTotalCreatures() {
+		return useWorldStore.getState().creatures.size; // ou o que você usa
+	}
+
 	destroy() {
 		this.container.destroy({ children: true });
 		this.pool.destroy();

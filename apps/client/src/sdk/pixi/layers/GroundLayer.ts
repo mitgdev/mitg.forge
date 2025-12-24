@@ -58,6 +58,10 @@ export class GroundLayer {
 		}
 	}
 
+	getSpriteCount() {
+		return this.sprites.length;
+	}
+
 	destroy() {
 		this.container.destroy({ children: true });
 		this.sprites = [];
