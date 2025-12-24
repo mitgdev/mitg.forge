@@ -1,12 +1,11 @@
-// components/PointerHoverLayer.tsx
 import { useEffect } from "react";
 import { screenToTile } from "@/sdk/game/screenToTile";
 import { useViewportStore } from "@/sdk/store/viewport";
 import { useWorldStore } from "@/sdk/store/world";
 
-export function PointerHoverLayer() {
-	const viewport = useViewportStore((s) => s.viewport);
-	const setHoveredTile = useViewportStore((s) => s.setHoveredTile);
+export function usePointerHoverLayer() {
+	const viewport = useViewportStore((state) => state.viewport);
+	const setHoveredTile = useViewportStore((state) => state.setHoveredTile);
 	const worldElement = useWorldStore((state) => state.worldElement);
 
 	useEffect(() => {
@@ -32,6 +31,4 @@ export function PointerHoverLayer() {
 			window.removeEventListener("blur", onLeave);
 		};
 	}, [worldElement, viewport, setHoveredTile]);
-
-	return null;
 }

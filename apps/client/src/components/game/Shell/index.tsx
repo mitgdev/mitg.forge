@@ -1,7 +1,11 @@
 import { useMemo } from "react";
+import { DragControllerLayer } from "@/components/Drag/ControllerLayer";
+import { Panel as PanelSlot } from "@/components/Panel";
 import { Panel } from "@/components/ui/Panel";
 import { MIN_GAME_WIDTH, PANEL_WIDTH } from "@/sdk/constants";
 import { GameCanvas } from "../Canvas";
+
+import "@/sdk/drag/register";
 
 const LEFT1 = true;
 const LEFT2 = true;
@@ -34,20 +38,19 @@ export const GameShell = () => {
 			}}
 		>
 			{/* LEFT PANELS */}
-			<Panel area="left1" border="right">
-				{LEFT1 && (
-					<div className="h-full p-2 text-neutral-200 text-xs">
-						Panel Left 1
-					</div>
-				)}
-			</Panel>
-			<Panel area="left2" border="right">
-				{LEFT2 && (
-					<div className="h-full p-2 text-neutral-200 text-xs">
-						Panel Left 2
-					</div>
-				)}
-			</Panel>
+			<div
+				style={{ gridArea: "left1" }}
+				className="border-neutral-800 border-r"
+			>
+				<PanelSlot panelId="left1" title="Left 1" />
+			</div>
+			<div
+				style={{ gridArea: "left2" }}
+				className="border-neutral-800 border-r"
+			>
+				<PanelSlot panelId="left2" title="Left 2" />
+			</div>
+
 			{/* CENTER: grid INTERNO com health / game / bottom */}
 			<div
 				style={{ gridArea: "center" }}
@@ -77,6 +80,7 @@ export const GameShell = () => {
 					<div className="h-full p-2 text-neutral-200 text-xs">Right 3</div>
 				)}
 			</Panel>
+			<DragControllerLayer />
 		</div>
 	);
 };

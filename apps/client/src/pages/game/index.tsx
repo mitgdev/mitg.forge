@@ -1,11 +1,8 @@
 import { GameShell } from "@/components/game/Shell";
-import { PointerHoverLayer } from "@/components/PointerHoverLayer";
+import { usePointerHoverLayer } from "@/sdk/hooks/usePointerHoverLayer";
 
 export function GamePage() {
-	return (
-		<>
-			<GameShell />
-			<PointerHoverLayer />
-		</>
-	);
+	usePointerHoverLayer();
+
+	return <GameShell />;
 }
