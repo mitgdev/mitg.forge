@@ -1,4 +1,9 @@
 [workspace]
 resolver = "2"
 
+
 members = ["apps/client/src-tauri"]
+
+[workspace.dependencies]
+rand = "0.8"
+rand_core = "0.6"
