@@ -63,9 +63,23 @@ export function GamePage() {
 		await invoke("game_disconnect");
 	}, []);
 
+	const sendRawDataXtea = useCallback(async () => {
+		const payload = Array.from(new TextEncoder().encode("ping"));
+		await invoke("game_command", {
+			command: { type: "SendRaw", data: { payload } },
+		});
+	}, []);
+
 	return (
 		<>
 			<div className="absolute top-1 right-1 flex flex-row gap-1">
+				<button
+					type="button"
+					className="rounded bg-blue-500 p-2 text-white"
+					onClick={sendRawDataXtea}
+				>
+					Send Xtea
+				</button>
 				<button
 					type="button"
 					className="rounded bg-blue-500 p-2 text-white"

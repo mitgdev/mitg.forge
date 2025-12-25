@@ -3,15 +3,25 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tauri::{AppHandle, Emitter};
 use tokio::{sync::mpsc, time::interval};
 
-use crate::game::{
-    events,
-    types::{GameEvent, MoveDir, MoveResult, Position, UiCommand},
+use crate::{
+    codec::{pack_body, unpack_body},
+    game::{
+        events,
+        types::{CryptoState, GameEvent, MoveDir, MoveResult, Position, UiCommand},
+    },
+    xtea::{generate_xtea_key_bytes, xtea_decrypt, xtea_encrypt, xtea_key_from_bytes_le},
 };
 
 #[derive(Debug)]
 pub enum WorkerCommand {
     Stop,
     Ui(UiCommand),
+}
+
+#[derive(Debug)]
+struct WorkerState {
+    crypto: CryptoState,
+    player_position: Position,
 }
 
 fn now_ms() -> u128 {
@@ -54,6 +64,20 @@ pub async fn run_worker(
     character_name: String,
     mut rx: mpsc::Receiver<WorkerCommand>,
 ) -> anyhow::Result<()> {
+    let key_bytes = generate_xtea_key_bytes();
+
+    let mut state = WorkerState {
+        crypto: CryptoState {
+            xtea_enabled: true,
+            xtea_key: Some(xtea_key_from_bytes_le(key_bytes)),
+        },
+        player_position: Position {
+            x: 100,
+            y: 100,
+            z: 7,
+        },
+    };
+
     emit(
         &app,
         GameEvent::State {
@@ -65,25 +89,23 @@ pub async fn run_worker(
         GameEvent::Log {
             level: "info".into(),
             message: format!(
-            "worker started (ip={ip} port={port} character={character_name} session_key_len={})",
-            session_key.len()
-        ),
+                "worker started (ip={ip} port={port} character={character_name} session_key_len={})",
+                session_key.len()
+            ),
             ts_ms: now_ms(),
         },
     );
-
-    // ✅ estado autoritativo do "server fake" vive aqui
-    let mut player_pos = Position {
-        x: 100,
-        y: 100,
-        z: 7,
-    };
-
-    emit(&app, GameEvent::PlayerPosition(player_pos));
-
-    // ✅ config fake (deixa fixo aqui também)
-    let latency_ms: u64 = 30;
-    let error_rate: f32 = 0.01; // 1% rollback
+    emit(
+        &app,
+        GameEvent::Log {
+            level: "info".into(),
+            message: "Login simulated: XTEA enabled + key stored in worker state".into(),
+            ts_ms: now_ms(),
+        },
+    );
+    emit(&app, GameEvent::CryptoState(state.crypto));
+    emit(&app, GameEvent::PlayerPosition(state.player_position));
+    emit(&app, GameEvent::CryptoState(state.crypto));
 
     let mut tick = interval(Duration::from_secs(1));
     let mut n: u64 = 0;
@@ -98,7 +120,7 @@ pub async fn run_worker(
             command = rx.recv() => {
                 match command {
                     Some(WorkerCommand::Ui(ui)) => {
-                        handle_ui_command(&app, ui, &mut player_pos, latency_ms, error_rate).await;
+                        handle_ui_command(&app, ui, &mut state).await;
                     }
                     Some(WorkerCommand::Stop) | None => {
                         emit(&app, GameEvent::Log {
@@ -117,14 +139,50 @@ pub async fn run_worker(
     Ok(())
 }
 
-async fn handle_ui_command(
-    app: &AppHandle,
-    command: UiCommand,
-    player_pos: &mut Position,
-    latency_ms: u64,
-    error_rate: f32,
-) {
+async fn handle_ui_command(app: &AppHandle, command: UiCommand, state: &mut WorkerState) {
+    // ✅ config fake (deixa fixo aqui também)
+    let latency_ms: u64 = 30;
+    let error_rate: f32 = 0.01; // 1% rollback
+
     match command {
+        UiCommand::SendRaw { payload } => {
+            let xtea = state.crypto.xtea_enabled;
+            let key = state.crypto.xtea_key;
+
+            let payload_hex = hex::encode(&payload);
+            let mut body = pack_body(&payload);
+
+            if xtea {
+                let k = key.expect("xtea_enabled but no key has generated");
+                xtea_encrypt(&mut body, k);
+            }
+
+            emit(
+                app,
+                GameEvent::RawTx {
+                    payload_hex,
+                    body_hex: hex::encode(&body),
+                    len: body.len(),
+                    xtea,
+                },
+            );
+
+            if xtea {
+                let k = key.unwrap();
+                xtea_decrypt(&mut body, k);
+            }
+
+            let unpacked = unpack_body(&body).unwrap();
+
+            emit(
+                app,
+                GameEvent::RawRx {
+                    payload_hex: hex::encode(&unpacked),
+                    len: unpacked.len(),
+                    xtea,
+                },
+            );
+        }
         UiCommand::Log { message } => {
             emit(
                 app,
@@ -135,11 +193,11 @@ async fn handle_ui_command(
                 },
             );
         }
-
         UiCommand::Move(move_command) => {
             tokio::time::sleep(Duration::from_millis(latency_ms)).await;
 
             let rolled_back = rand::random::<f32>() < error_rate;
+            let player_position = state.player_position;
 
             if rolled_back {
                 emit(
@@ -147,19 +205,19 @@ async fn handle_ui_command(
                     GameEvent::MoveResult(MoveResult {
                         req_id: move_command.req_id,
                         ok: false,
-                        position: *player_pos, // manda a posição autoritativa atual
+                        position: player_position, // manda a posição autoritativa atual
                         reason: Some("simulated_rollback".into()),
                     }),
                 );
             } else {
-                *player_pos = apply_dir(*player_pos, move_command.dir);
+                state.player_position = apply_dir(player_position, move_command.dir);
 
                 emit(
                     app,
                     GameEvent::MoveResult(MoveResult {
                         req_id: move_command.req_id,
                         ok: true,
-                        position: *player_pos,
+                        position: player_position,
                         reason: None,
                     }),
                 );

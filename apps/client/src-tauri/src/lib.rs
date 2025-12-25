@@ -1,7 +1,9 @@
+pub mod codec;
+pub mod game;
+pub mod xtea;
+
 use crate::game::commands::{game_command, game_connect, game_disconnect};
 use crate::game::mod_state::GameState;
-
-pub mod game;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

@@ -16,6 +16,13 @@ pub enum MoveDir {
     E,
 }
 
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CryptoState {
+    pub xtea_enabled: bool,
+    pub xtea_key: Option<[u32; 4]>,
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MoveCommand {
@@ -39,6 +46,7 @@ pub struct MoveResult {
 pub enum UiCommand {
     Log { message: String },
     Move(MoveCommand),
+    SendRaw { payload: Vec<u8> },
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -58,4 +66,16 @@ pub enum GameEvent {
     },
     MoveResult(MoveResult),
     PlayerPosition(Position),
+    CryptoState(CryptoState),
+    RawTx {
+        payload_hex: String,
+        body_hex: String,
+        len: usize,
+        xtea: bool,
+    },
+    RawRx {
+        payload_hex: String,
+        len: usize,
+        xtea: bool,
+    },
 }
