@@ -19,6 +19,7 @@ export function GamePage() {
 
 	useEffect(() => {
 		console.log("Setting Tauri Move Bridge");
+
 		setMoveBridge(createTauriMoveBridge());
 	}, []);
 

@@ -16,6 +16,7 @@ import { makeKeyFromPosition, useWorldStore } from "../store/world";
 import { CreatureLayer } from "./layers/CreatureLayer";
 import { DebugGridLayer } from "./layers/DebugGridLayer";
 import { GroundLayer } from "./layers/GroundLayer";
+import { ItemTestLayer } from "./layers/ItemLayer";
 import { OverlayLayer } from "./layers/OverlayLayer";
 import { WorldPerfSampler } from "./utils/WorldPerfSamples";
 
@@ -36,6 +37,7 @@ export class World {
 	private offsetY = 0;
 
 	private ground: GroundLayer;
+	private items: ItemTestLayer;
 	private creatures: CreatureLayer;
 	private overlay: OverlayLayer;
 	private debug: DebugGridLayer;
@@ -55,7 +57,7 @@ export class World {
 		this.clip.addChild(this.camera);
 
 		this.ground = new GroundLayer();
-
+		this.items = new ItemTestLayer();
 		this.creatures = new CreatureLayer();
 
 		this.overlay = new OverlayLayer();
@@ -63,6 +65,7 @@ export class World {
 
 		// ordem: chão -> criaturas -> overlay -> debug
 		this.camera.addChild(this.ground.container);
+		this.camera.addChild(this.items.container);
 		this.camera.addChild(this.creatures.container);
 		this.camera.addChild(this.overlay.container);
 		this.camera.addChild(this.debug.container);
@@ -187,6 +190,7 @@ export class World {
 
 		if (this.tilesDirty || this.viewDirty) {
 			this.ground.update(originX, originY, player.z);
+			this.items.update();
 			this.tilesDirty = false;
 		}
 
@@ -225,7 +229,7 @@ export class World {
 		this.unsubs = [];
 
 		this.ground.destroy();
-
+		this.items.destroy();
 		this.creatures.destroy();
 		this.overlay.destroy();
 		this.debug.destroy();

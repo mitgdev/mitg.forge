@@ -5,6 +5,7 @@ pub mod image;
 pub mod lzma;
 pub mod protobuf;
 pub mod sprites;
+pub mod thing_plan;
 
 use std::path::{Path, PathBuf};
 

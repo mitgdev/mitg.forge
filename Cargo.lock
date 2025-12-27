@@ -2063,8 +2063,11 @@ name = "miclient"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "assets",
  "hex",
+ "image",
  "num-bigint",
+ "parking_lot",
  "rand 0.8.5",
  "rand_core 0.6.4",
  "rsa",
