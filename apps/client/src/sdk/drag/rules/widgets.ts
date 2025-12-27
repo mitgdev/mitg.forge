@@ -1,6 +1,6 @@
 import { registerRule } from "@/sdk/drag/rules";
 import { AvailableKinds, AvailableZones } from "@/sdk/drag/types";
-import { type PanelId, useLayoutStore } from "@/sdk/store/layout";
+import { useLayoutStore } from "@/sdk/store/layout";
 
 registerRule({
 	kind: AvailableKinds.WIDGET,
