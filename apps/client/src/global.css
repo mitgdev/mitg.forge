@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Nada selecionável por padrão */
+:root {
+	-webkit-user-select: none; /* Safari/WebKit */
+	user-select: none;
+}
+
+/* Evita highlight azul no mobile/touch (opcional) */
+html,
+body {
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* Pode selecionar/copiá-lo */
+.allow-select,
+.allow-select * {
+	-webkit-user-select: text;
+	user-select: text;
+}
+
+/* Inputs/textarea sempre selecionáveis */
+input,
+textarea,
+[contenteditable="true"] {
+	-webkit-user-select: text;
+	user-select: text;
+}

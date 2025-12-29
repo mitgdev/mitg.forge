@@ -1,0 +1,22 @@
+[package]
+name = "assets"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+prost = "0.12"
+
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+log = { workspace = true }
+hex = { workspace = true }
+
+lzma-rs = { workspace = true }
+xz2 = { workspace = true }
+image = { workspace = true }
+
+
+[build-dependencies]
+prost-build = "0.12"
+protoc-bin-vendored = "3"

@@ -28,6 +28,9 @@ body:
       options:
         - label: api
         - label: web
+        - label: packages
+        - label: client
+        - label: docker
         - label: Other
     validations:
       required: true
