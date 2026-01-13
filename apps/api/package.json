@@ -37,7 +37,7 @@
 		"discord.js": "^14.25.1",
 		"dotenv-flow": "^4.1.0",
 		"fast-xml-parser": "^5.3.2",
-		"hono": "^4.10.7",
+		"hono": "^4.11.4",
 		"ioredis": "^5.8.2",
 		"jsonwebtoken": "^9.0.3",
 		"nodemailer": "^7.0.11",
